@@ -10,6 +10,17 @@ aggiornato: 2026-07-25
 >
 > `kb todo -in "Checklist M0 - Setup"` per vedere solo cosa resta.
 
+> [!tip] Il controllo automatico di tutto
+> Invece di verificare a mano, un comando dice lo stato di **ogni** voce e, per ognuna che manca,
+> l'azione esatta:
+>
+> ```powershell
+> & '.\08 - Tool\setup-macchina\Verify-Setup.ps1'
+> ```
+>
+> Va lanciato **prima** e **dopo** ogni parte. Le righe marcate `<<` sono bloccanti.
+> → [[Setup della macchina]]
+
 ---
 
 ## Parte 0 — Prima di martedì (domenica 26 / lunedì 27)
@@ -51,35 +62,32 @@ Facoltativi, quando c'è banda:
 
 ---
 
-## Parte 1 — La KB sotto Git (10 minuti, si può fare oggi)
+## Parte 1 — La KB sotto Git
 
-> Perché prima di tutto: 78 note esistono in **una copia sola, su un disco solo**. È il
-> rischio più concreto del progetto e si chiude in dieci minuti.
-> → [[ADR-0012 - Dove vivono KB e progetto Unity]]
+> Perché prima di tutto: 102 note esistevano in **una copia sola, su un disco solo**. È il
+> rischio più concreto del progetto. → [[ADR-0012 - Dove vivono KB e progetto Unity]]
 
-- [ ] `git config --global core.longpaths true`
+- [x] ~~`git config --global core.longpaths true`~~ — **fatto il 2026-07-25**
       *(serve a Git su Windows per i percorsi profondi che Unity genera; si imposta una volta)*
-- [ ] Aprire un terminale in `...\Bleed\VideoGame` e inizializzare il repo della KB
+- [x] ~~`git init` + `.gitignore` + `.gitattributes` + primo commit~~ — **fatto il 2026-07-25**,
+      111 file. `git log` mostra un commit.
 
-```bash
-git init -b main
-git add .
-git commit -m "docs: knowledge base iniziale, concept completo, 12 ADR"
-```
+Resta la parte che richiede il tuo account:
 
-- [ ] Creare un repository **privato** su GitHub (`cadaver-animatum-kb`) e collegarlo
+- [ ] 🔴 Creare un repository **privato** su GitHub (`cadaver-animatum-kb`) e collegarlo
 
 ```bash
 git remote add origin <url-del-repo>
 git push -u origin main
 ```
 
-**Cosa verifichi:** `git log --oneline` mostra un commit; il repo su GitHub è **privato** e
-contiene le cartelle `00 - INDEX` … `99 - Templates`.
+**Cosa verifichi:** `Verify-Setup.ps1` → la riga *Repo KB / remoto* passa da `[FALLA]` a `[ OK ]`.
+Il repo su GitHub deve essere **privato**.
 
 > [!danger] Mai `git init` nella cartella `Bleed`
-> Il vault Obsidian contiene anche `Pwd\` e altre cartelle personali. Il repo si inizializza
-> **solo** dentro `VideoGame`.
+> Il vault Obsidian contiene anche `Pwd\` e altre cartelle personali. Il repo è stato
+> inizializzato **solo** dentro `VideoGame`, e il commit contiene 111 file: tutti `.md`, gli
+> script del CLI e i due file di configurazione. Niente di personale.
 
 ---
 

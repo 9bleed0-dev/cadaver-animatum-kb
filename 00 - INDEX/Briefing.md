@@ -121,9 +121,9 @@ niente abbreviazioni.
 
 **Fase:** FASE 1 (Concept) chiusa · **FASE 2 (Prototipo) inizia martedì 28 luglio 2026.**
 
-Esiste: ~100 note di KB, concept completo, 12 ADR, il piano del prototipo, 15 schede sistema
-(4 progettate + 11 stub), il CLI.
-Non esiste: **progetto Unity, zero righe di codice, KB non ancora sotto Git.**
+Esiste: ~100 note di KB **sotto Git** (1 commit), concept completo, 12 ADR, il piano del
+prototipo, 15 schede sistema (4 progettate + 11 stub), il CLI, il verificatore dell'ambiente.
+Non esiste: **progetto Unity, zero righe di codice, remoto GitHub della KB.**
 
 **Prossimo passo:** [[Checklist M0 - Setup]] — installazione, progetto, Git, tour dell'editor.
 Poi [[Piano Prototipo]] → INC-1.

@@ -55,9 +55,11 @@ ondate, medievale con necromanzia storica.
 | [[Checklist M0 - Setup]] + file di configurazione pronti | ✅ |
 | Schede sistema | ✅ 4 progettate, 11 stub (`kb sys`) |
 | CLI della KB + [[Protocollo di Sessione]] | ✅ |
+| KB sotto Git | ✅ 1 commit, 111 file (2026-07-25) |
+| Remoto della KB su GitHub | ❌ **manca — finché manca, il backup non esiste** |
+| Controllo dell'ambiente | ✅ `Verify-Setup.ps1` → [[Setup della macchina]] |
 | Progetto Unity | ❌ Non ancora creato |
 | Codice | ❌ Zero righe |
-| KB sotto Git | ❌ **una copia sola, nessun backup** |
 
 ## Decisioni aperte
 
@@ -67,10 +69,20 @@ due repo separati, IDE VS 18 Insiders, budget 15-20 h/settimana.
 **Prossima, non bloccante:** Input System nuovo vs legacy, da chiudere a INC-1 con un ADR.
 Le altre sono in [[Registro Decisioni]] e si prendono strada facendo.
 
-## Da fare prima di martedì
+## Da fare prima di martedì — le cose che servono la tua identità
 
-- 🔴 **Avviare il download di Unity 6.3 LTS** da Unity Hub (diversi GB, di notte)
-- 🔴 **Mettere la KB sotto Git** con remoto privato — 10 minuti, chiude il rischio "una copia sola"
+Tutto il resto è già fatto. Queste tre no, perché richiedono un account o un click di
+amministratore. → [[Setup della macchina]]
+
+1. 🔴 **Unity Hub: accedi con il tuo Unity ID.** Senza licenza attivata l'editor si installa ma
+   **non si apre**. È il primo passo, non l'ultimo.
+2. 🔴 **Avvia il download di Unity `6000.3.x` LTS** — e nel pannello dei moduli **spunta la
+   Visual Studio Community** che Unity offre: è la versione su cui Unity è testata, e chiude la
+   questione dell'IDE.
+3. 🔴 **Crea il repository privato `cadaver-animatum-kb` su GitHub** e fai il push. Il commit
+   locale c'è, ma un commit su un solo disco non è un backup.
+
+Verifica in un comando: `& '.\08 - Tool\setup-macchina\Verify-Setup.ps1'`
 
 ## Prossimo passo concreto — martedì 28 luglio
 
@@ -97,7 +109,7 @@ Poi **INC-1**: terreno, [[Camera Isometrica]], [[Selezione e Comandi]].
 |---|---|
 | 🔴 **Pathfinding con molte unità** — il tetto va **misurato**, non desiderato | **INC-2** → [[Movimento Unità]] |
 | 🔴 **UX del menu di scelta sul cadavere** — se è macchinoso, il gioco muore | **INC-6**, con due varianti a confronto → [[Scelta sul Cadavere]] |
-| 🔴 **La KB non ha backup** — 100 note in una copia sola | [[Checklist M0 - Setup]] parte 1, oggi |
+| 🔴 **La KB non ha ancora un backup fuori dal disco** — il commit locale c'è, il remoto no | [[Checklist M0 - Setup]] parte 1 |
 | 🟠 Tentazione del disegno libero delle mura | [[Costruzione su Griglia]] · [[Scope e Anti-Scope]] |
 | 🟠 Costo emotivo del greyboxing | [[Lezione 02 - Perché il prototipo è fatto di cubi grigi]] |
 | 🟠 La punta di horror che diventa il tono dominante | [[Horror e Dread]] |

@@ -98,6 +98,7 @@ aggiornato: 2026-07-25
 ## 08 — Tool
 
 - [[README - CLI della KB]] — `kb`: come si interroga questa KB senza aprirla tutta
+- [[Setup della macchina]] — `Verify-Setup.ps1`: lo stato dell'ambiente in un comando
 - [[Setup del progetto Unity]] — i file di configurazione già pronti per martedì
 
 ---
