@@ -1,0 +1,18 @@
+# .gitignore della Knowledge Base di Cadaver Animatum
+#
+# Questo repository contiene SOLO testo: note, ADR, piani, il CLI.
+# Il progetto Unity vive in un repository separato (ADR-0012) e ha il suo .gitignore.
+# Qui non serve Git LFS.
+
+# Stato locale di Obsidian: cambia a ogni click e crea rumore nei diff.
+# (La configurazione del vault sta in ..\.obsidian, fuori da questo repo.)
+.obsidian/workspace*
+.obsidian/cache
+.trash/
+
+# Windows / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+*.tmp
+*~

@@ -1,0 +1,103 @@
+# CLAUDE.md — Cadaver Animatum (progetto Unity)
+
+> Questo è il **codice**. La **memoria** del progetto sta nella Knowledge Base, altrove.
+> Lingua di lavoro: **italiano**. Codice, nomi e commenti nel codice: **inglese**.
+
+## Dove sta la memoria
+
+```
+{{KB_PATH}}
+```
+
+Non si copia e **non si legge tutta** (~10.000 righe). Si interroga con il CLI `kb.cmd`,
+che è nella radice di questo progetto:
+
+```
+.\kb.cmd brief                                    <- APERTURA SESSIONE: solo questo
+.\kb.cmd toc  "Regole di Codice"                  la mappa di una nota
+.\kb.cmd read "Movimento Unità" -section "Dati"    una sezione sola
+.\kb.cmd find cadavere                            dove si parla di qualcosa
+.\kb.cmd grep NavMeshAgent
+.\kb.cmd sys                                      stato delle schede sistema
+.\kb.cmd check                                    lint della KB (chiusura sessione)
+.\kb.cmd help
+```
+
+**Regola dell'imbuto:** `find` → `toc` → `read -section` → file intero.
+Si scende di un livello solo se quello sopra non è bastato.
+
+## Protocollo di sessione
+
+**Apertura:** `.\kb.cmd brief`. Nient'altro finché non serve.
+
+**Prima di scrivere il codice di un sistema:** deve esistere la sua scheda in
+`05 - Sviluppo/Sistemi/` nella KB (`kb sys` per vederle). Se non c'è, si scrive prima quella.
+Se non è nel [[Piano Prototipo]], non si scrive.
+
+**Chiusura:** `.\kb.cmd check` verde · Briefing e Stato del Progetto aggiornati ·
+`kb new log` compilato · commit in **entrambi** i repo (codice e KB) con lo stesso soggetto.
+
+## Chi è l'utente
+
+**Non è un esperto di sviluppo videogiochi.** Va **insegnato**, non solo servito:
+prima si spiega *cosa* stiamo facendo e *perché*, poi si scrive il codice.
+Niente gergo senza spiegazione. Ogni termine tecnico nuovo va nel `Glossario` della KB.
+
+## Il gioco, in cinque righe
+
+Gestionale di sopravvivenza medievale con necromanzia storica. I sudditi sono cadaveri
+rianimati che mangiano carne umana; l'unica fonte di carne sono gli eserciti che vengono a
+ucciderti.
+
+**Core loop:** *devi essere attaccato per mangiare, e più mangi più verrai attaccato.*
+
+**La domanda del prototipo:** è teso — non frustrante — dover essere attaccati per
+sopravvivere? Niente entra nel codice se non serve a risponderle.
+
+## Regole di codice — non negoziabili
+
+**Mai** dentro `Update` / `FixedUpdate` / `LateUpdate`:
+`GetComponent` · `Find` / `FindObjectOfType` · `Camera.main` · LINQ ·
+concatenazione di stringhe · `new List` / `new []` · reflection.
+Si risolve in `Awake` e si tiene in un campo.
+
+**Sempre:**
+- `Time.deltaTime` nel movimento in `Update`; input in `Update`, forze in `FixedUpdate`;
+  camera in `LateUpdate`.
+- `[SerializeField] private`, non `public`.
+- Ogni numero che potremmo voler cambiare per bilanciare → **ScriptableObject**. Mai hardcoded.
+- `///` XML su ogni classe e metodo pubblico.
+- `== null` sugli oggetti Unity, mai `is null`.
+- Composizione, non ereditarietà. Chiamata diretta dentro lo stesso sistema, **evento** tra
+  sistemi diversi. La UI conosce il gameplay; il gameplay non sa che la UI esiste.
+- 4 spazi · graffe sempre · graffa aperta su riga nuova · max ~120 caratteri.
+
+**Naming:** classi/metodi/proprietà `PascalCase` · locali e parametri `camelCase` ·
+campi privati `_camelCase` · interfacce `IPascalCase` · booleani come domanda
+(`isDead`, `hasKey`) · **nome file = nome classe** · niente abbreviazioni.
+
+**Namespace:** `Bleed.Core` · `Bleed.Gameplay` · `Bleed.Data` · `Bleed.UI` · `Bleed.Utils` ·
+`Bleed.Editor`, allineati alle cartelle sotto `Assets/_Project/Scripts/`.
+
+Dettaglio: `.\kb.cmd read "Regole di Codice" -section "<sezione>"`
+
+## Struttura del progetto
+
+Tutto il nostro contenuto sta sotto `Assets/_Project/`. Gli asset esterni sotto
+`Assets/ThirdParty/`. Le scene di prova in `Assets/_Project/Scenes/_Sandbox/` e **mai** nelle
+Build Settings.
+
+Naming asset: `M_` materiali · `T_` texture · `SFX_` effetti · `MUS_` musica ·
+`Anim_` clip · `AC_` animator controller. **Mai spazi** nei nomi di file.
+
+Dettaglio: `.\kb.cmd read "Regole di Progetto Unity"`
+
+## Cosa NON fare mai
+
+- Non toccare `Assets/ThirdParty/`.
+- Non aggiungere pacchetti Unity o asset dello Store senza un ADR o un ok esplicito.
+- Non "sistemare" cose fuori dal compito assegnato: si segnalano e si mettono nel Backlog.
+- Non creare cartelle o spostare asset **da Esplora Risorse**: si fa da dentro Unity,
+  altrimenti si rompono i file `.meta` e con essi tutti i riferimenti.
+- Non committare `Library/`.
+- Non aggiungere feature non richieste. Lo scope è congelato nel Piano Prototipo.

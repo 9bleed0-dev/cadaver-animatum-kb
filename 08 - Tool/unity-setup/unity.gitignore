@@ -1,0 +1,67 @@
+# .gitignore per il progetto Unity di Cadaver Animatum
+# Base: github/gitignore/Unity.gitignore
+# Destinazione: radice del progetto Unity, con nome ".gitignore"
+#
+# REGOLA: questo file va messo PRIMA del primo commit.
+# Committare Library/ rende il repository inutilizzabile (gigabyte di cache rigenerabile).
+
+# ---------------------------------------------------------------- cache di Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# MemoryCaptures e Recordings crescono a dismisura
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# ---------------------------------------------------------------- IDE e tool
+.vs/
+.idea/
+.gradle/
+/[Aa]ssets/Plugins/Editor/JetBrains*
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# ---------------------------------------------------------------- crash e build
+sysinfo.txt
+crashlytics-build.properties
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# ---------------------------------------------------------------- Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# ---------------------------------------------------------------- Windows / macOS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---------------------------------------------------------------- nostro
+# Le scene di prova restano versionate (servono a riprodurre i bug),
+# ma non entrano mai nelle Build Settings. Vedi "Regole di Progetto Unity".

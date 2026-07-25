@@ -1,0 +1,10 @@
+# .gitattributes della Knowledge Base
+#
+# eol=lf: le note e gli script sono scritti con fine riga LF. Senza questa riga, Git su
+# Windows convertirebbe tutto in CRLF nella copia di lavoro, e ogni file risulterebbe
+# "modificato" senza che nessuno lo abbia toccato.
+* text=auto eol=lf
+
+# I .cmd sono file batch di Windows: vogliono CRLF, altrimenti in certi casi
+# l'interprete dei comandi si comporta in modo imprevedibile.
+*.cmd text eol=crlf
