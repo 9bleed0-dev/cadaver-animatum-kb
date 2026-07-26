@@ -3,7 +3,7 @@ tags: [index, moc]
 aggiornato: 2026-07-25
 ---
 
-# HOME — Progetto VideoGame
+# HOME — Cadaver Animatum
 
 > **Mappa di contenuti (MOC).** Punto di partenza per me e per te.
 > Se non sai dove guardare, guarda qui.

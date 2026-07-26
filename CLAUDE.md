@@ -1,4 +1,4 @@
-# CLAUDE.md — Istruzioni operative per il progetto VideoGame
+# CLAUDE.md — Istruzioni operative per Cadaver Animatum
 
 > Questo file viene caricato automaticamente all'inizio di ogni sessione.
 > **Non contiene il progetto: dice come si trova.** È un instradatore.

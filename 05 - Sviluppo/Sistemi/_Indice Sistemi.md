@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, sistemi, index]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Indice dei Sistemi
@@ -25,14 +25,14 @@ di più. Un sistema che non è in questa tabella non si costruisce.
 
 | Sistema | INC | Stato |
 |---|---|---|
-| [[Camera Isometrica]] | 1 | 🟡 Progettato |
-| [[Selezione e Comandi]] | 1 → 2 | 🟡 Progettato |
-| [[Movimento Unità]] | 2 | 🟡 Progettato — 🔴 rischio tecnico n.1 |
-| [[Risorse e Magazzino]] | 3 | 🟡 Progettato |
-| [[Posto di Lavoro e Assegnazione]] | 3 | ⚪ da scrivere |
-| [[HUD Risorse]] | 3 | ⚪ da scrivere |
-| [[Fame e Sussistenza]] | 4 | ⚪ da scrivere |
-| [[Stato della Partita]] | 4, 7 | ⚪ da scrivere |
+| [[Camera Isometrica]] | 1 | 🟢 Prototipato — verificato in Play Mode |
+| [[Selezione e Comandi]] | 1 → 2 | 🟢 Prototipato — **non ancora verificato** |
+| [[Movimento Unità]] | 2 | 🟢 Prototipato — 🔴 rischio tecnico n.1, **misura col Profiler non ancora fatta** |
+| [[Risorse e Magazzino]] | 3 | 🟢 Prototipato — **non ancora verificato**, 5 test EditMode scritti |
+| [[Posto di Lavoro e Assegnazione]] | 3 | 🟢 Prototipato — **non ancora verificato** |
+| [[HUD Risorse]] | 3 | 🟢 Prototipato — **non ancora verificato** |
+| [[Fame e Sussistenza]] | 4 | 🟢 Prototipato — **non ancora verificato** |
+| [[Stato della Partita]] | 4, 7 | 🟢 Prototipato — **non ancora verificato** |
 | [[Ondate]] | 5 | ⚪ da scrivere |
 | [[Combattimento Base]] | 5 | ⚪ da scrivere |
 | [[Cuore del Regno]] | 5 | ⚪ da scrivere |
@@ -40,6 +40,13 @@ di più. Un sistema che non è in questa tabella non si costruisce.
 | [[Scelta sul Cadavere]] | 6 | ⚪ da scrivere — 🔴 rischio UX n.1 |
 | [[Costruzione su Griglia]] | 7 | ⚪ da scrivere |
 | [[Fucina]] | 7 | ⚪ da scrivere |
+
+> [!danger] "Non ancora verificato" non è una formalità
+> Tutto questo codice è stato scritto in una sessione senza Unity aperto in primo piano:
+> non ho potuto premere Play, e Unity non ha ricompilato mentre scrivevo. È stato
+> controllato a occhio con la massima cura possibile (namespace ed API confermati contro i
+> sorgenti dei pacchetti installati), ma **la prima cosa da fare è aprire Unity, guardare la
+> Console, e giocare.** → vedi il recap di sessione
 
 Legenda avanzamento di una singola scheda:
 `Progettato` → `Prototipato` → `Implementato` → `Bilanciato` → `Rifinito` → `Done`

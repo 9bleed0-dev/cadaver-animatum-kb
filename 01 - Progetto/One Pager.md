@@ -29,7 +29,8 @@ I regni vicini mandano i loro eserciti per fermare il contagio. Tu devi difender
 E quegli eserciti sono la tua unica fonte di cibo.
 
 ## Genere e prospettiva
-- **Genere:** gestionale di sopravvivenza con difesa a ondate (*survival colony builder*)
+- **Genere:** gestionale di sopravvivenza con difesa a ondate (*survival colony builder*),
+  a **struttura di run** con progressione fra partite → [[ADR-0015 - Struttura a run e progressione fra partite]]
 - **Dimensione:** 3D low-poly → [[ADR-0008 - Stile visivo e dimensione]]
 - **Prospettiva:** camera ortografica isometrica, angolo fisso
 
@@ -80,6 +81,7 @@ che facciano esattamente questo.
 | **Stronghold** (2001) | catena produttiva multi-stadio, popolazione con bisogni, costruzione istantanea + manodopera | disegno libero delle mura, onore, IA d'assedio complessa |
 | **They Are Billions** | ondate crescenti, espansione che apre fronti, pausa tattica | 8 risorse, mappa procedurale, permadeath |
 | **Frostpunk** | il costo morale delle decisioni gestionali | l'albero delle leggi |
+| **Against the Storm** (2023) | la struttura a run di un city builder: partita corta, sblocchi che restano — **da studiare** | il tono da fiaba, la varietà di specie |
 
 ## Tono e stile visivo
 Tragico e sobrio, non horror né splatter. Low-poly stilizzato, palette desaturata

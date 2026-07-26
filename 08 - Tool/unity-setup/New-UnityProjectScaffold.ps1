@@ -34,7 +34,7 @@ $ErrorActionPreference = 'Stop'
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
 $SetupDir = $PSScriptRoot
-$KbRoot = Split-Path -Parent (Split-Path -Parent $SetupDir)   # ...\VideoGame
+$KbRoot = Split-Path -Parent (Split-Path -Parent $SetupDir)   # ...\CadaverAnimatum-KB
 $Utf8 = New-Object System.Text.UTF8Encoding($false)
 $did = New-Object System.Collections.Generic.List[string]
 $skip = New-Object System.Collections.Generic.List[string]

@@ -1,7 +1,7 @@
 ---
-tags: [sistema, core, stato, stub]
-stato: da-progettare
-aggiornato: 2026-07-25
+tags: [sistema, core, stato]
+stato: prototipato
+aggiornato: 2026-07-26
 ---
 
 # Sistema: Stato della Partita
@@ -12,41 +12,79 @@ aggiornato: 2026-07-25
 **Incremento:** INC-4 (sconfitta) → INC-7 (vittoria, pausa) di [[Piano Prototipo]]
 **Namespace:** `Bleed.Core`
 
-> [!warning] Scheda non ancora progettata
-> Si compila all'inizio della sessione che implementa INC-4.
-
 ## Vincoli già decisi
 
 - **State machine**, non cascate di `if` → [[ADR-0003 - Architettura del codice]] ·
   [[Design Patterns per Giochi]]
-- **Niente `GameManager` onnisciente.** È l'anti-pattern esplicitamente vietato: una classe che
-  contiene punteggio, vite, stato e riferimenti a tutto, e che cresce fino a diventare
-  intoccabile. Si divide per responsabilità → [[Architettura di Progetto]]
+- **Niente `GameManager` onnisciente.** `GameStateController` fa **solo** questo: stato e
+  transizioni. Non tiene risorse, non tiene unità, non tiene punteggio.
+  → [[Architettura di Progetto]]
 - **Vittoria:** sopravvivere a N ondate. **Sconfitta:** carestia oppure Cuore distrutto
   → [[ADR-0007 - Genere, core loop e scope del prototipo]]
 - **Niente menu, niente opzioni, niente salvataggi** nel prototipo → [[Scope e Anti-Scope]]
-- La **pausa tattica** è nei riferimenti (They Are Billions): `Time.timeScale = 0`, e i tick
-  dell'economia si fermano → [[Risorse e Magazzino]]
+- La **pausa tattica** ferma il tempo con `Time.timeScale = 0`: i tick dell'economia (basati su
+  `WaitForSeconds`, non su `Time.time` assoluto) si fermano automaticamente con lei
+  → [[Risorse e Magazzino]]
 
-## Le domande da chiudere quando si progetta
+## Le domande — risposte di questa prima versione
 
-- Gli stati minimi del prototipo: `Playing` · `Paused` · `Won` · `Lost`. Serve altro?
-- La sconfitta per carestia è **immediata** o ha una soglia di tolleranza (es. 30 secondi a
-  zero)? *Immediata è brutale e forse giusta; la soglia dà una possibilità di rimediare.*
-- Lo schermo di fine partita: quali numeri mostra? *Sono i numeri che diranno a INC-8 se il
-  gioco funziona: ondate sopravvissute, cadaveri raccolti, cadaveri **scaduti** — quest'ultimo
-  è la misura di quanto il giocatore stia perdendo il dilemma.*
-- Il riavvio è "ricarica la scena" o serve un reset esplicito? *(attenzione ai campi `static`:
-  se Domain Reload è disattivato, non si azzerano da soli)*
+- **Gli stati minimi**: `Playing` · `Paused` · `Won` · `Lost`. Bastano per ora — niente altro
+  aggiunto.
+- **La sconfitta per carestia ha una soglia di tolleranza**, non è immediata: 15 secondi
+  (`FoodSettings.starvationGraceSeconds`), decisi in [[Fame e Sussistenza]]. Dà una finestra
+  per rimediare invece di essere un cecchino.
+- **Lo schermo di fine partita**: oggi solo un testo ("HAI PERSO" / "HAI VINTO"), zero numeri.
+  I numeri utili a INC-8 (ondate sopravvissute, cadaveri raccolti/scaduti) arrivano quando
+  esistono le ondate e i cadaveri (INC-5, INC-6) — non prima, perché oggi quei numeri
+  sarebbero sempre zero.
+- **Il riavvio non è ancora implementato.** `Won`/`Lost` fermano il tempo e basta; ricaricare
+  la scena o resettare lo stato è un passo successivo, non necessario finché non esiste un
+  vero ciclo di partita da rigiocare.
+
+## Struttura tecnica
+
+**Classi**
+- `GameState` (enum) — `Playing` · `Paused` · `Won` · `Lost`.
+- `GameStateController` (MonoBehaviour) — tiene lo stato corrente, espone `Pause()` ·
+  `Resume()` · `Win()` · `Lose(string reason)`, emette `GameStateChanged`.
+- `GameOverIndicator` (Bleed.UI, MonoBehaviour) — ascolta `GameStateChanged`, mostra/nasconde
+  un testo. Non decide niente, solo mostra.
+
+**Dipendenze**
+- [[Fame e Sussistenza]] **chiama** `GameStateController.Lose(...)` direttamente (Gameplay
+  dipende da Core, non il contrario — vedi la nota nella sua scheda).
+- La UI **ascolta** l'evento `GameStateChanged`: non sa perché la partita è finita, solo che
+  lo è.
+- Nessuno chiama ancora `Win()`: arriva con [[Ondate]] e [[Cuore del Regno]] (INC-5), quando
+  esisterà una condizione di vittoria vera.
+
+## Diagramma
+
+```
+HungerSystem (Gameplay) ──Lose("Carestia")──►  GameStateController (Core)
+                                                       │
+                                          evento GameStateChanged
+                                                       │
+                                                       ▼
+                                              GameOverIndicator (UI)
+                                              mostra "HAI PERSO"
+                                                       │
+                                              Time.timeScale = 0
+```
 
 ## Stato
 
-- [ ] Progettato
-- [ ] Prototipato
-- [ ] Implementato
+- [x] Progettato
+- [x] Prototipato — collegato a [[Fame e Sussistenza]]. **Non ancora verificato in Play Mode.**
+- [ ] Implementato (manca: `Win()` non ancora chiamato da nessuno, nessun riavvio)
 - [ ] Bilanciato
-- [ ] Rifinito
+- [ ] Rifinito (il testo è `Text` legacy bianco, centrato, zero game feel — va bene per ora)
 - [ ] Done secondo [[Definition of Done]]
+
+**File:** `Assets/_Project/Scripts/Core/GameState.cs` ·
+`Assets/_Project/Scripts/Core/GameStateController.cs` ·
+`Assets/_Project/Scripts/UI/GameOverIndicator.cs` ·
+`Assets/_Project/Scripts/Editor/HungerAndGameStateSetup.cs` (tool: crea e collega tutto)
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Fame e Sussistenza]] · [[Ondate]] · [[Cuore del Regno]]

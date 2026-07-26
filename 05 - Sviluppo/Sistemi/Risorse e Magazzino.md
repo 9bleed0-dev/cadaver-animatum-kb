@@ -162,23 +162,36 @@ Costruzione             ──TryWithdraw()──┘      │
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato (i numeri salgono e scendono)
-- [ ] Implementato (transazioni atomiche, tetti, spreco)
-- [ ] Bilanciato (rese e consumi provati)
+- [x] Prototipato (i numeri salgono e scendono) — collegato a [[Posto di Lavoro e Assegnazione]].
+      **Non ancora verificato in Play Mode.**
+- [x] Implementato (transazioni atomiche, tetti, spreco) — `TryWithdraw` (singolo e multiplo
+      atomico), `Deposit` con spreco, variazione al minuto in `EconomyRunner`
+- [ ] Bilanciato (rese e consumi provati) — valori attuali sono placeholder, non giocati
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
 
 ## Note di implementazione
 
-*(si compila costruendo)*
-
-- [ ] È il primo ScriptableObject del progetto: va usato come **lezione** per l'utente.
-      → [[ScriptableObject]] e livello 4 di [[Percorso di Apprendimento]]
-- [ ] Primo candidato a un test automatico: `TryWithdraw` atomico è logica pura, senza Unity.
-      È l'occasione per far vedere a cosa serve un test.
+- [x] È il primo ScriptableObject del progetto (`ResourceDefinition`, `EconomySettings`) —
+      lezione per l'utente quando riprende in mano il progetto: → [[ScriptableObject]] e
+      livello 4 di [[Percorso di Apprendimento]]
+- [x] Primo test automatico scritto: 5 test EditMode su `Stockpile` (deposito con spreco,
+      prelievo singolo che fallisce senza toccare nulla, prelievo multiplo atomico che
+      fallisce se manca anche una sola risorsa, prelievo multiplo che riesce, prelievo che
+      non scende sotto zero). Vivono in `Scripts/Editor/StockpileTests.cs` **non** in un
+      assembly di test dedicato — [[Assembly Definitions]] restano deferiti, va bene per ora.
 - [ ] Attenzione ai valori negli asset `.asset`: modificati in Play Mode **restano** anche
       dopo lo stop. È il vantaggio principale degli ScriptableObject e la sorpresa numero uno
       di chi li usa per la prima volta.
+
+**File:** `Assets/_Project/Scripts/Data/ResourceType.cs` ·
+`Assets/_Project/Scripts/Data/ResourceAmount.cs` ·
+`Assets/_Project/Scripts/Data/ResourceDefinition.cs` ·
+`Assets/_Project/Scripts/Data/EconomySettings.cs` ·
+`Assets/_Project/Scripts/Gameplay/Stockpile.cs` ·
+`Assets/_Project/Scripts/Gameplay/EconomyRunner.cs` ·
+`Assets/_Project/Scripts/Editor/StockpileTests.cs` ·
+`Assets/_Project/Scripts/Editor/EconomySetup.cs` (tool: crea le 4 risorse + l'EconomyRunner)
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Posto di Lavoro e Assegnazione]] · [[Fame e Sussistenza]] · [[HUD Risorse]]

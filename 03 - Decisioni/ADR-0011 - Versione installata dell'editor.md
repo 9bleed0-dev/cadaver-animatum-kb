@@ -2,7 +2,7 @@
 tags: [adr, decisione, unity]
 stato: accettato
 data: 2026-07-25
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # ADR-0011 — Versione installata dell'editor
@@ -89,6 +89,13 @@ fatto contrario trovato sulla macchina, e registra come si risolve.
 > La premessa di questa decisione cade, e va riaperta con un ADR nuovo invece di scegliere sul
 > momento. In quel caso: si installa la versione **LTS più recente disponibile**, e si annota
 > in [[Asset e Tool]] cosa si è trovato.
+
+> [!tip] Verificato — 2026-07-26
+> Screenshot di Unity Hub, pannello *Install Editor*: **`6000.5.5f1`** etichettata `Supported`
+> (badge "Recommended" = più recente, non più stabile) · **`6000.3.20f1`** etichettata `LTS`
+> · `6000.0.80f1` `LTS` (in scadenza, già considerata e scartata in ADR-0001). La premessa
+> di questo ADR era corretta. **Si installa `6000.3.20f1`.** → versione annotata in
+> [[Asset e Tool]].
 
 ## Conseguenze
 

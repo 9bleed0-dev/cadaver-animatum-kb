@@ -82,7 +82,7 @@ in qualcosa che si può eseguire, invece di qualcosa da ricordare.
 
 ## Provalo tu
 
-Apri **PowerShell** dentro la cartella `...\Bleed\VideoGame` e prova:
+Apri **PowerShell** dentro la cartella `...\Bleed\CadaverAnimatum-KB` e prova:
 
 1. `.\kb.cmd brief` → vedi esattamente ciò che vedo io all'inizio di una sessione
 2. `.\kb.cmd todo` → tutte le caselle non spuntate delle note di piano

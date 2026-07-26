@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, piano, prototipo, milestone]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Piano Prototipo
@@ -43,6 +43,15 @@ L'ordine non è "dal facile al difficile". È: **prima i rischi, e la fame prima
 | **INC-6** | **Il bivio** | macelli o rialzi ogni cadavere, e i corpi scadono | **è il gioco.** Tutto prima esiste per arrivare qui |
 | **INC-7** | La partita | giochi 5 minuti, vinci o perdi | serve una partita, non una sandbox |
 | **INC-8** | Il verdetto | due persone ci giocano e tu decidi | il prototipo esiste per **rispondere**, non per crescere |
+
+> [!info] Stato al 2026-07-26
+> **INC-0 chiuso e verificato.** INC-1, INC-2, INC-3, INC-4: **codice scritto e committato**
+> (7 commit), ma scritto durante una sessione senza Unity in primo piano — **nessuno di
+> questi è ancora stato verificato in Play Mode.** Prima cosa da fare alla prossima
+> apertura: dare il focus a Unity, guardare la Console, premere Play.
+> Il criterio di uscita di INC-2 (misura del tetto di agenti col Profiler) **non è stato
+> fatto** — richiede un umano davanti al Profiler, non si può automatizzare.
+> → dettaglio completo: [[2026-07-26 - Sessione 07]]
 
 > [!tip] Perché la fame prima del cibo
 > Alla fine di INC-4 il gioco è **impossibile da vincere**: hai fame e nessuna fonte di carne.
@@ -159,23 +168,23 @@ peggiorasse, non sapremmo quale delle cinque è colpevole.
 
 ## Mappa dei sistemi
 
-| Sistema | Incremento | Scheda |
-|---|---|---|
-| [[Camera Isometrica]] | INC-1 | ✅ scritta |
-| [[Selezione e Comandi]] | INC-1 | ✅ scritta |
-| [[Movimento Unità]] | INC-2 | ✅ scritta |
-| [[Risorse e Magazzino]] | INC-3 | ✅ scritta |
-| [[Posto di Lavoro e Assegnazione]] | INC-3 | da scrivere |
-| [[HUD Risorse]] | INC-3 | da scrivere |
-| [[Fame e Sussistenza]] | INC-4 | da scrivere |
-| [[Stato della Partita]] | INC-4, INC-7 | da scrivere |
-| [[Ondate]] | INC-5 | da scrivere |
-| [[Combattimento Base]] | INC-5 | da scrivere |
-| [[Cuore del Regno]] | INC-5 | da scrivere |
-| [[Cadavere e Degrado]] | INC-6 | da scrivere |
-| [[Scelta sul Cadavere]] | INC-6 | da scrivere |
-| [[Costruzione su Griglia]] | INC-7 | da scrivere |
-| [[Fucina]] | INC-7 | da scrivere |
+| Sistema | Incremento | Scheda | Codice |
+|---|---|---|---|
+| [[Camera Isometrica]] | INC-1 | ✅ scritta | ✅ verificato |
+| [[Selezione e Comandi]] | INC-1 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Movimento Unità]] | INC-2 | ✅ scritta | ⚠️ scritto, non verificato · misura Profiler non fatta |
+| [[Risorse e Magazzino]] | INC-3 | ✅ scritta | ⚠️ scritto, non verificato · 5 test EditMode |
+| [[Posto di Lavoro e Assegnazione]] | INC-3 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[HUD Risorse]] | INC-3 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Fame e Sussistenza]] | INC-4 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Ondate]] | INC-5 | da scrivere | — |
+| [[Combattimento Base]] | INC-5 | da scrivere | — |
+| [[Cuore del Regno]] | INC-5 | da scrivere | — |
+| [[Cadavere e Degrado]] | INC-6 | da scrivere | — |
+| [[Scelta sul Cadavere]] | INC-6 | da scrivere | — |
+| [[Costruzione su Griglia]] | INC-7 | da scrivere | — |
+| [[Fucina]] | INC-7 | da scrivere | — |
 
 **Regola:** la scheda si scrive **prima** del codice, all'inizio della sessione che
 implementa quel sistema — non tutte insieme adesso. Una scheda scritta con tre incrementi di

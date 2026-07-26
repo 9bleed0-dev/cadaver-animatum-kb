@@ -129,14 +129,22 @@ if ($others.Count -gt 0) {
     Add-Row 'Unity' 'altri editor presenti' 'ATTENZIONE' ($others -join ', ') 'il progetto NON si apre con questi: se Hub propone un upgrade, rifiuta'
 }
 
-# licenza: senza, l'editor si installa ma non si apre
+# licenza: senza, l'editor si installa ma non si apre.
+# Unity 6 la mette sotto %LocalAppData%\Unity\licenses (non piu' C:\ProgramData\Unity,
+# che era il percorso delle versioni precedenti: verificato il 2026-07-26, falso negativo
+# corretto dopo che l'utente ha mostrato lo screenshot di una licenza Personal gia' attiva).
 $licPaths = @(
+    (Join-Path $env:LOCALAPPDATA 'Unity\licenses\UnityEntitlementLicense.xml'),
+    (Join-Path $env:LOCALAPPDATA 'Unity\licenses'),
     'C:\ProgramData\Unity\licenses',
     'C:\ProgramData\Unity\Unity_lic.ulf'
 )
 $hasLic = $false
-foreach ($lp2 in $licPaths) { if (Test-Path -LiteralPath $lp2) { $hasLic = $true } }
-if ($hasLic) { Add-Row 'Unity' 'licenza' 'OK' 'licenza presente in C:\ProgramData\Unity' }
+$licFound = ''
+foreach ($lp2 in $licPaths) {
+    if (Test-Path -LiteralPath $lp2) { $hasLic = $true; $licFound = $lp2; break }
+}
+if ($hasLic) { Add-Row 'Unity' 'licenza' 'OK' $licFound }
 else { Add-Row 'Unity' 'licenza' 'MANCA' 'nessuna licenza attivata' 'apri Unity Hub e accedi con il tuo Unity ID (serve un account: lo fai tu, non io) - la Personal e gratuita' -Critical }
 
 # UnityYAMLMerge, per il merge driver delle scene

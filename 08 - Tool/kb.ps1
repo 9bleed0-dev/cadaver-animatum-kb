@@ -1,6 +1,6 @@
 #Requires -Version 5.1
 <#
-    kb.ps1 - CLI of the VideoGame Knowledge Base.
+    kb.ps1 - CLI of the Cadaver Animatum Knowledge Base.
 
     Purpose: let an operator (human or AI) query the vault WITHOUT loading whole
     notes into context. Every command returns the smallest useful output.

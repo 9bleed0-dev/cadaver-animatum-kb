@@ -1,6 +1,6 @@
 ---
 tags: [decisioni, index, adr]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Registro Decisioni (ADR)
@@ -42,10 +42,14 @@ ridiscussa da zero, o peggio: contraddetta senza accorgersene.
 | [[ADR-0010 - Protocollo di contesto e CLI della KB\|0010]] | Protocollo di contesto | Briefing derivato + CLI `kb`, non lettura integrale della KB | 🟢 |
 | [[ADR-0011 - Versione installata dell'editor\|0011]] | Versione dell'editor | si installa **6.3 LTS** come da ADR-0001; `6000.4.1f1` resta ma non apre il progetto | 🟢 |
 | [[ADR-0012 - Dove vivono KB e progetto Unity\|0012]] | Cartelle e repository | **due repo separati**: KB dov'è, Unity in `C:\Dev\CadaverAnimatum` | 🟢 |
+| [[ADR-0013 - Nome delle cartelle di progetto\|0013]] | Nome delle cartelle | KB in `CadaverAnimatum-KB` — precisa il nome, non la posizione, di ADR-0012 | 🟢 |
+| [[ADR-0014 - L'operazione aperta - chi e non morto e chi no\|0014]] | Il mondo: chi è non morto | niente raggio · operazione mai chiusa · si macellano solo i rialzati | 🟢 |
+| [[ADR-0015 - Struttura a run e progressione fra partite\|0015]] | Struttura a run | una partita = una run · vittoria = chiudere l'operazione · rogue-lite fra partite | 🟢 |
+| [[ADR-0016 - Input System nuovo vs legacy\|0016]] | Input System | si usa il **nuovo** (già installato dal template) | 🟢 |
 
 \* la sezione "risorse" di ADR-0007 è precisata da ADR-0009; il resto resta in vigore.
 
-**Tutte le decisioni 0001-0012 sono Accettate al 2026-07-25.** Nessuna bloccante resta aperta.
+**Tutte le decisioni 0001-0016 sono Accettate al 2026-07-26.** Nessuna bloccante resta aperta.
 
 ## Decisioni prese fuori dagli ADR
 
@@ -53,14 +57,13 @@ Non tutto merita un ADR: una scelta **reversibile a costo zero** si registra dov
 
 | Decisione | Dove è registrata | Perché non è un ADR |
 |---|---|---|
-| **IDE: si tiene VS 18 Insiders** (2026-07-25) | [[Asset e Tool]] | cambiare IDE non lega niente del progetto: Unity rigenera `.sln`/`.csproj` da solo. Il rischio (build di anteprima) è stato segnalato e accettato |
+| **IDE: Visual Studio Community 2026, canale stabile, workload Unity** (2026-07-26) | [[Asset e Tool]] | cambiare IDE non lega niente del progetto: Unity rigenera `.sln`/`.csproj` da solo |
 | **Budget di tempo: 15-20 ore/settimana** (2026-07-25) | [[Scope e Anti-Scope]] | è un vincolo, non una decisione tecnica. Determina lo scope, non l'architettura |
 
 ## Decisioni ancora da prendere
 
 | Decisione | Quando serve |
 |---|---|
-| **Input System nuovo vs legacy** | 🟠 **a INC-1**, è la prossima che tocca |
 | Titolo definitivo (provvisorio: *Cadaver Animatum*) | quando si vuole |
 | Sistema di salvataggio | fuori dal prototipo |
 | Approccio all'audio (uGUI/mixer già delineati, non formalizzati) | fuori dal prototipo |

@@ -1,6 +1,6 @@
 ---
 tags: [risorse, tool, asset]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Asset e Tool
@@ -10,72 +10,65 @@ aggiornato: 2026-07-25
 
 ## Software
 
-Verificato sulla macchina il **2026-07-25**.
+Verificato con `Verify-Setup.ps1` (→ [[Setup della macchina]]) il **2026-07-26**.
 
 | Tool | Versione | Stato | Note |
 |---|---|---|---|
 | Unity Hub | *(da annotare)* | ✅ installato | `C:\Program Files\Unity Hub\` |
-| Unity Editor | **`6000.3.x` LTS** | ❌ **da installare entro lun 27** | versione del progetto, decisa in [[ADR-0011 - Versione installata dell'editor]] |
-| Unity Editor (altro) | `6000.4.1f1` | ⚠️ installato, **non apre il progetto** | resta sul disco; se Hub propone un upgrade, la risposta è no |
+| **Unity Editor** | **`6000.3.20f1` LTS** | ✅ installato | versione congelata del progetto, decisa in [[ADR-0011 - Versione installata dell'editor]] |
+| Unity Editor (altro) | `6000.4.1f1` | ⚠️ resta sul disco, **non apre il progetto** | se Hub propone un upgrade, la risposta è no |
+| **Licenza Unity** | Personal | ✅ attiva dal 3 aprile 2026 | `%LocalAppData%\Unity\licenses\UnityEntitlementLicense.xml` |
 | Moduli editor | Windows Standalone, WebGL | ✅ | serve solo Windows; per la build finale serve **IL2CPP** |
-| IDE | VS Community **2026 Insiders** `18.9` | ⚠️ **da rivedere** | senza workload Unity, e scade il **2026-10-07** → vedi la sezione qui sotto |
+| **IDE** | **Visual Studio Community 2026** `18.8.12021.73` | ✅ **risolto** | canale stabile (`Release`), scade il 2026-10-19. **Workload Unity ✅ · Tools for Unity ✅** — Attach to Unity disponibile |
 | Git | `2.55.0.windows.2` | ✅ installato | utente `Daniele` configurato |
 | Git LFS | `3.7.1` | ✅ installato | [[ADR-0004 - Version Control]] |
-| `core.longpaths` | — | ❌ **non impostato** | `git config --global core.longpaths true` — serve a Unity su Windows |
+| `core.longpaths` | `true` | ✅ impostato | |
 | .NET SDK | `10.0.400-preview` | ✅ installato | non serve al progetto: Unity porta il suo compilatore |
-| UnityYAMLMerge | incluso nell'editor | ✅ presente | `...\6000.4.1f1\Editor\Data\Tools\UnityYAMLMerge.exe` |
-| Obsidian | — | ✅ in uso | Vault `Bleed`, cartella `VideoGame` |
+| UnityYAMLMerge | incluso nell'editor | ✅ presente | `...\6000.3.20f1\Editor\Data\Tools\UnityYAMLMerge.exe` |
+| Obsidian | — | ✅ in uso | Vault `Bleed`, cartella `CadaverAnimatum-KB` → [[ADR-0013 - Nome delle cartelle di progetto]] |
 | PowerShell | 5.1 (Windows) | ✅ | è quello che fa girare `kb` → [[README - CLI della KB]] |
+| **Repo KB su GitHub** | — | ❌ **nessun remoto** | `git remote add origin ...` + `git push -u origin main`. Il commit locale non è un backup |
 
-> [!warning] Versione Unity congelata — da compilare martedì
-> Appena l'editor è installato, scrivere qui il numero **esatto** (es. `6000.3.7f1`) e non
-> aggiornarlo senza un nuovo ADR. → [[ADR-0011 - Versione installata dell'editor]]
->
-> **Versione congelata del progetto:** `<da scrivere dopo l'installazione>`
+**Versione congelata del progetto: `6000.3.20f1`** — non si aggiorna senza un nuovo ADR.
 
-### L'IDE — cosa c'è davvero installato
+### L'IDE — risolto
 
-Verificato con `vswhere` il 2026-07-25. **Una sola** installazione di Visual Studio:
+La VS Community 2026 Insiders vista il 2026-07-25 (anteprima, senza workload Unity, in
+scadenza il 2026-10-07) è stata **sostituita** da un'installazione sul canale stabile, con il
+workload *Game development with Unity* completo: Visual Studio Tools for Unity presente,
+`Attach to Unity` disponibile. Non serve più decidere niente qui.
 
-| | |
-|---|---|
-| Nome | **Visual Studio Community 2026** — `VisualStudioPreview/18.9.0-insiders+12009.208` |
-| Versione | `18.9.12009.208` · canale `VisualStudio.18.Preview` · `isPrerelease: true` |
-| Percorso | `C:\Program Files\Microsoft Visual Studio\18\Insiders` |
-| **Workload Unity** (`Microsoft.VisualStudio.Workload.ManagedGame`) | ❌ **NON installato** |
-| Visual Studio Tools for Unity | ❌ assente (nessuna cartella *Extensions\Microsoft\Visual Studio Tools for Unity*) |
-| **`expirationDate`** | **2026-10-07** |
-| `retirementDate` | 2027-01-05 |
-
-> [!danger] Due fatti che non erano visibili quando è stata presa la decisione
-> **1. Il supporto Unity non c'è.** Senza il workload *Game development with Unity* mancano
-> Visual Studio Tools for Unity: niente **Attach to Unity** (cioè niente breakpoint dentro il
-> gioco che gira), niente IntelliSense consapevole dei `MonoBehaviour`. Oggi quell'IDE è un
-> editor C# generico, non un IDE per Unity. Quindi il vantaggio "zero installazioni" **non
-> esiste**: qualcosa va installato in ogni caso.
->
-> **2. La build scade il 2026-10-07**, cioè subito dopo la finestra di settembre. Sul canale
-> Insiders l'aggiornamento non è una scelta: è una scadenza.
->
-> *(I riferimenti a `unity_cl_extension.xml` e `Microsoft.Cpp.Unity.props` trovati
-> nell'installazione **non** riguardano Unity: sono le "unity build" del compilatore C++, una
-> tecnica di compilazione con lo stesso nome e niente in comune.)*
-
-**Decisione:** `<in attesa>` — vedi le opzioni in [[Checklist M0 - Setup]] parte 0.
-Resta una scelta **reversibile a costo zero**: Unity rigenera `.sln` e `.csproj` da solo, quindi
-cambiare IDE non lega niente del progetto. Per questo non è un ADR.
-
-> [!tip] Come si decide senza indovinare
-> Nel pannello dei moduli di Unity Hub, durante l'installazione dell'editor, compare la voce
-> per installare una **Visual Studio Community** insieme a Unity. La versione che Unity offre lì
-> è quella su cui Unity è testata: **si prende quella**. È il modo di leggere la risposta invece
-> di dedurla.
+> [!info] Cosa restava da fare, e come si è chiuso
+> L'installazione risultava inizialmente incompleta (`isComplete: false` da `vswhere`): il
+> processo dell'installer si era fermato a metà. Riaperto **Visual Studio Installer** e
+> completata la modifica, il workload è comparso. Se ricapita: l'installer di VS è
+> un'applicazione a sé, separata da Visual Studio stesso.
 
 > [!danger] Non era aggiornata
 > Fino al 2026-07-25 questa tabella diceva "da installare" per cose che erano già installate,
 > e non registrava il conflitto sulla versione dell'editor. Un registro di versioni
 > disallineato è peggio di nessun registro: dà una risposta sbagliata con l'aria di essere
 > autorevole. Va aggiornato **nel momento** in cui si installa qualcosa, non dopo.
+
+### La licenza — falso negativo di `Verify-Setup.ps1`, corretto
+
+Lo script cercava la licenza in `C:\ProgramData\Unity`, il percorso usato dalle versioni di
+Unity precedenti alla 6. **Unity 6 la mette altrove**:
+
+```
+%LocalAppData%\Unity\licenses\UnityEntitlementLicense.xml
+```
+
+La licenza **Personal era già attiva dal 3 aprile 2026** — lo script diceva "manca" quando
+non mancava. Corretto il 2026-07-26 aggiungendo il percorso giusto (con quello vecchio tenuto
+come ripiego, per chi ha ancora un'installazione precedente). Verificato di nuovo dopo la
+correzione: `[ OK ]`.
+
+> [!tip] La lezione, in una riga
+> Un verificatore automatico può sbagliare quanto una nota scritta a mano — la differenza è
+> che si corregge una volta sola, per tutte le sessioni future. Per questo vale la pena
+> **fidarsi ma controllare**: se un check dice "manca" qualcosa che sembra impossibile,
+> guarda prima se il check sta cercando nel posto giusto.
 
 ## Pacchetti Unity
 

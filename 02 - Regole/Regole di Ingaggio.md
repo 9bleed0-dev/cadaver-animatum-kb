@@ -51,6 +51,16 @@ che dichiara di *superare* (supersede) il vecchio.
 
 Perché: tra tre mesi nessuno dei due ricorderà perché avevamo scelto X. L'ADR sì.
 
+**Il canone di design si misura, non si difende** *(aggiunto il 2026-07-26)*
+Un ADR che decide **struttura** (dove vivono i file, come è fatta una partita, cosa persiste)
+è portante: cambiarlo dopo costa caro, e per questo si ridiscute solo con un ADR nuovo.
+Un ADR che decide **meccanismi** (quanto costa, ogni quanto, come si chiama, quale numero) è
+un'ipotesi: si scrive per poterla provare, e il playtest ha l'ultima parola sull'argomentazione.
+
+Quando un ADR contiene entrambe le cose, lo dice esplicitamente in testa — vedi
+[[ADR-0015 - Struttura a run e progressione fra partite]]. Così non si finisce a difendere in
+riunione un numero che bastava provare.
+
 ## 6. Niente magia, niente scorciatoie invisibili
 
 - Non aggiungo pacchetti, asset store o dipendenze senza dirtelo e senza ADR.

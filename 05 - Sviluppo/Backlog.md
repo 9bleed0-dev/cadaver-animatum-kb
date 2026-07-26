@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, backlog, pianificazione]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Backlog
@@ -30,16 +30,13 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 ---
 
-## 🔴 Bloccanti — prima o durante martedì 28 luglio
+## 🔴 Bloccanti
 
 | # | Cosa | Dove |
 |---|---|---|
-| 1 | **Scaricare Unity 6.3 LTS** — diversi GB, da avviare entro lunedì 27 | [[ADR-0011 - Versione installata dell'editor]] |
-| 2 | Mettere **la KB sotto Git** con remoto privato — oggi esiste in una copia sola | [[Checklist M0 - Setup]] parte 1 |
-| 3 | Creare il progetto Unity con template Universal 3D in `C:\Dev\CadaverAnimatum` | [[Checklist M0 - Setup]] parte 3 |
-| 4 | `Force Text` + `Visible Meta Files` **prima** del primo commit | [[Checklist M0 - Setup]] parte 4 |
-| 5 | `git config --global core.longpaths true` | [[Checklist M0 - Setup]] parte 1 |
-| 6 | Verificare che Unity riconosca VS 18 Insiders (`External Tools`) — se no, VS 2022 Community | [[Asset e Tool]] |
+| 35 | **Aprire Unity, guardare la Console, premere Play.** Sessione 07 ha scritto INC-1…INC-4 senza Unity in primo piano: **niente di tutto questo è stato verificato.** È il primo passo, prima di continuare a costruire | [[2026-07-26 - Sessione 07]] · `Cadaver Animatum ▸ Setup ▸ ...` (5 tool, in ordine) |
+| 22 | Cancellare la cartella `...\Bleed\VideoGame` residua e vuota — dopo aver riavviato Claude Code sulla cartella nuova | [[ADR-0013 - Nome delle cartelle di progetto]] |
+| 34 | Creare il repository GitHub del progetto Unity (separato da quello della KB) + push | [[ADR-0012 - Dove vivono KB e progetto Unity]] · [[Checklist M0 - Setup]] parte 5 |
 
 ---
 
@@ -47,8 +44,6 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Note |
 |---|---|---|
-| 7 | **ADR su Input System** (nuovo vs legacy) | serve a INC-1: è la prima volta che tocchiamo l'input. Decisione ancora aperta in [[Registro Decisioni]] |
-| 8 | Verificare se il pacchetto **AI Navigation** è nel template Universal 3D | serve a INC-2 → [[Movimento Unità]] |
 | 10 | **Misurare** il tetto di agenti NavMesh col Profiler | è il criterio di uscita di INC-2, non un extra → [[Movimento Unità]] |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
 
@@ -59,10 +54,23 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | # | Cosa | Note |
 |---|---|---|
 | 12 | Configurare **UnityYAMLMerge** | già scritto in [[Checklist M0 - Setup]], va eseguito quando esistono scene vere |
-| 13 | Primo **test automatico** su `Stockpile.TryWithdraw` | logica pura senza Unity: è l'occasione per spiegare i test → [[Risorse e Magazzino]] |
-| 14 | Decidere il **titolo definitivo** (provvisorio: *Cadaver Animatum*) | non blocca niente |
+| 36 | **Degrado individuale dei lavoratori** — oggi la fame è tutto-o-niente a livello di regno | [[Fame e Sussistenza]] |
+| 37 | **Indicatore "tempo alla fame"** in HUD, ora che il consumo esiste | [[HUD Risorse]] |
+| 38 | **Assegnazione dei lavoratori dal giocatore** (oggi è chiamata da codice/editor tool) | [[Posto di Lavoro e Assegnazione]] · [[Selezione e Comandi]] |
+| 14 | Decidere il **titolo definitivo** (provvisorio: *Cadaver Animatum*) | non blocca niente, ma da qui dipendono la voce 23 e il nome delle cartelle → [[ADR-0013 - Nome delle cartelle di progetto]] |
+| 23 | **Radice dei namespace C#**: oggi è `Bleed.*`, che è il nome del *vault Obsidian*, non del gioco | da decidere **prima** di INC-1, quando esistono 0 righe di codice: dopo costa un rinomina su [[Piano Prototipo]], [[Regole di Codice]], [[Assembly Definitions]] e 12 schede sistema |
 | 15 | **Assembly Definitions** | quando la compilazione dà fastidio, non prima → [[Assembly Definitions]] |
 | 16 | Scena **Bootstrap** | serve quando ci sono sistemi globali da inizializzare, non ora |
+| 24 | **Giocare *Against the Storm*** (2023) | è il rogue-lite city builder più vicino a [[ADR-0015 - Struttura a run e progressione fra partite]]. Studiare: durata di una run, cosa persiste, come giustificano il ricominciare |
+| 25 | **Indicatore di notorietà** — "cosa il mondo sa di te" | senza raggio, è uno dei due motori del pilastro 4 e va **visibile a schermo**, o il pilastro smette di mordere → [[ADR-0014 - L'operazione aperta - chi e non morto e chi no]] |
+| 26 | **Il rito di conversione**: costo, luogo, officiante, durata | in M3 basta un costo secco su *Rialzare*; il rito completo è dopo → [[Scelta sul Cadavere]] |
+| 27 | **Contatore persistente dei sudditi perduti** | è la contromisura al fallimento a basso costo: va implementato **insieme** al livello meta, non dopo → ADR-0015 §5 |
+| 28 | **Livello meta**: persistenza fra run, Frammenti, Postille, sblocchi | non prima di M3. Progettare il salvataggio come "stato di run" + "stato persistente" separati → ADR-0015 §6 |
+| 31 | **Rovine abitate**: stato persistente per luogo sulla mappa di campagna | il pezzo più costoso di [[ADR-0015 - Struttura a run e progressione fra partite]] (§7), e quello con il rischio di equilibrio più alto: se tornarci rende sempre, fallire diventa la strategia ottimale |
+| 32 | **Trascrivi o perdi**: i frammenti sciolti si perdono se l'insediamento cade | ADR-0015 §8. Economico e dà il battito del genere — candidato buono per il primo test del meta |
+| 33 | **L'assalto annunciato** che porta il frammento | è la condizione di fine run (ADR-0015): un ufficiale dell'Inquisizione in un'ondata dichiarata → [[Ondate]] |
+| 29 | **Decidere il secolo** dell'ambientazione | le credenze sulla peste sono del 1348, le cronache dei revenant del XII sec., il grimorio del XV: ~250 anni mescolati sotto un pilastro che vieta gli anacronismi. Finestra proposta: **fine XIV / inizio XV** |
+| 30 | **Confermare: i sudditi iniziali sono morti?** | [[Il Rituale]] contiene due letture non conciliate. Proposta: sì, sono `cadaver animatum` |
 
 ---
 
@@ -109,8 +117,20 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | CLI della KB + [[Protocollo di Sessione]] ([[ADR-0010 - Protocollo di contesto e CLI della KB]]) | 2026-07-25 |
 | Versione dell'editor decisa → 6.3 LTS ([[ADR-0011 - Versione installata dell'editor]]) | 2026-07-25 |
 | Cartelle e repository decisi → due repo separati ([[ADR-0012 - Dove vivono KB e progetto Unity]]) | 2026-07-25 |
-| IDE deciso → si tiene VS 18 Insiders ([[Asset e Tool]]) | 2026-07-25 |
+| IDE risolto → Visual Studio Community 2026, canale stabile, workload Unity ([[Asset e Tool]]) | 2026-07-26 |
 | **Budget di tempo dichiarato: 15-20 h/settimana** → target di settembre = **M3** ([[Scope e Anti-Scope]]) | 2026-07-25 |
+| Cartella della KB rinominata `VideoGame` → `CadaverAnimatum-KB` ([[ADR-0013 - Nome delle cartelle di progetto]]) | 2026-07-26 |
+| Raggio abolito, operazione aperta, valvola, culto ([[ADR-0014 - L'operazione aperta - chi e non morto e chi no]]) | 2026-07-26 |
+| Struttura a run e condizione di vittoria ([[ADR-0015 - Struttura a run e progressione fra partite]]) | 2026-07-26 |
+| Pilastro 2 riformulato in «un assioma, poi rigore»; nuovi motori del pilastro 4 | 2026-07-26 |
+| Progetto Unity creato (`C:\Dev\CadaverAnimatum`), primo commit, `AI Navigation` e `Input System` già nel template | 2026-07-26 |
+| ADR su Input System → si usa il nuovo ([[ADR-0016 - Input System nuovo vs legacy]]) | 2026-07-26 |
+| **INC-1**: [[Camera Isometrica]] (pan/zoom/trascinamento) — verificata in Play Mode | 2026-07-26 |
+| **INC-1**: [[Selezione e Comandi]] (click, Shift, evidenziazione) — scritta, non verificata | 2026-07-26 |
+| **INC-2**: [[Movimento Unità]] su NavMesh + harness di misura — scritta, non verificata | 2026-07-26 |
+| **INC-3**: [[Risorse e Magazzino]] (Stockpile + 5 test), [[Posto di Lavoro e Assegnazione]], [[HUD Risorse]] — scritte, non verificate | 2026-07-26 |
+| **INC-4**: [[Fame e Sussistenza]], [[Stato della Partita]] — il **primo loop si chiude** (fame → lavoro → risorse) — scritte, non verificate | 2026-07-26 |
+| 5 tool editor da un click per costruire/collegare tutto quanto sopra (`Cadaver Animatum ▸ Setup`) | 2026-07-26 |
 
 ## Collegamenti
 - [[Scope e Anti-Scope]] · [[Piano Prototipo]] · [[Roadmap e Milestone]]

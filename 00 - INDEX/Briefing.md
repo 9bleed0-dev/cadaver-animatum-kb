@@ -1,6 +1,6 @@
 ---
 tags: [index, briefing, stato]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Briefing
@@ -20,8 +20,8 @@ aggiornato: 2026-07-25
 ## Il gioco
 
 **Cadaver Animatum** *(titolo provvisorio)* — gestionale di sopravvivenza con difesa a
-ondate. Medioevo storico, necromanzia documentata. PC/Windows, 3D low-poly, camera
-ortografica isometrica.
+ondate, **a struttura di run** con progressione fra partite. Medioevo storico, necromanzia
+documentata. PC/Windows, 3D low-poly, camera ortografica isometrica.
 
 > Il Re chiese che il suo popolo non morisse più. La richiesta fu esaudita.
 
@@ -30,8 +30,14 @@ ortografica isometrica.
 **La domanda che il prototipo deve rispondere — e nient'altro:**
 > È interessante — teso, non frustrante — dover essere attaccati per sopravvivere?
 
-**La decisione centrale:** ogni cadavere è un bivio — Macellare (Carne) · Lasciar marcire
-(Icore) · Rialzare (un suddito in più che non morirà mai). E si degrada nel tempo.
+**La decisione centrale:** ogni cadavere è un bivio — **Rialzare** (fresco: un suddito in più,
+costa, ed è una bocca per sempre) · **Macellare** (Carne) · **Estrarre Icore** (marcio).
+Si degrada nel tempo, e il degrado **spegne le opzioni migliori**: aspettare è una decisione.
+
+**Le tre regole del mondo che non si dimenticano** *(2026-07-26)*:
+1. **Non esiste raggio.** Nessuno diventa tuo da solo: i nemici muoiono e restano morti.
+2. **L'operazione non si è mai chiusa** — mancava il proemio. Il Re ne è la bocca aperta.
+3. **Si macellano solo i rialzati.** I sudditi iniziali sono un numero fisso e intoccabile.
 
 → [[One Pager]] · [[Il Rituale]] · [[Stato del Progetto]]
 
@@ -42,9 +48,12 @@ ortografica isometrica.
 | # | Pilastro | Vieta |
 |---|---|---|
 | 1 | **Il nemico è il raccolto** | fonti di cibo alternative affidabili, pace lunga, vittoria per sterminio |
-| 2 | **Medioevo vero, occulto vero** | fantasy, magia elementale, dark fantasy generico, anacronismi |
+| 2 | **Un assioma, poi rigore** | fantasy, magia elementale, anacronismi — e **ogni seconda eccezione soprannaturale** |
 | 3 | **Il macabro è burocratico — e ogni tanto si inceppa** | splatter, jumpscare, ironia, orrore frequente o prevedibile |
 | 4 | **Ogni espansione è una condanna** | espansione gratuita, zone sicure, crescita senza contraccolpo |
+
+L'assioma concesso è uno e solo uno: **l'operazione è reale ed è aperta**. Tutto il resto
+deriva da lì o da una fonte documentata.
 
 → [[Pilastri di Design]]
 
@@ -64,10 +73,14 @@ ortografica isometrica.
 | Stile | 3D low-poly, ortografica isometrica, priorità alle animazioni | 0008 |
 | Risorse | Carne · Icore · Pietra · Ferro — cadavere = bivio a 3 vie | 0009 |
 | Contesto | Briefing + `kb` CLI, non lettura integrale della KB | 0010 |
-| Cartelle | **due repo separati**: KB dov'è · Unity in `C:\Dev\CadaverAnimatum` | 0012 |
+| Cartelle | **due repo separati**: KB in `...\Bleed\CadaverAnimatum-KB` · Unity in `C:\Dev\CadaverAnimatum` | 0012, 0013 |
+| Mondo | niente raggio · operazione mai chiusa · si macellano solo i rialzati · il culto porta bocche, non cibo | 0014 |
+| Struttura | una partita = una mappa = una run · vinci **chiudendo** l'operazione coi 2 fogli del proemio | 0015 |
+| Rogue-lite | **vittoria e fallimento lasciano cose diverse**: Frammenti vs Postille · una run fallita lascia una **rovina abitata** a cui puoi tornare · l'hub è il Re | 0015 |
+| Input | Input System **nuovo** (già nel template, `com.unity.inputsystem 1.19.0`) | 0016 |
 
-Fuori dagli ADR: **tempo** = 15-20 h/settimana · **IDE** = ⚠️ riaperta, l'unica VS installata
-non ha il workload Unity e scade il 2026-10-07 → [[Asset e Tool]].
+Fuori dagli ADR: **tempo** = 15-20 h/settimana · **IDE** = ✅ risolto, VS Community 2026
+(canale stabile) con workload Unity → [[Asset e Tool]].
 
 ⚠️ Sul PC è installata anche `6000.4.1f1`: **il progetto non si apre con quella.**
 Se Unity Hub propone un upgrade, la risposta è no.
@@ -117,19 +130,34 @@ niente abbreviazioni.
 
 ---
 
-## Dove siamo — 2026-07-25
+## Dove siamo — 2026-07-26 (domenica notte)
 
-**Fase:** FASE 1 (Concept) chiusa · **FASE 2 (Prototipo) inizia martedì 28 luglio 2026.**
+**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo): INC-1…INC-4 hanno codice
+scritto e committato (7 commit), NESSUNO verificato in Play Mode.**
 
-Esiste: ~100 note di KB **sotto Git** (1 commit), concept completo, 12 ADR, il piano del
-prototipo, 15 schede sistema (4 progettate + 11 stub), il CLI, il verificatore dell'ambiente.
-Non esiste: **progetto Unity, zero righe di codice, remoto GitHub della KB.**
+Esiste: ~110 note di KB, **15 ADR**, ambiente e progetto Unity pronti
+(`C:\Dev\CadaverAnimatum`), e — scritto in [[2026-07-26 - Sessione 07]], mentre l'utente
+dormiva — il codice di: [[Camera Isometrica]] (✅ **verificata**, l'unica) ·
+[[Selezione e Comandi]] · [[Movimento Unità]] su NavMesh · [[Risorse e Magazzino]] (+5 test) ·
+[[Posto di Lavoro e Assegnazione]] · [[HUD Risorse]] · [[Fame e Sussistenza]] ·
+[[Stato della Partita]]. **Il primo loop chiude**: fame → lavoro → risorse.
 
-**Prossimo passo:** [[Checklist M0 - Setup]] — installazione, progetto, Git, tour dell'editor.
-Poi [[Piano Prototipo]] → INC-1.
+> [!danger] Nulla di questo (tranne la camera) è stato eseguito
+> Scritto senza Unity in primo piano: niente compilazione live, niente Play Mode. Controllato
+> a occhio con cura, ma **la prima cosa da fare è aprire Unity, guardare la Console, e
+> giocare** — non aggiungere altro codice sopra a codice mai provato.
 
-**Da fare prima di martedì:** avviare il download di **Unity 6.3 LTS** da Unity Hub, e mettere
-la **KB sotto Git** con un remoto privato (10 minuti, chiude il rischio "una copia sola").
+**Prossimo passo, in ordine:**
+1. Apri Unity, aspetta la ricompilazione, **guarda la Console** — se rossa, dimmi cosa dice
+2. Premi **Play**: WASD/rotella/trascinamento (camera, già ok) → click sul cubo (selezione) →
+   guarda se Pietra/Ferro salgono nell'angolo (HUD) → aspetta ~50s e verifica la sconfitta
+   per carestia
+3. Se qualcosa manca nella scena, i tool sono già lì e idempotenti:
+   `Cadaver Animatum ▸ Setup ▸ <nome> (INC-N)`, nell'ordine in cui compaiono nel menu
+4. **Solo dopo**: la misura del tetto di agenti NavMesh col Profiler — è il criterio di
+   uscita vero di INC-2, e serve un umano davanti allo schermo
+
+Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 
 **Budget di tempo:** 15-20 h/settimana × ~9 settimane = **135-180 ore**. Le stime grezze di
 [[Piano Prototipo]] moltiplicate per 3 arrivano a ~145-180 ore: **M3 ci sta, M4 no.**

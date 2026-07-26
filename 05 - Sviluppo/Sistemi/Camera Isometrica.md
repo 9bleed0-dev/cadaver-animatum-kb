@@ -1,7 +1,7 @@
 ---
 tags: [sistema, camera, input]
-stato: progettato
-aggiornato: 2026-07-25
+stato: prototipato
+aggiornato: 2026-07-26
 ---
 
 # Sistema: Camera Isometrica
@@ -120,21 +120,30 @@ rig.position          camera.orthographicSize
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato (funziona coi cubi)
-- [ ] Implementato
-- [ ] Bilanciato (angolo e velocità trovati provando)
+- [x] Prototipato (funziona coi cubi) — verificato in Play Mode dall'utente il 2026-07-26
+- [ ] Implementato (manca il tasto "torna al Cuore" — backlog #21, non bloccante)
+- [ ] Bilanciato (`pitch`/`yaw` = 40°/45° sono i default, non ancora provati e congelati)
 - [ ] Rifinito (game feel)
 - [ ] Done secondo [[Definition of Done]]
 
 ## Note di implementazione
 
-*(si compila costruendo)*
-
-- [ ] Decidere Input System nuovo o legacy — è una decisione aperta in
-      [[Registro Decisioni]]. Va chiusa qui, con un ADR, perché è la prima volta che serve.
-- [ ] Trovare `pitch` provando, poi congelarlo.
+- [x] ~~Decidere Input System nuovo o legacy~~ → **nuovo**, [[ADR-0016 - Input System nuovo vs legacy]]
+- [x] Pan (WASD + bordo schermo) — implementato in `CameraRigController`
+- [x] Trascinamento col tasto centrale — implementato con raycast sul piano y=0: il punto
+      di terreno sotto il cursore all'inizio del trascinamento resta sotto il cursore
+- [x] Zoom con rotella, smorzato con `Mathf.Lerp` — verificato funzionante
+- [ ] Trovare `pitch`/`yaw` provando davvero l'angolo, poi congelarli (oggi sono i default
+      di progetto: 40°/45°)
 - [ ] Verificare che con proiezione ortografica le ombre e il fog di URP si comportino come
-      ci si aspetta: l'ortografica ha qualche sorpresa in più della prospettiva.
+      ci si aspetta: l'ortografica ha qualche sorpresa in più della prospettiva
+- [ ] `mapBounds` di default (60×60) non ancora provato contro una mappa vera
+
+**File:** `Assets/_Project/Scripts/Core/CameraRigController.cs` ·
+`Assets/_Project/Scripts/Data/CameraSettings.cs` ·
+`Assets/_Project/Scripts/Editor/CameraRigSetup.cs` (tool: un click crea/collega il rig) ·
+`Assets/_Project/Scripts/Editor/TestSceneSetup.cs` (tool: crea pavimento + cubo di prova)
+**Commit:** `da15015`
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Selezione e Comandi]]

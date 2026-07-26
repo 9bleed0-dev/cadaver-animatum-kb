@@ -104,15 +104,16 @@ Cosa c'è, nei manuali veri, all'inizio di un'operazione? Non il potere. **Le pr
 Il Re non possedeva le protezioni. Possedeva solo l'operazione.
 
 > [!tip] La conseguenza che tiene insieme tutto
-> Senza il cerchio, l'effetto **non ha confine**.
+> Senza il proemio, l'operazione **non ha clausola di chiusura**.
 >
-> Il rituale doveva salvare *il popolo del re*. Non avendo la parte che definisce
-> **su chi** e **fin dove** agisce, si applica a tutto ciò che rientra nel suo raggio —
-> e quel raggio è **ovunque arrivi il regno**.
+> Non ha prodotto un effetto e si è conclusa: **è ancora in funzione.** Mancano le
+> *constrizioni* — chi, dove, **per quanto** — quindi l'operazione non specifica né in che
+> stato né fino a quando. E manca il cerchio, che proteggeva l'operatore:
+> **la bocca aperta dell'operazione è il Re stesso.**
 >
-> Questa è la spiegazione narrativa della **piaga che si espande**. Non è una malattia che
-> si diffonde: è un rituale senza bordo, e il bordo è il confine del tuo feudo.
-> Ogni terra che prendi entra nell'operazione. → [[Pilastri di Design]] pilastro 4
+> Da qui viene tutto il resto: il degrado dei sudditi (è la clausola mancante), la conversione
+> come atto deliberato e costoso invece che automatico, e la possibilità di **chiudere** —
+> che è la vittoria. → [[ADR-0014 - L'operazione aperta - chi e non morto e chi no]]
 
 ### Gli indizi da mostrare prima
 
@@ -143,21 +144,29 @@ Non è una frase d'atmosfera: è una **regola dura**.
 
 - La fame non li uccide: li **degrada**. Diventano lenti, inutili, e continuano a consumare.
 - Non puoi risolvere la sovrappopolazione lasciandoli morire. **Non se ne vanno.**
-- La tua popolazione è un numero che **sale e basta**.
+- I sudditi iniziali sono un numero **fisso**: non muoiono e non nascono. Ogni suddito in più
+  è stato **rialzato da te**, uno per uno.
+- E sono gli unici che non puoi rimettere nel ciclo. I rialzati sì. Loro mai.
 
-Questo trasforma il gestionale: nei colony builder normali la popolazione è una risorsa da
-far crescere. Qui è un **debito che si accumula**.
+Questo trasforma il gestionale: nei colony builder normali la popolazione è una risorsa da far
+crescere. Qui è **una manopola con un peso morale** — ogni bocca in più l'hai voluta tu, e
+l'unica parte che non puoi alleggerire è proprio quella che hai giurato di salvare.
 
-### b) Chi muore nel tuo raggio diventa tuo
-Il rituale non ha confini personali. I soldati nemici che cadono sulla tua terra rientrano
-nell'operazione.
+### b) Nessuno diventa tuo da solo
 
-Da cui la decisione centrale del gioco davanti a ogni cadavere:
+> [!warning] Corretto il 2026-07-26
+> La versione precedente diceva che chiunque muoia nel tuo raggio diventa tuo. **Non è più
+> canone**: contraddiceva il core loop, perché se i nemici nel raggio non muoiono non c'è cibo.
+> → [[ADR-0014 - L'operazione aperta - chi e non morto e chi no]]
+
+I nemici muoiono, e restano morti. Un corpo entra nell'operazione **solo se ce lo metti tu**,
+con un rito che costa. Da cui la decisione centrale del gioco davanti a ogni cadavere —
+**Rialzare · Macellare · Estrarre Icore** — e il fatto che nessuna delle tre si scelga da sola:
 → [[ADR-0009 - Risorse e ciclo del cadavere]]
 
 ### c) Il mondo esterno ha ragione
-Non sono fanatici: hanno **capito il funzionamento**. Sanno che ogni loro soldato caduto
-diventa tuo, e che ogni terra che tocchi entra nel rituale.
+Non sono fanatici: hanno **capito il funzionamento**. Sanno che ogni loro soldato caduto è
+materia prima per te, e che finché l'operazione resta aperta non finirà da sola.
 
 Da qui il loro comportamento, che diventa una meccanica: **recuperano o bruciano i propri
 morti**. Il giocatore deve impedirlo. Il carro dei bruciacadaveri è un bersaglio
@@ -167,12 +176,14 @@ E spiega perché mandano tutto ciò che hanno: contro un nemico che si nutre del
 perdite, la guerra prolungata è suicidio. L'unica strategia razionale è **l'annientamento
 immediato**.
 
-### d) La vittoria è un problema aperto
-Se i tuoi non muoiono e i loro morti diventano tuoi, **non puoi perdere per attrito**.
-Puoi solo perdere per **fame** o per **distruzione del Cuore**.
+### d) La vittoria è chiudere l'operazione
+Non puoi perdere per attrito: i tuoi non muoiono. Puoi perdere per **fame** o per
+**distruzione del Cuore** — e perdere non significa morire, perché il Re non può morire.
 
-Il gioco non ha una condizione di vittoria ovvia. È coerente: il Re ha eliminato la morte,
-e con essa la fine di qualunque cosa.
+Vinci recuperando i **due fogli del proemio** e officiando tu il rito che l'Inquisizione vuole
+officiare contro di te. Stessa carta, intenzione opposta: loro **revocano** — e il tuo popolo
+finisce — tu **constringi**, e resta. Non ti penti e non guarisci: **ti fermi.**
+→ [[ADR-0015 - Struttura a run e progressione fra partite]]
 
 ---
 
@@ -188,11 +199,22 @@ e con essa la fine di qualunque cosa.
   dice mai — lo decide il giocatore con come gestisce il regno.)*
 - Il consigliere sapeva? *(Proposta: no. È il primo a essere trasformato, e continua a
   servirti. Peggiore di un tradimento.)*
-- Il saggio è ancora vivo? È mai stato vivo?
-- Esiste il proemio mancante da qualche parte? *(Attenzione: è una promessa di "cura" che
-  potrebbe indebolire il tema. Da valutare con cura.)*
+- Il saggio è ancora vivo? È mai stato vivo? *(Nota del 2026-07-26: «Funzionerà.» e
+  nient'altro è l'unico punto in cui la trama scivola verso lo straniero-misterioso-che-sa,
+  cioè esattamente lo stereotipo vietato dal pilastro 2. Un chierico **sinceramente convinto**,
+  che sbaglia in buona fede, è più coerente con «non erano stupidi, erano disperati» — e più
+  inquietante, perché non lascia nessun colpevole.)*
+- **I sudditi iniziali sono morti o no?** La riga *«la peste cessa: non ha più nessuno da
+  uccidere»* dice che sono morti tutti e non si sono fermati. Altrove la nota li tratta come
+  risparmiati. *(Proposta di canone: sono morti. Sono `cadaver animatum` — la peste ha finito
+  il suo lavoro, loro non hanno smesso il proprio. Chiude l'ambiguità e rende il twist più
+  duro. **Da confermare.**)*
+- ~~Esiste il proemio mancante?~~ **Risolto il 2026-07-26**: esiste, sono due fogli, li porta
+  l'Inquisizione, e non è una cura — è un confine.
+  → [[ADR-0015 - Struttura a run e progressione fra partite]]
 
 ## Collegamenti
 - [[Visione]] · [[Pilastri di Design]] · [[One Pager]]
 - [[ADR-0009 - Risorse e ciclo del cadavere]]
+- [[ADR-0014 - L'operazione aperta - chi e non morto e chi no]] · [[ADR-0015 - Struttura a run e progressione fra partite]]
 - [[Occultismo e Necromanzia Medievale]] · [[Non Morti e Revenant nel Medioevo]] · [[La Peste Nera - credenze e reazioni]]

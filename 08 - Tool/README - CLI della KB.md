@@ -27,7 +27,7 @@ leggerla: aprire un file intero per usarne 20 righe.
 
 ## Come si usa
 
-Dalla cartella `VideoGame`:
+Dalla cartella `CadaverAnimatum-KB`:
 
 ```bash
 kb help
@@ -36,7 +36,7 @@ kb help
 > [!info] Per te
 > `kb` è un file `.cmd` nella radice della cartella: è un piccolo programma, non un
 > comando di Windows. Va lanciato da **PowerShell** o dal **Prompt dei comandi** aperto
-> dentro `...\Bleed\VideoGame`. In PowerShell si scrive `.\kb.cmd`.
+> dentro `...\Bleed\CadaverAnimatum-KB`. In PowerShell si scrive `.\kb.cmd`.
 
 ### Lettura mirata
 

@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, setup, checklist, unity, git]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Checklist M0 — Setup
@@ -25,30 +25,17 @@ aggiornato: 2026-07-25
 
 ## Parte 0 — Prima di martedì (domenica 26 / lunedì 27)
 
-> [!info] Decisioni chiuse (2026-07-25)
-> Editor: **Unity 6.3 LTS** ([[ADR-0011 - Versione installata dell'editor]]).
-> Cartelle: **due repo separati**, Unity in `C:\Dev\CadaverAnimatum`
-> ([[ADR-0012 - Dove vivono KB e progetto Unity]]).
->
-> **IDE: riaperta** — vedi il punto qui sotto.
+> [!info] Fatto (2026-07-26) — resta un solo bloccante
+> Editor `6000.3.20f1` LTS ✅ installato. Licenza Personal ✅ attiva. IDE (Visual Studio
+> Community 2026, canale stabile, workload Unity + Tools for Unity) ✅ risolto.
+> **Resta solo il remoto GitHub della KB** — parte 1 qui sotto.
 
-- [ ] 🔴 **Avviare il download di Unity 6.3 LTS** — Unity Hub ▸ *Installs* ▸ *Install Editor*,
-      l'ultima `6000.3.x` etichettata **LTS**. Moduli:
-      **Windows Build Support (IL2CPP)** ✔ · **Documentation** ✔ · WebGL ✘ · Android/iOS ✘.
-      Sono diversi GB: conviene di notte.
-
-      > Nello stesso pannello dei moduli compare la voce per installare una **Visual Studio
-      > Community** insieme a Unity: **spuntala.** È la versione su cui Unity è testata, e
-      > risolve la questione dell'IDE senza doverla dedurre.
-
-- [ ] 🔴 **Mettere la KB sotto Git** → parte 1 qui sotto. Dieci minuti, e chiude il rischio
-      "100 note in una copia sola".
-- [ ] ⚠️ **IDE — decisione riaperta il 2026-07-25.** Il controllo con `vswhere` ha mostrato due
-      fatti che non si conoscevano: sull'unica Visual Studio installata (Community **2026
-      Insiders** `18.9`) **manca il workload Unity** — quindi niente *Attach to Unity*, cioè
-      niente breakpoint dentro il gioco che gira — e la build **scade il 2026-10-07**.
-      Il vantaggio "zero installazioni" non esiste: qualcosa va installato comunque.
-      → i fatti e le opzioni in [[Asset e Tool]]
+- [x] ~~Avviare il download di Unity 6.3 LTS~~ — **fatto**, `6000.3.20f1`
+- [x] ~~Mettere la KB sotto Git~~ — **fatto**, 2 commit (manca solo il remoto, parte 1)
+- [x] ~~IDE~~ — **risolto**: Visual Studio Community 2026 `18.8`, canale stabile, workload
+      Unity + Tools for Unity confermati da `Verify-Setup.ps1`
+- [x] ~~Licenza Unity~~ — **Personal attiva** dal 3 aprile 2026
+      (`%LocalAppData%\Unity\licenses\UnityEntitlementLicense.xml`)
 - [ ] Dopo aver aperto Unity: `Edit ▸ Preferences ▸ External Tools` deve riconoscere l'IDE e
       generare i file di progetto. Se non lo riconosce, l'integrazione non c'è.
 
@@ -72,145 +59,120 @@ Facoltativi, quando c'è banda:
 - [x] ~~`git init` + `.gitignore` + `.gitattributes` + primo commit~~ — **fatto il 2026-07-25**,
       111 file. `git log` mostra un commit.
 
-Resta la parte che richiede il tuo account:
+- [x] ~~Creare un repository privato su GitHub (`cadaver-animatum-kb`) e collegarlo~~ —
+      **fatto il 2026-07-26**: `github.com/9bleed0-dev/cadaver-animatum-kb`, privato, push riuscito.
 
-- [ ] 🔴 Creare un repository **privato** su GitHub (`cadaver-animatum-kb`) e collegarlo
+**Cosa verifichi:** `Verify-Setup.ps1` → *Repo KB / remoto* è `[ OK ]`. ✅
 
-```bash
-git remote add origin <url-del-repo>
-git push -u origin main
-```
-
-**Cosa verifichi:** `Verify-Setup.ps1` → la riga *Repo KB / remoto* passa da `[FALLA]` a `[ OK ]`.
-Il repo su GitHub deve essere **privato**.
+> [!info] Intoppo incontrato e risolto — credenziali Git multiple
+> Il primo tentativo ha fallito con *403 Permission denied*: sul PC c'erano **due identità
+> GitHub salvate** (una vecchia di Visual Studio, `DsaulleBleed`, e quella giusta,
+> `9bleed0-dev`), e Git ha riusato per errore la sessione del browser già loggata con
+> l'account sbagliato. Risolto eliminando entrambe le credenziali salvate in Windows
+> Credential Manager (`cmdkey`, e per il target con `/` nel nome — un bug noto di `cmdkey` —
+> l'API Win32 `CredDelete` direttamente) e rifacendo il login scegliendo l'account giusto.
 
 > [!danger] Mai `git init` nella cartella `Bleed`
 > Il vault Obsidian contiene anche `Pwd\` e altre cartelle personali. Il repo è stato
-> inizializzato **solo** dentro `VideoGame`, e il commit contiene 111 file: tutti `.md`, gli
+> inizializzato **solo** dentro `CadaverAnimatum-KB`, e il commit contiene 111 file: tutti `.md`, gli
 > script del CLI e i due file di configurazione. Niente di personale.
 
 ---
 
-## Parte 2 — L'editor (martedì)
+## Parte 2 — L'editor
 
-- [ ] Verificare che il download della **6.3 LTS** (avviato prima di martedì) sia finito
-- [ ] Scrivere la versione **esatta** (es. `6000.3.7f1`) in [[Asset e Tool]]
+- [x] ~~Verificare che il download della 6.3 LTS sia finito~~ — **fatto**, `6000.3.20f1`
+- [x] ~~Scrivere la versione esatta in Asset e Tool~~ — **fatto**
 
 **Cosa verifichi:** in *Installs* la versione compare senza avvisi, e in [[Asset e Tool]] c'è
-scritto il numero completo.
+scritto il numero completo. ✅
 
-> [!warning] Se in Unity Hub `6000.3` non risultasse etichettata `LTS`
-> La premessa di [[ADR-0011 - Versione installata dell'editor]] cade. Non si sceglie sul momento:
-> si installa la **LTS più recente disponibile**, si annota cosa si è trovato in
-> [[Asset e Tool]], e si riapre la decisione con un ADR nuovo.
+> [!tip] Verificato — 2026-07-26
+> Confermato in Unity Hub: `6000.5.5f1` è etichettata `Supported` (badge "Recommended" =
+> più recente, non più stabile), `6000.3.20f1` è etichettata `LTS`. **Si installa
+> `6000.3.20f1`.** → [[Asset e Tool]]
 
 > [!danger] Attenzione a quale editor apre il progetto
-> Sul disco ci sono due editor: `6000.3.x` (nostro) e `6000.4.1f1`. Unity Hub mostra la versione
-> accanto al nome del progetto: **deve essere la 6.3**. Aprire il progetto con la 6.4 è una
-> migrazione **a senso unico** — Unity riscrive asset e cache e tornare indietro non è supportato.
-> Se Hub propone un upgrade: **no**.
+> Sul disco possono restare altri editor (`6000.4.x`, `6000.5.x`...). Unity Hub mostra la
+> versione accanto al nome del progetto: **deve essere `6000.3.20f1`**. Aprire il progetto con
+> un'altra versione è una migrazione **a senso unico** — Unity riscrive asset e cache e tornare
+> indietro non è supportato. Se Hub propone un upgrade: **no**.
 
 ---
 
-## Parte 3 — Il progetto
+## Parte 3 — Il progetto ✅ fatta il 2026-07-26
 
-- [ ] Unity Hub → *Projects* → **New project**
-- [ ] Template: **Universal 3D** ([[ADR-0002 - Render Pipeline]]) — non "3D (Built-In)", non
-      "Universal 2D"
-- [ ] Nome progetto: `CadaverAnimatum` *(senza spazi: i tool a riga di comando di Unity si
-      rompono con gli spazi nei percorsi)*
-- [ ] Percorso: `C:\Dev\` → il progetto nasce in `C:\Dev\CadaverAnimatum`
-      ([[ADR-0012 - Dove vivono KB e progetto Unity]])
-- [ ] Aspettare la prima importazione (lenta: Unity sta compilando shader e cache)
+- [x] Unity Hub → *Projects* → **New project**
+- [x] Template: **Universal 3D** ([[ADR-0002 - Render Pipeline]])
+- [x] Nome progetto: `CadaverAnimatum`
+- [x] Percorso: `C:\Dev\CadaverAnimatum` ([[ADR-0012 - Dove vivono KB e progetto Unity]])
+- [x] Prima importazione completata
 
-**Cosa verifichi:** l'editor si apre, la Console è **vuota** (nessun errore rosso), la scena
-di esempio del template si vede nella Scene view.
+**Cosa verifichi:** l'editor si apre, la Console è **vuota**, la scena di esempio si vede. ✅
 
----
-
-## Parte 4 — Impostazioni obbligatorie, PRIMA del primo commit
-
-> [!danger] L'ordine conta
-> Queste impostazioni cambiano il **formato dei file** che Unity scrive. Se si committa prima
-> di applicarle, il primo commit contiene file binari illeggibili e va rifatto.
-
-`Edit ▸ Project Settings ▸ Editor`:
-
-- [ ] **Asset Serialization ▸ Mode** → `Force Text`
-- [ ] **Version Control ▸ Mode** → `Visible Meta Files`
-
-`Edit ▸ Project Settings ▸ Player`:
-
-- [ ] **Company Name** e **Product Name** compilati (finiscono nel percorso dei salvataggi:
-      cambiarli dopo sposta i dati)
-
-- [ ] **Chiudere Unity** *(così scrive su disco tutto quello che ha in memoria)*
-
-**Cosa verifichi:** apri `ProjectSettings\EditorSettings.asset` con un editor di testo e lo
-**leggi**. Se è testo leggibile, `Force Text` è attivo.
+> [!danger] Occhio al campo "Location" in Unity Hub
+> Il primo tentativo puntava a `C:\Users\utente\Desktop\Gamesss\Cadaver` (una cartella creata
+> per errore, poi lasciata vuota) — contraddiceva [[ADR-0012 - Dove vivono KB e progetto Unity]]
+> senza nessun motivo tecnico nuovo, e quella cartella conteneva già GB di installer non
+> correlati. Corretto **prima** di cliccare *Create project*, non dopo: spostare un progetto
+> Unity dopo il primo commit fa perdere la cronologia Git.
 
 ---
 
-## Parte 5 — Struttura, configurazioni e Git
+## Parte 4 — Impostazioni obbligatorie, PRIMA del primo commit ✅ già a posto
 
-Con Unity **chiuso**, dalla cartella della KB:
+> [!info] Sorpresa positiva — non serve più impostarle a mano
+> Verificato il 2026-07-26: il template **Universal 3D** di Unity 6.3 LTS nasce **già** con
+> `m_SerializationMode: 2` (Force Text) e `m_ExternalVersionControlSupport: Visible Meta Files`
+> in `EditorSettings.asset`. Non è più necessario il passaggio manuale in
+> `Edit ▸ Project Settings ▸ Editor` che questa checklist richiedeva — resta qui come
+> **verifica**, non come azione.
 
-```powershell
-& '.\08 - Tool\unity-setup\New-UnityProjectScaffold.ps1' -ProjectPath 'C:\Dev\CadaverAnimatum'
-```
+- [x] Asset Serialization = Force Text — **già così di default**, verificato leggendo
+      `EditorSettings.asset` (è testo)
+- [x] Version Control = Visible Meta Files — **già così di default**
+- [ ] `Edit ▸ Project Settings ▸ Player` → **Company Name** ancora `DefaultCompany`
+      *(non bloccante: cambia solo il percorso dei salvataggi, e cambiarlo dopo li sposta.
+      Da compilare prima di avere salvataggi veri, non prima di INC-1)*
 
-Lo script (leggi [[Setup del progetto Unity]] per cosa fa esattamente):
+**Cosa verifichi:** apri `ProjectSettings\EditorSettings.asset` con un editor di testo. Se è
+testo leggibile, `Force Text` è attivo. ✅
 
-- [ ] verifica che il percorso sia davvero un progetto Unity (`Assets/` + `ProjectSettings/`)
-- [ ] crea la struttura `Assets/_Project/...` di [[Regole di Progetto Unity]]
-- [ ] copia `.gitignore`, `.gitattributes`, `.editorconfig` già pronti
-- [ ] fa `git init`, `git lfs install`, e **si ferma** senza committare
+---
 
-Poi, a mano, perché sono comandi che vale la pena capire:
+## Parte 5 — Struttura, configurazioni e Git ✅ fatta il 2026-07-26
 
-- [ ] configurare il merge driver di Unity (fonde scene e prefab in conflitto invece di
-      corromperli — [[Version Control Git per Unity]]):
+- [x] `New-UnityProjectScaffold.ps1` eseguito: struttura `_Project/`, `.gitignore`,
+      `.gitattributes`, `.editorconfig`, ponte `kb.cmd` + `CLAUDE.md`, `git init`, `git lfs install`
+- [x] Merge driver `unityyamlmerge` configurato (versione `6000.3.20f1`)
+- [x] Controllo critico: `git status` **non** elencava `Library/Temp/Logs` ✅
+- [x] `git lfs track` elencava correttamente `*.png`, `*.fbx`, `*.wav`… ✅
+- [x] Primo commit: **129 file**, `a37f1b0` — include tutti i `.meta` (31 sotto `_Project/`,
+      generati da Unity dopo aver dato il focus all'editor)
+- [ ] Repository **privato** su GitHub per il progetto (separato da quello della KB) +
+      `git push -u origin main` — **non ancora fatto, non bloccante**
 
-```bash
-git config merge.unityyamlmerge.name "Unity SmartMerge"
-git config merge.unityyamlmerge.driver "'C:/Program Files/Unity/Hub/Editor/<VERSIONE>/Editor/Data/Tools/UnityYAMLMerge.exe' merge -p %O %B %A %A"
-git config merge.unityyamlmerge.recursive binary
-```
+> [!info] Bug trovato e corretto nello stesso passaggio
+> `unity.gitignore` non conosceva **`.slnx`**, il nuovo formato di file soluzione di Visual
+> Studio 2022+ (sostituisce `.sln`, che era già ignorato). Aggiunto sia al template in
+> `08 - Tool/unity-setup/unity.gitignore` sia al progetto. `.vsconfig` invece **resta
+> tracciato**: non è un file rigenerato come `.sln`, è la lista dei componenti VS richiesti dal
+> progetto, e Microsoft raccomanda di versionarlo.
 
-*(sostituisci `<VERSIONE>` con quella installata; il file `UnityYAMLMerge.exe` è già stato
-verificato presente nell'installazione)*
-
-- [ ] primo commit:
-
-```bash
-git status
-git add .
-git commit -m "chore: initial Unity project, URP, folder structure"
-```
-
-- [ ] repository **privato** su GitHub (`cadaver-animatum`) + `git push -u origin main`
-
-**Cosa verifichi:**
-1. `git status` **prima** di `git add` non elenca `Library/`, `Temp/`, `obj/`, `Logs/`.
-   Se le elenca, il `.gitignore` non è al posto giusto: **fermati**, non committare.
-2. `git lfs track` elenca `*.png`, `*.fbx`, `*.wav`…
-3. Il commit contiene i file `.meta`. Se non ci sono, `Visible Meta Files` non è attivo.
+**Cosa verifichi:** ✅ tutto sopra confermato prima di committare.
 
 > [!danger] L'errore che costa più caro
 > Committare `Library/`. È una cache rigenerabile che pesa **gigabyte**: il repository diventa
-> inutilizzabile e ripulirlo dopo richiede di riscrivere la storia. Il controllo n.1 qui sopra
-> esiste solo per questo.
+> inutilizzabile e ripulirlo dopo richiede di riscrivere la storia. Il controllo critico sopra
+> esiste solo per questo — ed è stato eseguito prima del commit.
 
 ---
 
-## Parte 6 — Il ponte con la KB
+## Parte 6 — Il ponte con la KB ✅ fatta (dallo scaffolding)
 
-- [ ] Copiare `08 - Tool\unity-setup\kb.cmd` nella radice di `C:\Dev\CadaverAnimatum`
-      *(è un `kb.cmd` con il percorso assoluto alla KB: da dentro il progetto Unity puoi
-      interrogare la KB senza aprirla)*
-- [ ] Copiare `08 - Tool\unity-setup\CLAUDE.md` nella radice del progetto Unity
-      *(dice a una sessione aperta nel progetto dove sta la memoria e come si consulta)*
-- [ ] Verificare: dalla cartella del progetto Unity, `.\kb.cmd brief` stampa il [[Briefing]]
+- [x] `kb.cmd` presente in `C:\Dev\CadaverAnimatum` con il percorso assoluto alla KB
+- [x] `CLAUDE.md` presente nella radice del progetto Unity
+- [x] Verificato: `.\kb.cmd brief` da `C:\Dev\CadaverAnimatum` stampa il [[Briefing]] ✅
 
 ---
 
@@ -233,14 +195,17 @@ Non è burocrazia: è il livello 1 di [[Percorso di Apprendimento]].
 
 ## Chiusura di INC-0
 
-- [ ] Aggiornare [[Asset e Tool]] con le versioni **esatte** di tutto
-- [ ] Aggiornare [[Briefing]] e [[Stato del Progetto]]
-- [ ] `kb check` verde
-- [ ] `kb new log` e compilarlo
-- [ ] Commit in **entrambi** i repo
+- [x] [[Asset e Tool]] aggiornato con le versioni esatte
+- [x] [[Briefing]] e [[Stato del Progetto]] aggiornati
+- [x] `kb check` verde
+- [ ] `kb new log` e compilarlo — sessione ancora aperta
+- [ ] Push del repo GitHub del progetto Unity — **non bloccante**, il commit locale esiste
+- [ ] Provare Play in Unity e verificare Console vuota — non ancora fatto
 
 **Criterio di uscita di INC-0:** apri il progetto, premi Play, nessun errore in Console,
-`git log` mostra un commit in ognuno dei due repo. → si passa a INC-1.
+`git log` mostra un commit in ognuno dei due repo. **Commit presenti in entrambi**
+(KB: `3ffbeb1`/`dff6bc8`, progetto: `a37f1b0`); resta da provare Play e aprire il repo remoto
+del progetto. → **quasi pronti per INC-1**.
 
 ---
 
