@@ -115,6 +115,39 @@ Qualcosa non funziona.
 - **Niente lavoro non richiesto.** Se vedo un problema fuori compito, lo scrivo nel Backlog
   e vado avanti.
 - **Zero cose "quasi finite" alla chiusura.** [[Definition of Done]].
+- 🔴 **Mai più di un incremento senza eseguirlo.** Vedi sotto.
+
+### La regola del codice non eseguito
+
+> [!danger] Un incremento scritto e non provato conta come zero
+> Nella Sessione 07 sono stati scritti quattro incrementi di fila senza mai premere Play
+> (l'utente dormiva, Unity non era in primo piano). La revisione a freddo ha poi trovato
+> **sette difetti**, di cui **cinque invisibili alla rilettura riga per riga**: dipendevano da
+> *quando* Unity esegue le cose — edit mode contro runtime, serializzazione, ricarica della
+> scena. Due avrebbero reso inerte metà del lavoro **senza un solo errore in Console**.
+>
+> Non è stato un problema di attenzione: è un problema di metodo. Contraddiceva questa stessa
+> nota («passi piccoli, ognuno provabile in Unity») e [[Definition of Done]] («provato **da
+> te** in Play Mode»).
+
+**La regola, da qui in avanti:** si può scrivere codice non eseguito solo per **un** incremento
+alla volta. Se una sessione autonoma dovesse comunque proseguire (perché l'utente non è
+disponibile a provare):
+
+1. Ogni incremento successivo al primo va marcato **esplicitamente** `non verificato` nella
+   sua scheda e nel log — non basta saperlo.
+2. Prima di chiudere, si fa una **revisione a freddo** cercando specificamente le categorie di
+   errore che la rilettura non vede: cosa succede in edit mode contro runtime, cosa è
+   serializzato e cosa no, cosa fallisce *in silenzio*.
+3. La sessione seguente **inizia dalla verifica**, non da codice nuovo.
+
+> [!tip] Le tre domande che trovano i bug invisibili in Unity
+> 1. **Questo stato sopravvive al Play?** Se un tool dell'editor imposta qualcosa, o è
+>    `[SerializeField]`, o si perde.
+> 2. **`Awake` è già girato quando questo viene chiamato?** In edit mode `AddComponent` **non**
+>    chiama `Awake`. A runtime sì. Stesso codice, due comportamenti.
+> 3. **Se questo passo viene dimenticato, si vede?** Se il fallimento è silenzioso, il passo va
+>    reso impossibile da dimenticare — non documentato meglio.
 
 ---
 

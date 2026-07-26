@@ -24,6 +24,7 @@ aggiornato: 2026-07-25
 | Metodo | PascalCase, verbo | `TakeDamage()`, `IsGrounded()` |
 | Proprietà | PascalCase | `public float Health { get; }` |
 | Campo pubblico | PascalCase | `public int MaxHealth;` |
+| Campo pubblico in uno **ScriptableObject di dati** | camelCase — **eccezione**, vedi sotto | `public float panSpeed = 20f;` |
 | Campo privato | camelCase, `_` opzionale ma **coerente** | `_currentHealth` |
 | Campo `[SerializeField]` privato | camelCase | `[SerializeField] private float moveSpeed;` |
 | Variabile locale / parametro | camelCase | `float deltaTime` |
@@ -37,6 +38,27 @@ aggiornato: 2026-07-25
 - Niente prefissi ungheresi (`strName`, `fSpeed`).
 - Booleani come domande: `isDead`, `hasKey`, `canJump`.
 - Il nome del file **deve** coincidere col nome della classe (Unity lo richiede per i MonoBehaviour).
+
+> [!info] L'eccezione dei contenitori di dati — aggiunta il 2026-07-26
+> Un `ScriptableObject` che serve **solo** a contenere numeri modificabili nell'Inspector
+> (`CameraSettings`, `UnitDefinition`, `ResourceDefinition`, `EconomySettings`, `FoodSettings`)
+> usa **campi pubblici in camelCase**, non PascalCase.
+>
+> Perché l'eccezione esiste:
+> 1. Unity mostra il nome del campo nell'Inspector applicando lo *nicening*: `panSpeed` diventa
+>    «Pan Speed», e `PanSpeed` diventerebbe la stessa cosa — quindi PascalCase non porta
+>    nessun vantaggio all'utente, che è chi legge quei nomi più spesso.
+> 2. **Rinominare un campo serializzato rompe gli asset esistenti** (i valori sono salvati per
+>    nome nel file `.asset`, e si azzererebbero silenziosamente) a meno di aggiungere
+>    `[FormerlySerializedAs]` su ognuno.
+> 3. È la convenzione di fatto della maggior parte dei team Unity per i dati esposti.
+>
+> **Resta PascalCase** per i campi pubblici di tutto il resto: MonoBehaviour, classi C# normali,
+> costanti. E i campi privati serializzati restano `camelCase` come già scritto sopra.
+>
+> *Nota storica:* la discrepanza è nata scrivendo il codice di INC-1 senza rileggere questa
+> tabella. Si è scelto di **codificare la pratica** invece di rinominare cinque file mai
+> eseguiti, perché il costo (rottura silenziosa degli asset) era maggiore del beneficio.
 
 ---
 

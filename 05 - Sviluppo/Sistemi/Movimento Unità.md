@@ -170,20 +170,46 @@ parametro sulla *nostra* macchina.
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato (una capsula cammina)
-- [ ] **Misurato col Profiler** ← criterio di uscita di INC-2
-- [ ] Implementato (update manager, gestione fallimenti)
+- [x] Prototipato (una capsula cammina) — **non ancora verificato in Play Mode**
+- [ ] **Misurato col Profiler** ← criterio di uscita di INC-2, **ancora da fare**
+- [ ] Implementato (update manager fatto; gestione dei fallimenti solo abbozzata)
 - [ ] Bilanciato (velocità e peso trovati provando)
 - [ ] Rifinito (animazione agganciata, senza root motion)
 - [ ] Done secondo [[Definition of Done]]
 
 ## Note di implementazione
 
-*(si compila costruendo)*
-
-- [ ] Verificare se AI Navigation è nel template Universal 3D o va aggiunto.
+- [x] AI Navigation **è già nel template** Universal 3D (`com.unity.ai.navigation 2.0.13`):
+      non serve aggiungere niente.
 - [ ] Provare cosa succede a un agente quando gli si costruisce un muro addosso.
 - [ ] Misurare **prima** con avoidance Low, **poi** con High. La differenza è il dato utile.
+
+**File:** `Assets/_Project/Scripts/Data/UnitDefinition.cs` ·
+`Gameplay/UnitMovement.cs` · `Gameplay/UnitUpdateManager.cs` ·
+`Gameplay/NavMeshLoadTester.cs` · `Editor/NavMeshTestSetup.cs`
+
+### Correzioni fatte in revisione, prima di eseguire — 2026-07-26
+
+**1. `Initialize()` sarebbe crashato se chiamato da un tool dell'editor.** Nell'editor
+`AddComponent` **non** chiama `Awake`, quindi `_agent` era ancora nullo quando
+`ApplyDefinition()` provava a scriverci. A runtime funzionava (lì `AddComponent` chiama `Awake`
+subito): un bug che si manifesta **solo** in edit mode.
+→ Corretto con `EnsureAgent()`, chiamato da entrambi i percorsi.
+
+**2. La registrazione nell'`UnitUpdateManager` è stata spostata dentro `UnitMovement`.**
+Prima era responsabilità di chi creava l'unità, e i lavoratori di INC-3 se ne erano dimenticati:
+sarebbero camminati fino al posto di lavoro senza mai segnalare l'arrivo, quindi senza produrre
+nulla — e **senza un solo errore in Console**. Ora `OnEnable`/`OnDisable` (più `Initialize`,
+per gli spawner a runtime che arrivano dopo `OnEnable`) fanno da sé.
+
+> [!tip] La lezione di design
+> Quando dimenticare un passo produce un fallimento **silenzioso**, quel passo non va
+> documentato: va reso impossibile da dimenticare. Spostare la registrazione dentro il
+> componente che ne ha bisogno elimina la classe di bug, non la singola occorrenza.
+
+**3. `NavMeshLoadTester` ora nasce disattivato.** 25 capsule che vagano rendono illeggibile
+qualunque prova dell'economia. Si attiva a mano quando serve la misura col Profiler — che è il
+suo unico scopo.
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Selezione e Comandi]] · [[Posto di Lavoro e Assegnazione]]

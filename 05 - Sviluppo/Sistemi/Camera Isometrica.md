@@ -133,6 +133,23 @@ rig.position          camera.orthographicSize
 - [x] Trascinamento col tasto centrale — implementato con raycast sul piano y=0: il punto
       di terreno sotto il cursore all'inizio del trascinamento resta sotto il cursore
 - [x] Zoom con rotella, smorzato con `Mathf.Lerp` — verificato funzionante
+
+> [!danger] Bug trovato in revisione, dopo la verifica — 2026-07-26
+> **La rotella su Windows manda 120 per tacca, non 1.** Il codice faceva
+> `scroll × zoomSpeed × 0.01` = 120 × 8 × 0.01 = **9,6 unità di zoom per singolo scatto**, su
+> un intervallo totale di 20 (da 5 a 25): due scatti e sei al fondo. Lo zoom *sembrava*
+> funzionare — si muoveva — ma era di fatto a due stati, non continuo.
+>
+> Corretto normalizzando (`scroll / 120`) con un tetto di 3 tacche per frame per i trackpad,
+> e `zoomSpeed` portato da 8 a **2** unità per tacca.
+>
+> **Il valore è stato cambiato anche nell'asset**, non solo nel default C#: un
+> `ScriptableObject` già creato conserva i valori serializzati, e cambiare il default nel
+> codice non lo aggiorna. È la sorpresa n.1 di chi usa gli ScriptableObject per la prima
+> volta — vale la pena ricordarla.
+>
+> Corretto anche l'avvio: partiva a `orthographicSize` 5 (cioè già tutto zoomato avanti,
+> il valore lasciato dal template) invece che a `referenceOrthoSize` = 12.
 - [ ] Trovare `pitch`/`yaw` provando davvero l'angolo, poi congelarli (oggi sono i default
       di progetto: 40°/45°)
 - [ ] Verificare che con proiezione ortografica le ombre e il fog di URP si comportino come

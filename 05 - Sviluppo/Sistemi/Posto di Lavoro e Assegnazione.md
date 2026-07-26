@@ -83,11 +83,37 @@ EconomyRunner.EconomyTicked  ──►  WorkSite.HandleEconomyTicked
                               Stockpile.Deposit(risorsa, resa × arrivati)
 ```
 
+## Due bug trovati in revisione, prima di eseguire — 2026-07-26
+
+Entrambi avrebbero prodotto lo stesso sintomo silenzioso: **Pietra e Ferro fermi a zero per
+sempre**, senza un solo errore in Console. Vale la pena capirli, perché sono due trappole
+generali di Unity, non dettagli di questo sistema.
+
+**1. L'assegnazione non sopravviveva al Play.** Il tool dell'editor chiamava `AssignTo()`, che
+scrive in `_currentSite` — un campo privato **non serializzato**. Premendo Play, Unity ricarica
+la scena dai dati salvati su disco: tutto ciò che esiste solo in memoria svanisce.
+→ Corretto con `[SerializeField] private WorkSite _initialSite`, che il tool **serializza**, e
+uno `Start()` nel `Worker` che lo trasforma in un ordine vero.
+
+> [!tip] La regola generale
+> Un tool dell'editor può solo **scrivere dati serializzati**. Se chiama un metodo che imposta
+> stato runtime, quello stato non esiste al Play. Vale per qualunque cosa costruiremo con i
+> tool da qui in avanti.
+
+**2. I lavoratori non erano registrati nell'`UnitUpdateManager`.** Solo il `NavMeshLoadTester`
+registrava le sue unità. Senza registrazione, nessuno chiama `NotifyIfArrived()`, quindi
+`UnitArrived` non si attiva mai, quindi `ConfirmArrival()` non arriva mai, quindi
+`_arrivedWorkers` resta vuoto: il lavoratore cammina fino alla cava, ci si ferma, e non
+produce niente.
+→ Corretto spostando la registrazione **dentro `UnitMovement`** (`OnEnable`/`OnDisable` + in
+`Initialize`), così non esiste più il caso "qualcuno ha dimenticato di registrare".
+
 ## Stato
 
 - [x] Progettato
 - [x] Prototipato — Cava/Miniera/Fossa create, 2 lavoratori assegnati (Cava, Miniera) via
-      tool editor. **Non ancora verificato in Play Mode.**
+      tool editor. **Non ancora verificato in Play Mode**, ma i due bug che l'avrebbero reso
+      inerte sono stati trovati e corretti in revisione.
 - [ ] Implementato (mancano: riassegnazione dall'utente, interruzione per fame)
 - [ ] Bilanciato
 - [ ] Rifinito

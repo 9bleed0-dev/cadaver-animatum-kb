@@ -143,22 +143,50 @@ Click destro ──► SelectionInput ──► Command ──► ICommandable.T
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato (funziona coi cubi)
-- [ ] Implementato
+- [x] Prototipato (funziona coi cubi) — **non ancora verificato in Play Mode**
+- [ ] Implementato (mancano rettangolo di selezione, comandi col destro, `maxSelection`,
+      doppio click — tutti INC-2 o oltre)
 - [ ] Bilanciato (soglie di click e doppio click provate)
 - [ ] Rifinito (game feel)
 - [ ] Done secondo [[Definition of Done]]
 
 ## Note di implementazione
 
-*(si compila costruendo)*
+Implementati: click singolo, click nel vuoto che deseleziona, Shift+click, soglia di 4px
+click-vs-trascinamento, evidenziazione a scambio di materiale.
 
-- [ ] Verificare la guardia sulla UI: con uGUI si usa
-      `EventSystem.current.IsPointerOverGameObject()`. → [[UI in Unity]]
-- [ ] Provare l'evidenziazione con il minimo sforzo possibile: un secondo materiale, non un
-      outline shader. Siamo nei cubi grigi.
+**File:** `Assets/_Project/Scripts/Core/ISelectable.cs` · `Core/SelectionService.cs` ·
+`Core/SelectionInput.cs` · `Gameplay/Selectable.cs` · `Editor/SelectionSetup.cs`
+
+- [x] Guardia sulla UI: `EventSystem.current.IsPointerOverGameObject()` → [[UI in Unity]]
+- [x] Evidenziazione col minimo sforzo: scambio di materiale, non outline shader
 - [ ] Il doppio click "seleziona tutti dello stesso tipo" è comodità: se costa più di
       mezz'ora, va in [[Backlog]].
+
+### Tre correzioni fatte in revisione, prima di eseguire — 2026-07-26
+
+**1. Il tool dell'editor sarebbe crashato.** Scriveva la `LayerMask` con
+`FindProperty("_selectableLayers").FindPropertyRelative("m_Bits")`. Una `LayerMask` serializza
+come **intero semplice**: `FindPropertyRelative` restituisce `null` → `NullReferenceException`
+al primo click sul menu. → Corretto in `.intValue` diretto.
+
+**2. Il difetto che questa stessa scheda aveva previsto** (§ *Regole e casi limite*: «se un
+oggetto selezionato viene distrutto, esce dalla selezione senza lasciare un riferimento
+nullo… la fonte numero uno di `NullReferenceException`») **non era implementato.**
+→ Aggiunto `SelectionService.PruneDestroyed()`, chiamato dai metodi che modificano la
+selezione. Usa `== null` sul `Transform`: Unity sovrascrive l'operatore per gli oggetti
+distrutti, ed è esattamente il caso per cui [[Regole di Codice]] vieta `is null`.
+Protetto anche `ClearInternal`, che chiamando `OnDeselected()` su un oggetto distrutto avrebbe
+sollevato `MissingReferenceException`.
+
+**3. `[RequireComponent(typeof(Renderer))]` era sbagliato.** `Renderer` è **astratta**: Unity
+non può aggiungerla, e logga un errore se l'oggetto non ha già un renderer.
+→ Sostituito con un controllo esplicito in `Awake` e un messaggio comprensibile.
+
+> [!info] Cosa insegna il difetto n.2
+> La scheda aveva **previsto correttamente** il problema in fase di progetto, e il codice l'ha
+> ignorato comunque. Scrivere i casi limite non basta: bisogna rileggerli mentre si implementa.
+> È il motivo per cui questa revisione è servita.
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Camera Isometrica]] · [[Movimento Unità]] · [[Scelta sul Cadavere]]

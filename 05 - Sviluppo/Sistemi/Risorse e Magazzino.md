@@ -178,8 +178,21 @@ Costruzione             ──TryWithdraw()──┘      │
 - [x] Primo test automatico scritto: 5 test EditMode su `Stockpile` (deposito con spreco,
       prelievo singolo che fallisce senza toccare nulla, prelievo multiplo atomico che
       fallisce se manca anche una sola risorsa, prelievo multiplo che riesce, prelievo che
-      non scende sotto zero). Vivono in `Scripts/Editor/StockpileTests.cs` **non** in un
-      assembly di test dedicato — [[Assembly Definitions]] restano deferiti, va bene per ora.
+      non scende sotto zero).
+
+> [!info] Perché i test stanno in `Scripts/Editor/` e non in un assembly dedicato
+> Non è pigrizia: è l'**unica** collocazione possibile oggi. Un assembly definito con un
+> `.asmdef` **non può referenziare** `Assembly-CSharp` (la dipendenza va solo nel verso
+> opposto: le assembly predefinite vedono gli asmdef, non viceversa). Quindi un assembly di
+> test separato **non riuscirebbe a vedere `Stockpile`**, che vive in `Assembly-CSharp`.
+>
+> Le due strade sarebbero: tenere i test dove sono (fatto), oppure spostare **tutto** il
+> codice di gioco in asmdef — che è [[Assembly Definitions]], rimandato in [[Backlog]].
+> Verificato che `nunit.framework.dll` è auto-referenziato (`isExplicitlyReferenced: 0`),
+> quindi la compilazione regge.
+>
+> ⚠️ **Da verificare**: che il Test Runner in EditMode li *elenchi* davvero. Se non li
+> vedesse, i test compilano comunque — sarebbe solo la scoperta automatica a mancare.
 - [ ] Attenzione ai valori negli asset `.asset`: modificati in Play Mode **restano** anche
       dopo lo stop. È il vantaggio principale degli ScriptableObject e la sorpresa numero uno
       di chi li usa per la prima volta.

@@ -86,9 +86,16 @@ EconomyRunner.EconomyTicked ──► HungerSystem.HandleTick
 ## Stato
 
 - [x] Progettato
-- [x] Prototipato — collegato a 2 lavoratori esistenti. **Non ancora verificato in Play Mode**:
-      con Carne iniziale 50 e consumo 0,5/tick/lavoratore × 2 lavoratori × 2 tick/secondo,
-      la Carne si esaurisce in ~50 secondi, poi altri 15 di tolleranza prima della sconfitta.
+- [x] Prototipato — collegato a 2 lavoratori esistenti. **Non ancora verificato in Play Mode.**
+
+**Il conto atteso, da verificare cronometro alla mano:** tick ogni 0,5 s = **2 tick/secondo**;
+2 lavoratori × 0,5 Carne/tick = **2 Carne/secondo**. Con 50 Carne iniziali: esaurite a **~25 s**,
+più 15 s di tolleranza → **sconfitta intorno al secondo 40**. La Fossa (che produrrebbe Carne)
+è senza lavoratori, quindi non entra Carne: è voluto, è il punto di INC-4.
+
+> [!warning] Errore corretto il 2026-07-26
+> La prima stesura di questa scheda diceva «~50 secondi»: aveva dimenticato che con
+> `tickSeconds = 0,5` ci sono **due** tick al secondo, non uno. Il numero giusto è ~25 s.
 - [ ] Implementato (manca: degrado individuale, indicatore "tempo alla fame" in UI)
 - [ ] Bilanciato ← qui sta la maggior parte del lavoro: è la curva di tensione del gioco
 - [ ] Rifinito
