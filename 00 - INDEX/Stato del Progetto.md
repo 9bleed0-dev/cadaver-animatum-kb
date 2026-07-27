@@ -15,7 +15,10 @@ aggiornato: 2026-07-27
 **FASE 2 — Prototipo** ✅ **chiusa (2026-07-26).** INC-1…INC-4 verificati in Play Mode
 dall'utente, loop fame → lavoro → risorse → sconfitta completo, e il criterio di uscita di
 INC-2 (misura del tetto di agenti NavMesh) **soddisfatto**: ~200 unità, ~5ms/frame, ampio
-margine sotto i 16,7ms del target 60fps. **Prossimo: INC-5.** → [[Piano Prototipo]]
+margine sotto i 16,7ms del target 60fps.
+**INC-5 progettato (2026-07-27)**: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]]
+scritte, incluso [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]].
+**Prossimo: scrivere il codice di INC-5.** → [[Piano Prototipo]]
 
 ## Il gioco
 
@@ -96,7 +99,7 @@ powershell -ExecutionPolicy Bypass -File "08 - Tool\setup-macchina\Verify-Setup.
 del progetto Unity, e provare Play in Unity per confermare Console vuota.
 → [[Checklist M0 - Setup]] § *Chiusura di INC-0*
 
-## Prossimo passo concreto — si apre INC-5
+## Prossimo passo concreto — INC-5 progettato, resta il codice
 
 **FASE 2 è chiusa.** Verificato dall'utente in Play Mode (2026-07-26): selezione, movimento,
 produzione, HUD, sconfitta per carestia — tutto funziona. Undici difetti trovati e corretti in
@@ -109,8 +112,14 @@ picchi isolati a ~10-13ms legati a eventi puntuali (GC, un trigger di evento) �
 16,7ms del target 60fps. Il tetto di design del prototipo (200 unità) è ampiamente coperto:
 il punto di rottura reale non serve trovarlo ora. → [[Movimento Unità]] § *La misura*
 
-**Prossimo passo:** iniziare **INC-5** (Ondate, Combattimento Base, Cuore del Regno) —
-tre sistemi nuovi, ancora da schedare. → [[Piano Prototipo]]
+✅ **INC-5 progettato (2026-07-27)**: [[Ondate]] (curva morbida: 3 nemici, +2/ondata, ogni
+60s, 5 ondate per vincere), [[Combattimento Base]] (`IDamageable`, ingaggio automatico,
+soldati fermi, nemici che si fermano per combattere) e [[Cuore del Regno]] (HP, nessuna
+funzione produttiva ancora) sono scritte per intero. Chiusa anche una tensione fra
+[[Il Rituale]] ("i sudditi non muoiono mai") e il combattimento, con
+[[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]].
+
+**Prossimo passo:** scrivere il codice di INC-5, un sistema alla volta. → [[Piano Prototipo]]
 → dettaglio completo della sessione in [[2026-07-26 - Sessione 07]]
 
 > [!info] Da leggere prima di martedì (15 minuti in tutto)
@@ -139,6 +148,11 @@ tre sistemi nuovi, ancora da schedare. → [[Piano Prototipo]]
 
 ## Ultima sessione
 
+- **2026-07-27 — Sessione 08**: chiusi gli ultimi allineamenti post-misura Profiler, poi
+  progettato **INC-5** per intero: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]].
+  Trovato e risolto un conflitto fra la regola "i sudditi non muoiono mai" e la morte in
+  combattimento → [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]]. Nessun
+  codice scritto. → [[2026-07-27 - Sessione 08]]
 - **2026-07-26 — Sessione 07**: scritto tutto il codice di INC-1…INC-4 (camera, selezione,
   movimento su NavMesh, economia, posti di lavoro, HUD, fame, stato della partita), poi
   **verificato dall'utente in Play Mode**. Il loop fame → lavoro → risorse **funziona per

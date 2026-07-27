@@ -1,6 +1,6 @@
 ---
 tags: [decisioni, index, adr]
-aggiornato: 2026-07-26
+aggiornato: 2026-07-27
 ---
 
 # Registro Decisioni (ADR)
@@ -46,10 +46,11 @@ ridiscussa da zero, o peggio: contraddetta senza accorgersene.
 | [[ADR-0014 - L'operazione aperta - chi e non morto e chi no\|0014]] | Il mondo: chi è non morto | niente raggio · operazione mai chiusa · si macellano solo i rialzati | 🟢 |
 | [[ADR-0015 - Struttura a run e progressione fra partite\|0015]] | Struttura a run | una partita = una run · vittoria = chiudere l'operazione · rogue-lite fra partite | 🟢 |
 | [[ADR-0016 - Input System nuovo vs legacy\|0016]] | Input System | si usa il **nuovo** (già installato dal template) | 🟢 |
+| [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere\|0017]] | Morte in combattimento | un rialzato caduto torna cadavere e resta rialzabile: "non muoiono mai" vale sulla popolazione, non sul singolo corpo | 🟢 |
 
 \* la sezione "risorse" di ADR-0007 è precisata da ADR-0009; il resto resta in vigore.
 
-**Tutte le decisioni 0001-0016 sono Accettate al 2026-07-26.** Nessuna bloccante resta aperta.
+**Tutte le decisioni 0001-0017 sono Accettate al 2026-07-27.** Nessuna bloccante resta aperta.
 
 ## Decisioni prese fuori dagli ADR
 

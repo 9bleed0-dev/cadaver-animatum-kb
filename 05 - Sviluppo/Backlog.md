@@ -43,6 +43,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Note |
 |---|---|---|
+| 39 | **Il menu di [[Scelta sul Cadavere]] (INC-6) deve distinguere il "di chi era" il cadavere**: nemico (tutte le opzioni), rialzato caduto (solo Rialzare), suddito iniziale caduto (solo Rialzare, mai altro) | [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] — il tag nasce a INC-5, la regola si applica a INC-6 |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
 
 ---

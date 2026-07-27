@@ -1,7 +1,7 @@
 ---
 tags: [progetto, trama, lore, design]
 stato: approvato
-aggiornato: 2026-07-25
+aggiornato: 2026-07-27
 ---
 
 # Il Rituale
@@ -147,6 +147,12 @@ Non è una frase d'atmosfera: è una **regola dura**.
 - I sudditi iniziali sono un numero **fisso**: non muoiono e non nascono. Ogni suddito in più
   è stato **rialzato da te**, uno per uno.
 - E sono gli unici che non puoi rimettere nel ciclo. I rialzati sì. Loro mai.
+
+> [!info] E in combattimento?
+> "Non muoiono mai" descrive l'assenza di attrito **netto** sulla popolazione, non
+> l'invulnerabilità del singolo corpo in ogni istante. Un rialzato colpito a morte cade e
+> torna cadavere come chiunque altro — ma resta sempre rialzabile di nuovo: non è una perdita
+> definitiva finché non scegli tu di non riportarlo indietro. → [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]]
 
 Questo trasforma il gestionale: nei colony builder normali la popolazione è una risorsa da far
 crescere. Qui è **una manopola con un peso morale** — ogni bocca in più l'hai voluta tu, e

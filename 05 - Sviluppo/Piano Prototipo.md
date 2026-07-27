@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, piano, prototipo, milestone]
-aggiornato: 2026-07-26
+aggiornato: 2026-07-27
 ---
 
 # Piano Prototipo
@@ -44,12 +44,15 @@ L'ordine non è "dal facile al difficile". È: **prima i rischi, e la fame prima
 | **INC-7** | La partita | giochi 5 minuti, vinci o perdi | serve una partita, non una sandbox |
 | **INC-8** | Il verdetto | due persone ci giocano e tu decidi | il prototipo esiste per **rispondere**, non per crescere |
 
-> [!info] Stato al 2026-07-26
+> [!info] Stato al 2026-07-27
 > **INC-0, INC-1, INC-2, INC-3, INC-4 tutti verificati in Play Mode dall'utente.** Il loop
 > fame → lavoro → risorse → sconfitta funziona per intero. Il criterio di uscita di INC-2
 > (misura del tetto di agenti col Profiler) **è stato fatto**: ~200 unità, ~5ms/frame
 > (~200 fps), ampio margine sotto i 16,7ms del target 60fps, con `avoidanceQuality = Low`.
-> **FASE 2 è chiusa.** Prossimo passo: INC-5.
+> **FASE 2 è chiusa.**
+> **INC-5 progettato**: le tre schede ([[Ondate]], [[Combattimento Base]], [[Cuore del Regno]])
+> sono scritte e le domande di design chiuse — incluso [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]], che risolve una tensione con [[Il Rituale]]. Prossimo passo:
+> scrivere il codice.
 > → dettaglio completo: [[2026-07-26 - Sessione 07]] · [[Movimento Unità]] § *La misura*
 
 > [!tip] Perché la fame prima del cibo
@@ -177,9 +180,9 @@ peggiorasse, non sapremmo quale delle cinque è colpevole.
 | [[HUD Risorse]] | INC-3 | ✅ scritta | ✅ verificato |
 | [[Fame e Sussistenza]] | INC-4 | ✅ scritta | ✅ verificato |
 | [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ✅ verificato |
-| [[Ondate]] | INC-5 | da scrivere | — |
-| [[Combattimento Base]] | INC-5 | da scrivere | — |
-| [[Cuore del Regno]] | INC-5 | da scrivere | — |
+| [[Ondate]] | INC-5 | ✅ scritta | — |
+| [[Combattimento Base]] | INC-5 | ✅ scritta | — |
+| [[Cuore del Regno]] | INC-5 | ✅ scritta | — |
 | [[Cadavere e Degrado]] | INC-6 | da scrivere | — |
 | [[Scelta sul Cadavere]] | INC-6 | da scrivere | — |
 | [[Costruzione su Griglia]] | INC-7 | da scrivere | — |

@@ -75,6 +75,7 @@ deriva da lì o da una fonte documentata.
 | Contesto | Briefing + `kb` CLI, non lettura integrale della KB | 0010 |
 | Cartelle | **due repo separati**: KB in `...\Bleed\CadaverAnimatum-KB` · Unity in `C:\Dev\CadaverAnimatum` | 0012, 0013 |
 | Mondo | niente raggio · operazione mai chiusa · si macellano solo i rialzati · il culto porta bocche, non cibo | 0014 |
+| Combattimento | un rialzato caduto torna cadavere e resta rialzabile: "non muoiono mai" vale sulla popolazione, non sul singolo corpo | 0017 |
 | Struttura | una partita = una mappa = una run · vinci **chiudendo** l'operazione coi 2 fogli del proemio | 0015 |
 | Rogue-lite | **vittoria e fallimento lasciano cose diverse**: Frammenti vs Postille · una run fallita lascia una **rovina abitata** a cui puoi tornare · l'hub è il Re | 0015 |
 | Input | Input System **nuovo** (già nel template, `com.unity.inputsystem 1.19.0`) | 0016 |
@@ -152,7 +153,11 @@ come testo e committata** (`77eb27c`, progetto Unity).
 ~5ms/frame di base (~200 fps), ben sotto i 16,7ms del target 60fps. → [[Movimento Unità]]
 § *La misura*
 
-**Prossimo passo:** iniziare **INC-5** (ondate, combattimento base, Cuore del Regno).
+✅ **INC-5 progettato (2026-07-27)**: [[Ondate]] · [[Combattimento Base]] · [[Cuore del Regno]]
+scritte per intero. Risolta anche una tensione fra [[Il Rituale]] ("i sudditi non muoiono
+mai") e la morte in combattimento → [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]].
+
+**Prossimo passo:** scrivere il codice di INC-5, un sistema alla volta.
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 
