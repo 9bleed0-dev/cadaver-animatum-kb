@@ -169,6 +169,12 @@ E le due regole gemelle, applicate al codice:
 - **Non si ristampa un file per cambiarne tre righe.** Modifica chirurgica, e si cita
   `File.cs:42` invece di incollare.
 
+> [!tip] E se l'imbuto costa fatica, si potenzia lo strumento
+> **Se una cosa la stiamo facendo a mano più volte, `kb` deve imparare a farla.** Il CLI è
+> nostro e sta in un file: aggiungere un comando costa dieci minuti e ripaga a ogni sessione.
+> Vale anche prima di guardare a plugin o connettori esterni.
+> → [[README - CLI della KB]] § *Potenziare il CLI*
+
 ---
 
 ## Riepilogo: la sequenza di un incremento

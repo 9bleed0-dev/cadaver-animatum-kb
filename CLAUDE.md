@@ -51,6 +51,11 @@ kb sys · kb adr · kb todo                   stato dei sistemi, degli ADR, dei 
 kb help
 ```
 
+**Il CLI è nostro: se una cosa la facciamo a mano più volte, `kb` deve imparare a farla.**
+Aggiungere un comando = una funzione `Cmd-Nome` + una riga nello `switch` + una in `kb help`.
+Vincoli da non rompere: **ASCII puro** in `kb.ps1`, zero dipendenze, nessuna cache.
+→ `08 - Tool/README - CLI della KB.md` § *Potenziare il CLI*
+
 ### Chiusura di sessione
 
 ```bash

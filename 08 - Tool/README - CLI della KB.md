@@ -1,6 +1,6 @@
 ---
 tags: [tool, kb, cli, processo]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-27
 ---
 
 # CLI della KB — `kb`
@@ -123,11 +123,51 @@ Non sovrascrive mai un file che esiste: si ferma e lo dice.
 >
 > Deve stampare `0`.
 
-### Se un giorno serve di più
+## Potenziare il CLI: è nostro, si estende
 
-Il file è un singolo script con un `switch` sul comando. Aggiungere un comando = aggiungere
-una funzione `Cmd-Nome` e una riga nel `switch`. Se dovesse diventare grande, si riscrive in
-C# (il .NET SDK è già installato) — ma non prima che serva davvero.
+> [!tip] Direttiva permanente (2026-07-27)
+> **Se una cosa la stiamo facendo a mano più volte, il CLI deve imparare a farla.**
+> `kb` non è uno strumento esterno da subire: è nostro, sta in un file, e aggiungere un comando
+> costa dieci minuti. Prima di adottare un plugin o un connettore esterno la domanda è sempre
+> se non basti una funzione qui
+> ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] §5).
+
+**Come si aggiunge un comando:** una funzione `Cmd-Nome`, una riga nel `switch` finale, una
+riga in `Cmd-Help`. Il file è un singolo script, nessuna dipendenza da installare.
+
+### I segnali che dicono "adesso serve"
+
+| Segnale | Esempio concreto |
+|---|---|
+| **Ripeto la stessa sequenza di comandi manuali** | tre `kb grep` di fila per rispondere a una domanda sola |
+| **Uso `grep`/`find` grezzi dove un comando saprebbe rispondere meglio** | cercare a mano quali tool dell'editor esistono nel progetto Unity |
+| **Un controllo che dimentico** finisce per rompere qualcosa | è così che è nato `kb check`: la Definition of Done resa eseguibile |
+| **Rispondo a una domanda leggendo file interi** | è lo spreco n.1 di [[Protocollo di Sessione]]: se è ricorrente, va automatizzato |
+
+### Candidati osservati, non ancora necessari
+
+Registrati perché sono emersi **lavorando**, non immaginati. Nessuno va implementato prima che
+serva davvero ([[Regole di Ingaggio]]: niente feature non richieste).
+
+- **`kb` non sa nulla del repository Unity.** Da [[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] §4 la regola dell'imbuto vale anche per il codice, ma il tool che la rende
+  applicabile esiste solo per la KB: nella Sessione 08 le ricerche nel codice sono state fatte
+  con `grep`/`find` a mano. Un comando che cerchi in `C:\Dev\CadaverAnimatum` da qui
+  chiuderebbe il buco.
+- **Nessun comando conosce i branch.** Con il workflow di [[Workflow di Sviluppo]] servirà
+  sapere a colpo d'occhio se i due repository sono sullo stesso branch — la divergenza fra KB e
+  codice è un rischio dichiarato ([[Backlog]] #45).
+
+### Vincoli da non rompere quando lo si estende
+
+1. **ASCII puro** in `kb.ps1` — vedi l'avviso sopra: non è una preferenza di stile, è una
+   condizione perché lo script venga interpretato correttamente.
+2. **Zero dipendenze**: PowerShell 5.1 e nient'altro. Un tool che richiede un'installazione per
+   funzionare smette di essere affidabile all'apertura di sessione.
+3. **Nessuna cache**: rilegge sempre i file. Una cache disallineata è peggio di nessuna cache.
+4. **Ogni comando nuovo va documentato qui e in `kb help`**, o non esiste per il me di domani.
+
+Se un giorno lo script diventasse troppo grande, si riscrive in C# (il .NET SDK è già
+installato) — ma non prima che serva davvero.
 
 ## Perché non basta Obsidian
 
