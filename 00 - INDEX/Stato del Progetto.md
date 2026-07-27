@@ -96,26 +96,37 @@ del progetto Unity, e provare Play in Unity per confermare Console vuota.
 
 ## Prossimo passo concreto — verificare, non costruire
 
-**Prima di scrivere altro codice:** apri Unity, guarda la Console, premi Play. Il codice di
-INC-1…INC-4 è stato scritto in una sessione senza Unity in primo piano (l'utente dormiva) e
-**non è mai stato eseguito.** Cinque tool da un click, **in quest'ordine**, ricreano tutto
-da zero se serve:
+**Prima di scrivere altro codice:** apri Unity, guarda la Console, esegui i setup, premi Play.
+Il codice di INC-1…INC-4 è stato scritto in una sessione senza Unity in primo piano e **non è
+mai stato eseguito.**
 
-```
-Cadaver Animatum ▸ Setup ▸ Camera Isometrica (INC-1)
-Cadaver Animatum ▸ Setup ▸ Terreno di Prova (INC-1)
-Cadaver Animatum ▸ Setup ▸ Selezione (INC-1)
-Cadaver Animatum ▸ Setup ▸ Test NavMesh (INC-2)
-Cadaver Animatum ▸ Setup ▸ Economia (INC-3)
-Cadaver Animatum ▸ Setup ▸ Posti di Lavoro (INC-3)
-Cadaver Animatum ▸ Setup ▸ HUD Risorse (INC-3)
-Cadaver Animatum ▸ Setup ▸ Fame e Stato Partita (INC-4)
-```
+**Stato verificato della scena** (letto da `SampleScene.unity` il 2026-07-26): contiene solo
+`CameraRig`, `Main Camera`, `Ground`, `TestCube`, luce e volume. In `_Project/Data/` c'è solo
+`CameraSettings.asset`.
 
-(già eseguiti una volta questa notte — servono di nuovo solo se si riparte da una scena pulita)
+> [!danger] I tool NON sono stati eseguiti
+> Solo i primi due (Camera Isometrica, Terreno di Prova) sono stati lanciati dall'utente prima
+> di andare a dormire. **Tutti gli altri no** — un'assistente non può cliccare le voci di menu
+> di Unity. Una prima versione di questa nota affermava il contrario: era falso, ed è stato
+> corretto controllando il file della scena invece di fidarsi della memoria.
 
-Dopo: **premi Play**, guarda la Console, prova WASD/rotella/click, e guarda se Pietra e Ferro
-salgono. → dettaglio completo in [[2026-07-26 - Sessione 07]]
+**Da eseguire, in quest'ordine** (l'ordine conta: ognuno usa ciò che il precedente crea):
+
+| # | Voce di menu | Serve perché |
+|---|---|---|
+| 1 | `Selezione (INC-1)` | crea layer + materiale, rende il `TestCube` cliccabile |
+| 2 | `NavMesh e Unità di Prova (INC-2)` | **cuoce il NavMesh**: senza, nessuna unità cammina |
+| 3 | `Economia (INC-3)` | crea le 4 risorse e l'`EconomyRunner` |
+| 4 | `Posti di Lavoro (INC-3)` | richiede il NavMesh (2) e l'`EconomyRunner` (3) |
+| 5 | `HUD Risorse (INC-3)` | richiede l'`EconomyRunner` (3) |
+| 6 | `Fame e Stato Partita (INC-4)` | richiede `EconomyRunner` (3) e `HUD_Canvas` (5) |
+
+I tool sono **idempotenti**: rilanciarli non duplica nulla. Se uno manca un prerequisito, lo
+dice in Console con il nome del tool da eseguire prima.
+
+Poi **`Ctrl+S`** (il NavMesh cotto va salvato) e **Play**: WASD/rotella/trascinamento, click sul
+cubo, e guarda se Pietra e Ferro salgono nell'angolo.
+→ dettaglio completo in [[2026-07-26 - Sessione 07]]
 
 Solo dopo aver verificato: **INC-2 resta da chiudere davvero** con la misura del tetto di
 agenti NavMesh al Profiler (Window ▸ Analysis ▸ Profiler) — è un umano davanti allo schermo,
