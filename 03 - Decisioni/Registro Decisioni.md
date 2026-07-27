@@ -47,10 +47,11 @@ ridiscussa da zero, o peggio: contraddetta senza accorgersene.
 | [[ADR-0015 - Struttura a run e progressione fra partite\|0015]] | Struttura a run | una partita = una run · vittoria = chiudere l'operazione · rogue-lite fra partite | 🟢 |
 | [[ADR-0016 - Input System nuovo vs legacy\|0016]] | Input System | si usa il **nuovo** (già installato dal template) | 🟢 |
 | [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere\|0017]] | Morte in combattimento | un rialzato caduto torna cadavere e resta rialzabile: "non muoiono mai" vale sulla popolazione, non sul singolo corpo | 🟢 |
+| [[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti\|0018]] | Workflow di sviluppo | **un branch per incremento**, merge solo se verificato in Play Mode · task nella sessione vs Backlog fra le sessioni · sub-agenti solo per lettura/analisi · imbuto esteso al codice | 🟢 |
 
 \* la sezione "risorse" di ADR-0007 è precisata da ADR-0009; il resto resta in vigore.
 
-**Tutte le decisioni 0001-0017 sono Accettate al 2026-07-27.** Nessuna bloccante resta aperta.
+**Tutte le decisioni 0001-0018 sono Accettate al 2026-07-27.** Nessuna bloccante resta aperta.
 
 ## Decisioni prese fuori dagli ADR
 

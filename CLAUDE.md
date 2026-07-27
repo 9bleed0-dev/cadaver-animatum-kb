@@ -59,7 +59,7 @@ kb check          # deve uscire verde: e' la Definition of Done resa eseguibile
 
 1. `kb check` verde (frontmatter, `## Fonti`, link rotti, note orfane, note >300 righe)
 2. `00 - INDEX/Briefing.md` e `00 - INDEX/Stato del Progetto.md` riallineati
-3. `kb new log` e compilarlo
+3. `kb new log` e compilarlo — **dichiarando su quale branch siamo e se è stato mergiato**
 4. `05 - Sviluppo/Backlog.md` aggiornato; nuovo **ADR** se ci sono state decisioni strutturali
 5. Commit
 
@@ -74,7 +74,7 @@ Se salto questo passaggio, alla sessione successiva ho perso la memoria. **Ricor
 |---|---|
 | `00 - INDEX` | **Briefing**, Home, stato del progetto, come si usa la KB |
 | `01 - Progetto` | visione, GDD, one pager, roadmap, scope e anti-scope |
-| `02 - Regole` | ingaggio, protocollo di sessione, codice, progetto Unity, Definition of Done |
+| `02 - Regole` | ingaggio, protocollo di sessione, **workflow (branch/task/deleghe)**, codice, progetto Unity, Definition of Done |
 | `03 - Decisioni` | ADR — numerati e immutabili |
 | `04 - Knowledge Base` | il sapere tecnico: Unity, C#, architettura, arte, audio, game design, lore |
 | `05 - Sviluppo` | **Piano Prototipo**, **Checklist M0**, schede dei sistemi, backlog, log sessioni |
@@ -113,6 +113,15 @@ Il progetto Unity **non sta qui**: vive in una cartella e in un repository separ
 6. **Ogni sistema ha una scheda** in `05 - Sviluppo/Sistemi/` **prima** di essere codificato.
 7. **Se una decisione tecnica ha alternative reali → serve un ADR**, non una scelta silenziosa.
 8. **Le domande si fanno in blocco all'inizio**, non spalmate nel lavoro.
+9. **Un branch per incremento** (`inc-N-slug`, stesso nome nei due repo), **mai commit di
+   codice di gioco su `main`** se non un merge verificato. Il merge richiede la verifica in
+   Play Mode dell'utente: `main` deve sempre essere un gioco che parte.
+   → `02 - Regole/Workflow di Sviluppo.md` · `ADR-0018`
+10. **Sub-agenti solo per lettura e analisi** (audit, ricerche, riletture a freddo su file
+   diversi), mai per scrivere codice di gioco o toccare la scena: c'è un solo Unity e la
+   verifica resta seriale. Ogni delega si dichiara.
+11. **La regola dell'imbuto vale anche per il codice**: `grep` mirato → lettura parziale →
+   file intero. Un file appena modificato **non si rilegge**.
 
 ## Regole di codice (dettaglio in `Regole di Codice`)
 

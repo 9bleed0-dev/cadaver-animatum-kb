@@ -208,8 +208,9 @@ Non si contano i token a mano. Si guardano tre indicatori concreti:
 | Decisioni prese che sono finite in un ADR o nel Backlog | tutte |
 
 ## Collegamenti
+- [[Workflow di Sviluppo]] — branch, task e deleghe: il *come* operativo che completa questo protocollo
 - [[Regole di Ingaggio]] — come lavoriamo, lato umano
 - [[Definition of Done]] — quando una cosa è finita
 - [[README - CLI della KB]] — il tool che rende applicabile questo protocollo
-- [[ADR-0010 - Protocollo di contesto e CLI della KB]]
+- [[ADR-0010 - Protocollo di contesto e CLI della KB]] · [[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]]
 - [[Briefing]] · [[Piano Prototipo]]

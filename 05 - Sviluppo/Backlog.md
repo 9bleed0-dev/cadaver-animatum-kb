@@ -34,8 +34,8 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Dove |
 |---|---|---|
+| 34 | **Creare il repository GitHub del progetto Unity + push.** Verificato il 2026-07-27: `git remote -v` è **vuoto**, il codice del gioco esiste solo sul disco locale. Da 🟡 a 🔴: ora che si adotta un workflow a branch ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]]) è anche un prerequisito, non solo un backup | [[ADR-0012 - Dove vivono KB e progetto Unity]] · [[Checklist M0 - Setup]] parte 5 |
 | 22 | Cancellare la cartella `...\Bleed\VideoGame` residua e vuota — dopo aver riavviato Claude Code sulla cartella nuova | [[ADR-0013 - Nome delle cartelle di progetto]] |
-| 34 | Creare il repository GitHub del progetto Unity (separato da quello della KB) + push | [[ADR-0012 - Dove vivono KB e progetto Unity]] · [[Checklist M0 - Setup]] parte 5 |
 
 ---
 
@@ -54,7 +54,8 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Note |
 |---|---|---|
-| 12 | Configurare **UnityYAMLMerge** | già scritto in [[Checklist M0 - Setup]], va eseguito quando esistono scene vere |
+| 44 | **Valutare connettori/plugin per Claude Code**, con verifica di disponibilità reale al momento (non a memoria) e solo se motivati da uno **spreco misurato**. Prima domanda sempre: il CLI `kb` non fa già la stessa cosa? | [[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] §5 · [[README - CLI della KB]] |
+| 45 | **Sorvegliare la divergenza fra i due repo**: con branch omonimi in KB e Unity, se uno viene mergiato e l'altro no le note e il codice si separano — il rischio nuovo introdotto da ADR-0018 | [[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] § *Conseguenze negative* · [[ADR-0005 - Knowledge Base come fonte di verità]] |
 | 36 | **Degrado individuale dei lavoratori** — oggi la fame è tutto-o-niente a livello di regno | [[Fame e Sussistenza]] |
 | 37 | **Indicatore "tempo alla fame"** in HUD, ora che il consumo esiste | [[HUD Risorse]] |
 | 38 | **Assegnazione dei lavoratori dal giocatore** (oggi è chiamata da codice/editor tool) | [[Posto di Lavoro e Assegnazione]] · [[Selezione e Comandi]] |
@@ -137,6 +138,8 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | **INC-5 progettato e scritto**: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]] — [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] | 2026-07-27 |
 | Indurito preventivamente `UnitUpdateManager` contro lo stesso bug di iterazione corretto in `CombatUpdateManager` | 2026-07-27 |
 | **INC-5 verificato in Play Mode dall'utente**: ondata, combattimento, cadaveri che restano in scena (nostri e nemici) — nessun errore in Console | 2026-07-27 |
+| **UnityYAMLMerge configurato** (era la voce 12): verificato — `merge.unityyamlmerge.driver` attivo e `.gitattributes` mappa scene/prefab/asset/meta | 2026-07-27 |
+| **Workflow di sviluppo deciso**: branch per incremento, task vs Backlog, sub-agenti solo lettura, imbuto esteso al codice ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] + [[Workflow di Sviluppo]]) | 2026-07-27 |
 
 ## Collegamenti
 - [[Scope e Anti-Scope]] · [[Piano Prototipo]] · [[Roadmap e Milestone]]

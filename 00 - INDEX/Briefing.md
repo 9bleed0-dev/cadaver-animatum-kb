@@ -76,6 +76,7 @@ deriva da lì o da una fonte documentata.
 | Cartelle | **due repo separati**: KB in `...\Bleed\CadaverAnimatum-KB` · Unity in `C:\Dev\CadaverAnimatum` | 0012, 0013 |
 | Mondo | niente raggio · operazione mai chiusa · si macellano solo i rialzati · il culto porta bocche, non cibo | 0014 |
 | Combattimento | un rialzato caduto torna cadavere e resta rialzabile: "non muoiono mai" vale sulla popolazione, non sul singolo corpo | 0017 |
+| Workflow | **un branch per incremento** (`inc-N-slug`, stesso nome nei 2 repo) · merge su `main` **solo** se verificato in Play Mode · sub-agenti solo lettura/analisi | 0018 |
 | Struttura | una partita = una mappa = una run · vinci **chiudendo** l'operazione coi 2 fogli del proemio | 0015 |
 | Rogue-lite | **vittoria e fallimento lasciano cose diverse**: Frammenti vs Postille · una run fallita lascia una **rovina abitata** a cui puoi tornare · l'hub è il Re | 0015 |
 | Input | Input System **nuovo** (già nel template, `com.unity.inputsystem 1.19.0`) | 0016 |
@@ -126,8 +127,11 @@ niente abbreviazioni.
 5. **Cubi grigi** finché il gioco non è divertente.
 6. **Chiusura di sessione obbligatoria**: `kb check` verde, [[Stato del Progetto]]
    aggiornato, log scritto, commit fatto.
+7. **Si lavora su un branch per incremento**, mai direttamente su `main`: il merge avviene
+   **solo** dopo la verifica in Play Mode. `git branch --show-current` ogni volta che si
+   riprende. → [[Workflow di Sviluppo]] · [[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]]
 
-→ [[Regole di Ingaggio]] · [[Protocollo di Sessione]] · [[Definition of Done]]
+→ [[Regole di Ingaggio]] · [[Protocollo di Sessione]] · [[Definition of Done]] · [[Workflow di Sviluppo]]
 
 ---
 
