@@ -45,7 +45,6 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | # | Cosa | Note |
 |---|---|---|
 | 39 | **Il menu di [[Scelta sul Cadavere]] (INC-6) deve distinguere il "di chi era" il cadavere**: nemico (tutte le opzioni), rialzato caduto (solo Rialzare), suddito iniziale caduto (solo Rialzare, mai altro) | [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] — il tag nasce a INC-5, la regola si applica a INC-6 |
-| 41 | **`UnitUpdateManager` ha lo stesso rischio strutturale risolto in `CombatUpdateManager`**: itera `_units` per indice catturando `count` prima del ciclo. Oggi non si manifesta (nessuno rimuove un'unità durante l'arrivo di un'altra), ma [[Cadavere e Degrado]] (INC-6, raccolta cadaveri) potrebbe farlo. Applicare la stessa correzione (ricontrollare `Count` e `_cursor %= Count` a ogni passo) **prima** di introdurre codice che disabilita unità durante `NotifyIfArrived` | [[Movimento Unità]] · vedi `CombatUpdateManager.cs` (2026-07-27) per il fix di riferimento |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
 
 ---
@@ -134,6 +133,8 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | 5 tool editor da un click per costruire/collegare tutto quanto sopra (`Cadaver Animatum ▸ Setup`) | 2026-07-26 |
 | Prima prova reale in Play Mode: INC-1…INC-4 verificati dall'utente, 3 difetti in più trovati e corretti | 2026-07-26 |
 | **Misura del tetto di agenti NavMesh col Profiler**: ~200 unità, ~5ms/frame — criterio di uscita di INC-2 soddisfatto, **FASE 2 chiusa** | 2026-07-27 |
+| **INC-5 progettato e scritto**: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]] — [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] | 2026-07-27 |
+| Indurito preventivamente `UnitUpdateManager` contro lo stesso bug di iterazione corretto in `CombatUpdateManager` | 2026-07-27 |
 
 ## Collegamenti
 - [[Scope e Anti-Scope]] · [[Piano Prototipo]] · [[Roadmap e Milestone]]

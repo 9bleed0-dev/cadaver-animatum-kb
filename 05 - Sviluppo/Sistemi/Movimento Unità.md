@@ -1,7 +1,7 @@
 ---
 tags: [sistema, navmesh, unita, rischio]
 stato: progettato
-aggiornato: 2026-07-25
+aggiornato: 2026-07-27
 ---
 
 # Sistema: Movimento Unità
@@ -233,6 +233,17 @@ Corretto replicando ciò che fa il pulsante *Bake* dell'Inspector: `BakeNavMesh`
 
 ✅ Il tool è stato rilanciato: la scena è tornata testo e il fix è confermato in pratica,
 non solo in teoria.
+
+### Indurimento preventivo — 2026-07-27
+
+**`UnitUpdateManager.Update()` iterava `_units` per indice avendo catturato `Count` prima del
+ciclo.** Il difetto era dormiente qui (nessuno rimuove un'unità durante l'arrivo di un'altra,
+oggi), ma [[Combattimento Base]] (INC-5) ha lo stesso schema in `CombatUpdateManager` **e** un
+modo reale di innescarlo: un colpo che uccide il bersaglio nella stessa chiamata lo rimuove
+dalla lista che il ciclo sta scorrendo, rischiando un indice fuori dai limiti dell'array con
+più morti nello stesso frame. Corretta anche qui la stessa struttura, per prevenire lo stesso
+bug il giorno in cui [[Cadavere e Degrado]] (INC-6, raccolta cadaveri) disabiliterà unità
+durante `NotifyIfArrived`. **Non ancora verificato in Play Mode.**
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Selezione e Comandi]] · [[Posto di Lavoro e Assegnazione]]
