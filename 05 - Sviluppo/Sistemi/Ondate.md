@@ -86,16 +86,24 @@ ondata == totalWaves e nessun nemico rimasto? ──► GameStateController.Win(
 ## Stato
 
 - [x] Progettato
-- [x] Prototipato (2026-07-27) — codice scritto, **non ancora verificato in Play Mode**
-- [ ] Implementato
-- [ ] Bilanciato ← insieme a [[Fame e Sussistenza]], è dove si decide se il gioco è teso o frustrante
+- [x] Prototipato — codice scritto
+- [x] **Verificato in Play Mode dall'utente (2026-07-27)**: il conto alla rovescia in HUD
+  funziona, gli invasori partono dal punto d'ingresso (sul NavMesh, confermato) e camminano
+  verso il Cuore, l'ondata 2 è scattata dopo la 1. Nessun errore in Console.
+- [ ] Implementato (`totalWaves`/vittoria non ancora osservati: serve sopravvivere a 5 ondate,
+  non ancora provato per intero)
+- [ ] Bilanciato — la curva morbida (60s) è arrivata **dopo** la carestia di
+  [[Fame e Sussistenza]] (~40s): abbassata a **15s** solo per questo collaudo. Il valore
+  definitivo resta da decidere quando esisterà un modo di procurarsi Carne dai cadaveri
+  (INC-6) — prima di allora ogni valore è provvisorio.
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
 
-> [!warning] Da verificare col cronometro alla mano, come per INC-2
-> Il punto d'ingresso (x=28) è stato scelto perché dentro i confini del `Ground` (scala 6 →
-> 60×60 unità circa), ma non è stato ancora confermato che sia davvero sul NavMesh cotto — se
-> gli invasori non partono, è il primo posto da controllare.
+> [!warning] Scoperto in Play Mode: il timer delle ondate va incrociato con quello della fame
+> Con `waveIntervalSeconds = 60` (il valore morbido originale) si moriva di carestia **prima**
+> che la prima ondata esistesse: 50 Carne, -120/min con 2 lavoratori → 25s per esaurirla, +15s
+> di tolleranza → sconfitta a ~40s, contro un'ondata a 60s. Corretto **temporaneamente** a
+> `15` per poter vedere il combattimento; è un valore di collaudo, non la curva finale.
 
 **File:** `Assets/_Project/Scripts/Data/WaveDefinition.cs` · `Gameplay/WaveManager.cs` ·
 `UI/WaveHUD.cs` · `Editor/WaveSetup.cs` (tool: punto d'ingresso, wiring, testo del conto alla

@@ -133,9 +133,10 @@ niente abbreviazioni.
 
 ## Dove siamo — 2026-07-26 (domenica notte)
 
-**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo) ✅ chiusa.** INC-1…INC-4
+**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo) ✅ chiusa.** INC-1…INC-5
 verificati in Play Mode dall'utente. Selezione, movimento, produzione, HUD, sconfitta per
-carestia — **il loop funziona per intero**.
+carestia, **e ora anche l'assedio**: ondata avvistata, invasori intercettati dai Soldati,
+caduti (nostri e nemici) rimasti sul campo come cadaveri invece di sparire.
 
 Esiste: ~110 note di KB, **16 ADR**, ambiente e progetto Unity pronti
 (`C:\Dev\CadaverAnimatum`), e il codice di: [[Camera Isometrica]] · [[Selezione e Comandi]] ·
@@ -153,13 +154,16 @@ come testo e committata** (`77eb27c`, progetto Unity).
 ~5ms/frame di base (~200 fps), ben sotto i 16,7ms del target 60fps. → [[Movimento Unità]]
 § *La misura*
 
-✅ **INC-5 progettato e scritto (2026-07-27)**: [[Ondate]] · [[Combattimento Base]] ·
-[[Cuore del Regno]] hanno codice completo, riletto a freddo (due bug corretti prima del
-commit). Risolta anche una tensione fra [[Il Rituale]] ("i sudditi non muoiono mai") e la
-morte in combattimento → [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]].
+✅ **INC-5 progettato, scritto e verificato in Play Mode (2026-07-27)**: [[Ondate]] ·
+[[Combattimento Base]] · [[Cuore del Regno]]. L'utente ha confermato: conto alla rovescia,
+invasori intercettati dai Soldati, caduti (nostri e nemici) rimasti sul campo come cadaveri —
+nessun errore in Console. [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]]
+confermato in pratica: un Soldato è caduto ed è rimasto un cadavere, non è sparito. Il Cuore
+del Regno non ha ancora incassato un colpo (i Soldati fermano sempre l'ondata prima).
 
-**Prossimo passo:** aprire Unity, eseguire i 3 tool di setup di INC-5 in ordine, verificare in
-Play Mode — **mai eseguito**, stessa cautela di [[2026-07-26 - Sessione 07]].
+**Prossimo passo:** **INC-6 — il bivio del cadavere** ([[Cadavere e Degrado]] +
+[[Scelta sul Cadavere]]). Sono ancora schede stub: si progettano prima del codice, come
+INC-5.
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 

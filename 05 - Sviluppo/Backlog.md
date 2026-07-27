@@ -34,7 +34,6 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Dove |
 |---|---|---|
-| 40 | **Aprire Unity, eseguire i 3 tool di INC-5 in ordine** (Combattimento → Cuore del Regno → Ondate), guardare la Console, premere Play. Scritto in una sessione senza Unity in primo piano: **niente è stato verificato** | [[2026-07-27 - Sessione 08]] · `Cadaver Animatum ▸ Setup ▸ ...` |
 | 22 | Cancellare la cartella `...\Bleed\VideoGame` residua e vuota — dopo aver riavviato Claude Code sulla cartella nuova | [[ADR-0013 - Nome delle cartelle di progetto]] |
 | 34 | Creare il repository GitHub del progetto Unity (separato da quello della KB) + push | [[ADR-0012 - Dove vivono KB e progetto Unity]] · [[Checklist M0 - Setup]] parte 5 |
 
@@ -45,6 +44,8 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | # | Cosa | Note |
 |---|---|---|
 | 39 | **Il menu di [[Scelta sul Cadavere]] (INC-6) deve distinguere il "di chi era" il cadavere**: nemico (tutte le opzioni), rialzato caduto (solo Rialzare), suddito iniziale caduto (solo Rialzare, mai altro) | [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] — il tag nasce a INC-5, la regola si applica a INC-6 |
+| 42 | **Ribilanciare `WaveDefinition.waveIntervalSeconds`**: oggi è `15`, abbassato solo per far arrivare un'ondata prima della carestia durante il collaudo. Il valore vero si decide quando esisterà un modo di procurarsi Carne dai cadaveri | [[Ondate]] · [[Fame e Sussistenza]] |
+| 43 | **2 Soldati fissi contro una curva che cresce (+2 invasori/ondata) senza modo di aggiungerne altri**: atteso finché non esiste [[Scelta sul Cadavere]] (INC-6), ma da tenere d'occhio quando si bilancia INC-7 | [[Combattimento Base]] |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
 
 ---
@@ -135,6 +136,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | **Misura del tetto di agenti NavMesh col Profiler**: ~200 unità, ~5ms/frame — criterio di uscita di INC-2 soddisfatto, **FASE 2 chiusa** | 2026-07-27 |
 | **INC-5 progettato e scritto**: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]] — [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] | 2026-07-27 |
 | Indurito preventivamente `UnitUpdateManager` contro lo stesso bug di iterazione corretto in `CombatUpdateManager` | 2026-07-27 |
+| **INC-5 verificato in Play Mode dall'utente**: ondata, combattimento, cadaveri che restano in scena (nostri e nemici) — nessun errore in Console | 2026-07-27 |
 
 ## Collegamenti
 - [[Scope e Anti-Scope]] · [[Piano Prototipo]] · [[Roadmap e Milestone]]

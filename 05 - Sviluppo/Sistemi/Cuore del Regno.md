@@ -81,7 +81,11 @@ Invasore (CombatUnit) ──► entro engageRange del Cuore, nessun soldato in m
 ## Stato
 
 - [x] Progettato
-- [x] Prototipato (2026-07-27) — codice scritto, **non ancora verificato in Play Mode**
+- [x] Prototipato — codice scritto, presente in scena senza errori
+- [ ] **Non ancora stress-testato direttamente**: nei collaudi del 2026-07-27 i due Soldati
+  hanno sempre fermato l'ondata prima che un invasore la raggiungesse. `IDamageable.TakeDamage`
+  e la sconfitta per Cuore distrutto restano da vedere girare almeno una volta — succederà da
+  solo quando un'ondata più numerosa (o senza Soldati) sfonderà la linea.
 - [ ] Implementato
 - [ ] Bilanciato
 - [ ] Rifinito

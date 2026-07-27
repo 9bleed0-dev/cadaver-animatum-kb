@@ -45,15 +45,15 @@ L'ordine non è "dal facile al difficile". È: **prima i rischi, e la fame prima
 | **INC-8** | Il verdetto | due persone ci giocano e tu decidi | il prototipo esiste per **rispondere**, non per crescere |
 
 > [!info] Stato al 2026-07-27
-> **INC-0, INC-1, INC-2, INC-3, INC-4 tutti verificati in Play Mode dall'utente.** Il loop
-> fame → lavoro → risorse → sconfitta funziona per intero. Il criterio di uscita di INC-2
-> (misura del tetto di agenti col Profiler) **è stato fatto**: ~200 unità, ~5ms/frame
-> (~200 fps), ampio margine sotto i 16,7ms del target 60fps, con `avoidanceQuality = Low`.
-> **FASE 2 è chiusa.**
-> **INC-5 progettato e scritto**: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]] hanno
-> codice completo (`IDamageable`/`Faction`, `CombatUnit`, `WaveManager`, `KingdomHeart` + 3 tool
-> editor), riletto a freddo prima del commit — **non ancora verificato in Play Mode**.
-> Prossimo passo: aprire Unity ed eseguire i tre tool di setup, in ordine.
+> **INC-0, INC-1, INC-2, INC-3, INC-4, INC-5 tutti verificati in Play Mode dall'utente.**
+> Il loop fame → lavoro → risorse → sconfitta funziona per intero, e ora anche l'assedio:
+> ondata avvistata col conto alla rovescia, invasori intercettati dai Soldati, caduti (nostri
+> e loro) rimasti sul campo come cadaveri invece di sparire. **FASE 2 è chiusa.**
+> Curva delle ondate ancora provvisoria (`waveIntervalSeconds = 15`, abbassata solo per il
+> collaudo — vedi [[Ondate]]). Il Cuore del Regno non ha ancora incassato un colpo: i Soldati
+> hanno sempre fermato l'ondata prima.
+> **Prossimo passo: INC-6, il bivio del cadavere** — [[Cadavere e Degrado]] e
+> [[Scelta sul Cadavere]], ancora da progettare.
 > → dettaglio completo: [[2026-07-27 - Sessione 08]] · [[Movimento Unità]] § *La misura*
 
 > [!tip] Perché la fame prima del cibo
@@ -181,9 +181,9 @@ peggiorasse, non sapremmo quale delle cinque è colpevole.
 | [[HUD Risorse]] | INC-3 | ✅ scritta | ✅ verificato |
 | [[Fame e Sussistenza]] | INC-4 | ✅ scritta | ✅ verificato |
 | [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ✅ verificato |
-| [[Ondate]] | INC-5 | ✅ scritta | ⚠️ scritto, non verificato |
-| [[Combattimento Base]] | INC-5 | ✅ scritta | ⚠️ scritto, non verificato |
-| [[Cuore del Regno]] | INC-5 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Ondate]] | INC-5 | ✅ scritta | ✅ verificato |
+| [[Combattimento Base]] | INC-5 | ✅ scritta | ✅ verificato |
+| [[Cuore del Regno]] | INC-5 | ✅ scritta | ⚠️ presente, non stress-testato (nessun invasore l'ha mai raggiunto) |
 | [[Cadavere e Degrado]] | INC-6 | da scrivere | — |
 | [[Scelta sul Cadavere]] | INC-6 | da scrivere | — |
 | [[Costruzione su Griglia]] | INC-7 | da scrivere | — |

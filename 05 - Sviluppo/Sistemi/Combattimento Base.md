@@ -104,16 +104,18 @@ CombatUpdateManager ──► interroga CombatUnit.Tick() a rotazione
 ## Stato
 
 - [x] Progettato
-- [x] Prototipato (2026-07-27) — codice scritto, **non ancora verificato in Play Mode**
-- [ ] Implementato
-- [ ] Bilanciato
+- [x] Prototipato — codice scritto
+- [x] **Verificato in Play Mode dall'utente (2026-07-27)**: ondata 1 (3 invasori) intercettata
+  dai due Soldati; un Soldato e più invasori sono caduti e sono rimasti in scena **ruotati**
+  (cadaveri, non distrutti) invece di sparire; nessun errore in Console.
+- [ ] Implementato (manca ancora ogni uso reale di `CorpseOrigin`/`_isInitialSubject`: arriva
+  con [[Scelta sul Cadavere]], INC-6)
+- [ ] Bilanciato ← con 2 Soldati fissi e una curva che cresce (+2 invasori/ondata), il
+  rapporto di forze peggiora ondata dopo ondata **senza modo di aggiungere difensori** finché
+  [[Scelta sul Cadavere]] (INC-6) non permette di rialzare i propri caduti come nuovi soldati.
+  Atteso, non un difetto: è il punto in cui INC-6 diventa necessario, non solo interessante.
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
-
-> [!warning] Rischio noto, non ancora verificato dal vivo
-> Il lampeggio del colpo usa `Shader.PropertyToID` per gestire sia `_BaseColor` (URP/Lit) che
-> `_Color` (Built-in), invece di assumere `Renderer.material.color` — ma non è stato ancora
-> visto girare in Play Mode. Se non lampeggia, è il primo posto da controllare.
 
 **File:** `Assets/_Project/Scripts/Core/IDamageable.cs` · `Core/Faction.cs` ·
 `Data/CombatUnitDefinition.cs` · `Gameplay/CombatUnit.cs` · `Gameplay/CombatRegistry.cs` ·
