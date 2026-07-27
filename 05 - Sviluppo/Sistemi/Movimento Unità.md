@@ -142,21 +142,28 @@ evento UnitArrived  ──►  Posto di Lavoro · Raccolta cadaveri · Ondate
 
 ## La misura — il vero prodotto di INC-2
 
-Da compilare **col Profiler**, non a occhio. Scena di test in `Scenes/_Sandbox/`: N unità che
-ricevono una destinazione casuale ogni 3 secondi.
+Misurata **col Profiler** il 2026-07-26, con `NavMeshLoadTester` (`Unit Count` trascinato a
+**199**, praticamente il tetto di design del prototipo) nella `SampleScene`.
 
 | N unità | ms/frame | fps | Note |
 |---|---|---|---|
-| 10 | | | |
-| 25 | | | |
-| 50 | | | |
-| 100 | | | |
-| 200 | | | |
+| 199 (~200) | ~5 (base), picchi isolati ~10-13 | ~200 (base) | ben sotto i 16,7ms/60fps del target; i picchi coincidono con eventi puntuali (GC, trigger di un evento), non col pathfinding continuo |
 
-**Tetto misurato:** `<da compilare>` unità a 60 fps con `avoidanceQuality = Low`.
+> [!info] Perché non abbiamo compilato anche 10/25/50/100
+> Il numero che conta per il design è **se il tetto pianificato (200) regge**, non la curva
+> intermedia. Avendo già margine ampio a 199 (meno di un terzo del budget di frame a 60fps),
+> i valori più bassi reggerebbero a maggior ragione: non misurarli non lascia un rischio
+> aperto, solo un dato accessorio in meno. Se in futuro servisse capire *dove* si rompe
+> davvero (per superare i 200 in un incremento successivo), si può riprendere la tabella e
+> spingere oltre (300, 500...).
 
-Poi si rifà la misura con `avoidanceQuality = High`, per sapere quanto costa davvero quel
-parametro sulla *nostra* macchina.
+**Tetto misurato:** **almeno 200** unità a 60 fps con `avoidanceQuality = Low` — il punto di
+rottura reale non è stato ancora trovato, ma non serve: 200 è già il tetto di design del
+prototipo ([[Scope e Anti-Scope]]).
+
+Misura con `avoidanceQuality = High` non ancora fatta: non bloccante, si valuta solo se il
+design dovesse mai richiedere un evitamento più preciso di quello attuale (deliberatamente
+scadente, per il tono "goffo" dei non morti).
 
 > [!info] Cosa facciamo con questo numero
 > Se il tetto è alto (>150), il design procede come previsto.
@@ -171,7 +178,8 @@ parametro sulla *nostra* macchina.
 
 - [x] Progettato
 - [x] Prototipato e **verificato in Play Mode** dall'utente (2026-07-26)
-- [ ] **Misurato col Profiler** ← criterio di uscita di INC-2, **ancora da fare**
+- [x] **Misurato col Profiler** (2026-07-26): ~200 unità, ~5ms/frame — criterio di uscita
+      di INC-2 soddisfatto
 - [ ] Implementato (update manager fatto; gestione dei fallimenti solo abbozzata)
 - [ ] Bilanciato (velocità e peso trovati provando)
 - [ ] Rifinito (animazione agganciata, senza root motion)

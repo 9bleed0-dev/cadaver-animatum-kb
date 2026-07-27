@@ -12,10 +12,10 @@ aggiornato: 2026-07-26
 
 **FASE 0 — Fondamenta** ✅ **chiusa (2026-07-26)** — ambiente pronto, progetto Unity creato
 **FASE 1 — Concept** ✅ (2026-07-25)
-**FASE 2 — Prototipo** ✅ **INC-1…INC-4 verificati in Play Mode dall'utente (2026-07-26).**
-Il loop fame → lavoro → risorse → sconfitta funziona per intero. La scena è tornata testo
-e committata. Resta solo la misura del tetto NavMesh al Profiler prima di INC-5.
-→ [[Piano Prototipo]]
+**FASE 2 — Prototipo** ✅ **chiusa (2026-07-26).** INC-1…INC-4 verificati in Play Mode
+dall'utente, loop fame → lavoro → risorse → sconfitta completo, e il criterio di uscita di
+INC-2 (misura del tetto di agenti NavMesh) **soddisfatto**: ~200 unità, ~5ms/frame, ampio
+margine sotto i 16,7ms del target 60fps. **Prossimo: INC-5.** → [[Piano Prototipo]]
 
 ## Il gioco
 
@@ -96,22 +96,21 @@ powershell -ExecutionPolicy Bypass -File "08 - Tool\setup-macchina\Verify-Setup.
 del progetto Unity, e provare Play in Unity per confermare Console vuota.
 → [[Checklist M0 - Setup]] § *Chiusura di INC-0*
 
-## Prossimo passo concreto — solo la misura resta
+## Prossimo passo concreto — si apre INC-5
 
-**Verificato dall'utente in Play Mode (2026-07-26): selezione, movimento, produzione, HUD,
-sconfitta per carestia — tutto funziona.** Undici difetti trovati e corretti in tutto (sette
-in revisione a freddo, quattro alla prima esecuzione reale — incluso il bug per cui la scena
-diventava binaria).
+**FASE 2 è chiusa.** Verificato dall'utente in Play Mode (2026-07-26): selezione, movimento,
+produzione, HUD, sconfitta per carestia — tutto funziona. Undici difetti trovati e corretti in
+tutto (sette in revisione a freddo, quattro alla prima esecuzione reale — incluso il bug per
+cui la scena diventava binaria, poi rigenerata e committata in `77eb27c`).
 
-✅ **La scena è stata rigenerata come testo e committata** (`77eb27c`, progetto Unity): il tool
-`NavMesh e Unità di Prova (INC-2)` è stato rilanciato, il `NavMeshData` ora vive come asset
-esterno (`Assets/Scenes/SampleScene/NavMesh-Ground.asset`), la scena torna YAML leggibile e
-diffabile. → dettaglio in [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script
-rompe Force Text*
+✅ **Criterio di uscita di INC-2 soddisfatto**: misurato col Profiler (2026-07-26), ~200 unità
+(`NavMeshLoadTester`, `Unit Count = 199`) reggono a **~5ms/frame di base** (~200 fps), con
+picchi isolati a ~10-13ms legati a eventi puntuali (GC, un trigger di evento) — ben sotto i
+16,7ms del target 60fps. Il tetto di design del prototipo (200 unità) è ampiamente coperto:
+il punto di rottura reale non serve trovarlo ora. → [[Movimento Unità]] § *La misura*
 
-**Resta un solo passo prima di poter chiudere davvero INC-2:** la misura del tetto di agenti
-NavMesh al Profiler (Window ▸ Analysis ▸ Profiler) — richiede un umano davanti allo schermo,
-non è automatizzabile. Poi si passa a **INC-5**.
+**Prossimo passo:** iniziare **INC-5** (Ondate, Combattimento Base, Cuore del Regno) —
+tre sistemi nuovi, ancora da schedare. → [[Piano Prototipo]]
 → dettaglio completo della sessione in [[2026-07-26 - Sessione 07]]
 
 > [!info] Da leggere prima di martedì (15 minuti in tutto)

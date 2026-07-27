@@ -45,13 +45,12 @@ L'ordine non è "dal facile al difficile". È: **prima i rischi, e la fame prima
 | **INC-8** | Il verdetto | due persone ci giocano e tu decidi | il prototipo esiste per **rispondere**, non per crescere |
 
 > [!info] Stato al 2026-07-26
-> **INC-0 chiuso e verificato.** INC-1, INC-2, INC-3, INC-4: **codice scritto e committato**
-> (7 commit), ma scritto durante una sessione senza Unity in primo piano — **nessuno di
-> questi è ancora stato verificato in Play Mode.** Prima cosa da fare alla prossima
-> apertura: dare il focus a Unity, guardare la Console, premere Play.
-> Il criterio di uscita di INC-2 (misura del tetto di agenti col Profiler) **non è stato
-> fatto** — richiede un umano davanti al Profiler, non si può automatizzare.
-> → dettaglio completo: [[2026-07-26 - Sessione 07]]
+> **INC-0, INC-1, INC-2, INC-3, INC-4 tutti verificati in Play Mode dall'utente.** Il loop
+> fame → lavoro → risorse → sconfitta funziona per intero. Il criterio di uscita di INC-2
+> (misura del tetto di agenti col Profiler) **è stato fatto**: ~200 unità, ~5ms/frame
+> (~200 fps), ampio margine sotto i 16,7ms del target 60fps, con `avoidanceQuality = Low`.
+> **FASE 2 è chiusa.** Prossimo passo: INC-5.
+> → dettaglio completo: [[2026-07-26 - Sessione 07]] · [[Movimento Unità]] § *La misura*
 
 > [!tip] Perché la fame prima del cibo
 > Alla fine di INC-4 il gioco è **impossibile da vincere**: hai fame e nessuna fonte di carne.
@@ -171,13 +170,13 @@ peggiorasse, non sapremmo quale delle cinque è colpevole.
 | Sistema | Incremento | Scheda | Codice |
 |---|---|---|---|
 | [[Camera Isometrica]] | INC-1 | ✅ scritta | ✅ verificato |
-| [[Selezione e Comandi]] | INC-1 | ✅ scritta | ⚠️ scritto, non verificato |
-| [[Movimento Unità]] | INC-2 | ✅ scritta | ⚠️ scritto, non verificato · misura Profiler non fatta |
-| [[Risorse e Magazzino]] | INC-3 | ✅ scritta | ⚠️ scritto, non verificato · 5 test EditMode |
-| [[Posto di Lavoro e Assegnazione]] | INC-3 | ✅ scritta | ⚠️ scritto, non verificato |
-| [[HUD Risorse]] | INC-3 | ✅ scritta | ⚠️ scritto, non verificato |
-| [[Fame e Sussistenza]] | INC-4 | ✅ scritta | ⚠️ scritto, non verificato |
-| [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Selezione e Comandi]] | INC-1 | ✅ scritta | ✅ verificato |
+| [[Movimento Unità]] | INC-2 | ✅ scritta | ✅ verificato · misura Profiler fatta (~200 unità, ~5ms/frame) |
+| [[Risorse e Magazzino]] | INC-3 | ✅ scritta | ✅ verificato · 5 test EditMode |
+| [[Posto di Lavoro e Assegnazione]] | INC-3 | ✅ scritta | ✅ verificato |
+| [[HUD Risorse]] | INC-3 | ✅ scritta | ✅ verificato |
+| [[Fame e Sussistenza]] | INC-4 | ✅ scritta | ✅ verificato |
+| [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ✅ verificato |
 | [[Ondate]] | INC-5 | da scrivere | — |
 | [[Combattimento Base]] | INC-5 | da scrivere | — |
 | [[Cuore del Regno]] | INC-5 | da scrivere | — |

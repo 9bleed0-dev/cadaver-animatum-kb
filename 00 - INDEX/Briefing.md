@@ -132,9 +132,9 @@ niente abbreviazioni.
 
 ## Dove siamo — 2026-07-26 (domenica notte)
 
-**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo): INC-1…INC-4 verificati in
-Play Mode dall'utente.** Selezione, movimento, produzione, HUD, sconfitta per carestia — **il
-loop funziona per intero**.
+**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo) ✅ chiusa.** INC-1…INC-4
+verificati in Play Mode dall'utente. Selezione, movimento, produzione, HUD, sconfitta per
+carestia — **il loop funziona per intero**.
 
 Esiste: ~110 note di KB, **16 ADR**, ambiente e progetto Unity pronti
 (`C:\Dev\CadaverAnimatum`), e il codice di: [[Camera Isometrica]] · [[Selezione e Comandi]] ·
@@ -145,13 +145,14 @@ Esiste: ~110 note di KB, **16 ADR**, ambiente e progetto Unity pronti
 ✅ La prima prova reale aveva trovato 4 difetti in più (oltre ai 7 della revisione a freddo),
 incluso il più serio: **la scena diventava binaria** perché `BuildNavMesh()` non salvava i suoi
 dati come asset esterno. Tutti e quattro corretti nel codice, e la scena è stata **rigenerata
-come testo e committata** (`77eb27c`, progetto Unity) — il ciclo è chiuso.
+come testo e committata** (`77eb27c`, progetto Unity).
 → [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script rompe Force Text*
 
-**Prossimo passo, in ordine:**
-1. La misura del tetto di agenti NavMesh col Profiler — è il criterio di uscita vero di
-   INC-2, e serve un umano davanti allo schermo (Window ▸ Analysis ▸ Profiler)
-2. **Solo dopo quello**: si passa a INC-5 (ondate, combattimento base, Cuore del Regno)
+✅ **Criterio di uscita di INC-2 soddisfatto**: misurato col Profiler, ~200 unità reggono a
+~5ms/frame di base (~200 fps), ben sotto i 16,7ms del target 60fps. → [[Movimento Unità]]
+§ *La misura*
+
+**Prossimo passo:** iniziare **INC-5** (ondate, combattimento base, Cuore del Regno).
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 
