@@ -77,7 +77,7 @@ l'Inquisizione la **revochi**.
 | **Licenza Unity** | ✅ Personal, attiva dal 3 aprile 2026 |
 | **IDE (Visual Studio + workload Unity)** | ✅ risolto |
 | **Progetto Unity** | ✅ creato — `C:\Dev\CadaverAnimatum`, Universal 3D, sotto Git |
-| Remoto GitHub del progetto Unity | ❌ manca — **non bloccante**, il commit locale esiste |
+| Remoto GitHub del progetto Unity | ❌ **manca, e ora è bloccante** — verificato il 2026-07-27: `git remote -v` è vuoto, il codice esiste **solo sul disco locale**. Prerequisito del workflow a branch ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]]) |
 | **Codice** | ✅ **8+ commit** — INC-1…INC-4 scritti e **verificati in Play Mode dall'utente** (camera, selezione, movimento su NavMesh, economia, lavoro, HUD, fame, stato partita). Un passo resta: rigenerare la scena → *Un solo passo resta*, sotto → [[2026-07-26 - Sessione 07]] |
 
 ## Decisioni aperte
@@ -124,8 +124,15 @@ Il Cuore del Regno non ha ancora incassato un colpo (i Soldati fermano sempre l'
 resta da vedere girare quella parte. La curva delle ondate (`waveIntervalSeconds = 15`) è
 provvisoria, abbassata solo per il collaudo.
 
+🔀 **Nuovo workflow, in vigore da INC-6** ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]]): si lavora su **un branch per incremento**, merge su `main` solo dopo la verifica in
+Play Mode. Motivo: INC-6 è il primo incremento che **modifica** logica già verificata invece di
+aggiungerne di nuova. → [[Workflow di Sviluppo]] per i comandi.
+
 **Prossimo passo:** **INC-6 — il bivio del cadavere** ([[Cadavere e Degrado]] +
-[[Scelta sul Cadavere]]): ancora schede stub, da progettare prima del codice.
+[[Scelta sul Cadavere]]): ancora schede stub, da progettare prima del codice, come **nuova
+sessione** sul branch `inc-6-bivio-cadavere`.
+⚠️ **Prerequisito**: creare il remoto del repo Unity ([[Backlog]] #34) — `gh` non è installato,
+va creato a mano su GitHub.
 → [[Piano Prototipo]] · dettaglio completo in [[2026-07-27 - Sessione 08]]
 
 > [!info] Da leggere prima di martedì (15 minuti in tutto)
