@@ -1,6 +1,6 @@
 ---
 tags: [sistema, edifici]
-stato: progettato
+stato: prototipato
 aggiornato: 2026-07-27
 ---
 
@@ -81,11 +81,14 @@ Invasore (CombatUnit) ──► entro engageRange del Cuore, nessun soldato in m
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato
+- [x] Prototipato (2026-07-27) — codice scritto, **non ancora verificato in Play Mode**
 - [ ] Implementato
 - [ ] Bilanciato
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
+
+**File:** `Assets/_Project/Scripts/Data/KingdomHeartDefinition.cs` ·
+`Gameplay/KingdomHeart.cs` · `Editor/KingdomHeartSetup.cs` (tool: crea il Cuore a (14, 0.5, 0), 200 HP)
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Ondate]] · [[Combattimento Base]] · [[Stato della Partita]] · [[Scelta sul Cadavere]]

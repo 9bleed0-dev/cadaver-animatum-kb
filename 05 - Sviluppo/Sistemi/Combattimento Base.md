@@ -1,6 +1,6 @@
 ---
 tags: [sistema, combattimento]
-stato: progettato
+stato: prototipato
 aggiornato: 2026-07-27
 ---
 
@@ -104,11 +104,21 @@ CombatUpdateManager ──► interroga CombatUnit.Tick() a rotazione
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato
+- [x] Prototipato (2026-07-27) — codice scritto, **non ancora verificato in Play Mode**
 - [ ] Implementato
 - [ ] Bilanciato
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
+
+> [!warning] Rischio noto, non ancora verificato dal vivo
+> Il lampeggio del colpo usa `Shader.PropertyToID` per gestire sia `_BaseColor` (URP/Lit) che
+> `_Color` (Built-in), invece di assumere `Renderer.material.color` — ma non è stato ancora
+> visto girare in Play Mode. Se non lampeggia, è il primo posto da controllare.
+
+**File:** `Assets/_Project/Scripts/Core/IDamageable.cs` · `Core/Faction.cs` ·
+`Data/CombatUnitDefinition.cs` · `Gameplay/CombatUnit.cs` · `Gameplay/CombatRegistry.cs` ·
+`Gameplay/CombatUpdateManager.cs` · `Gameplay/CorpseOrigin.cs` · `Gameplay/CorpsePlaceholder.cs` ·
+`Editor/CombatSetup.cs` (tool: crea due Soldati fermi di prova)
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Ondate]] · [[Cadavere e Degrado]] · [[Movimento Unità]] · [[Cuore del Regno]] · [[Fucina]]

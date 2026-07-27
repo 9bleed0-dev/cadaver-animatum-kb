@@ -34,6 +34,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Dove |
 |---|---|---|
+| 40 | **Aprire Unity, eseguire i 3 tool di INC-5 in ordine** (Combattimento → Cuore del Regno → Ondate), guardare la Console, premere Play. Scritto in una sessione senza Unity in primo piano: **niente è stato verificato** | [[2026-07-27 - Sessione 08]] · `Cadaver Animatum ▸ Setup ▸ ...` |
 | 22 | Cancellare la cartella `...\Bleed\VideoGame` residua e vuota — dopo aver riavviato Claude Code sulla cartella nuova | [[ADR-0013 - Nome delle cartelle di progetto]] |
 | 34 | Creare il repository GitHub del progetto Unity (separato da quello della KB) + push | [[ADR-0012 - Dove vivono KB e progetto Unity]] · [[Checklist M0 - Setup]] parte 5 |
 
@@ -44,6 +45,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | # | Cosa | Note |
 |---|---|---|
 | 39 | **Il menu di [[Scelta sul Cadavere]] (INC-6) deve distinguere il "di chi era" il cadavere**: nemico (tutte le opzioni), rialzato caduto (solo Rialzare), suddito iniziale caduto (solo Rialzare, mai altro) | [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] — il tag nasce a INC-5, la regola si applica a INC-6 |
+| 41 | **`UnitUpdateManager` ha lo stesso rischio strutturale risolto in `CombatUpdateManager`**: itera `_units` per indice catturando `count` prima del ciclo. Oggi non si manifesta (nessuno rimuove un'unità durante l'arrivo di un'altra), ma [[Cadavere e Degrado]] (INC-6, raccolta cadaveri) potrebbe farlo. Applicare la stessa correzione (ricontrollare `Count` e `_cursor %= Count` a ogni passo) **prima** di introdurre codice che disabilita unità durante `NotifyIfArrived` | [[Movimento Unità]] · vedi `CombatUpdateManager.cs` (2026-07-27) per il fix di riferimento |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
 
 ---

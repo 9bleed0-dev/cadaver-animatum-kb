@@ -50,10 +50,11 @@ L'ordine non è "dal facile al difficile". È: **prima i rischi, e la fame prima
 > (misura del tetto di agenti col Profiler) **è stato fatto**: ~200 unità, ~5ms/frame
 > (~200 fps), ampio margine sotto i 16,7ms del target 60fps, con `avoidanceQuality = Low`.
 > **FASE 2 è chiusa.**
-> **INC-5 progettato**: le tre schede ([[Ondate]], [[Combattimento Base]], [[Cuore del Regno]])
-> sono scritte e le domande di design chiuse — incluso [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]], che risolve una tensione con [[Il Rituale]]. Prossimo passo:
-> scrivere il codice.
-> → dettaglio completo: [[2026-07-26 - Sessione 07]] · [[Movimento Unità]] § *La misura*
+> **INC-5 progettato e scritto**: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]] hanno
+> codice completo (`IDamageable`/`Faction`, `CombatUnit`, `WaveManager`, `KingdomHeart` + 3 tool
+> editor), riletto a freddo prima del commit — **non ancora verificato in Play Mode**.
+> Prossimo passo: aprire Unity ed eseguire i tre tool di setup, in ordine.
+> → dettaglio completo: [[2026-07-27 - Sessione 08]] · [[Movimento Unità]] § *La misura*
 
 > [!tip] Perché la fame prima del cibo
 > Alla fine di INC-4 il gioco è **impossibile da vincere**: hai fame e nessuna fonte di carne.
@@ -180,9 +181,9 @@ peggiorasse, non sapremmo quale delle cinque è colpevole.
 | [[HUD Risorse]] | INC-3 | ✅ scritta | ✅ verificato |
 | [[Fame e Sussistenza]] | INC-4 | ✅ scritta | ✅ verificato |
 | [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ✅ verificato |
-| [[Ondate]] | INC-5 | ✅ scritta | — |
-| [[Combattimento Base]] | INC-5 | ✅ scritta | — |
-| [[Cuore del Regno]] | INC-5 | ✅ scritta | — |
+| [[Ondate]] | INC-5 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Combattimento Base]] | INC-5 | ✅ scritta | ⚠️ scritto, non verificato |
+| [[Cuore del Regno]] | INC-5 | ✅ scritta | ⚠️ scritto, non verificato |
 | [[Cadavere e Degrado]] | INC-6 | da scrivere | — |
 | [[Scelta sul Cadavere]] | INC-6 | da scrivere | — |
 | [[Costruzione su Griglia]] | INC-7 | da scrivere | — |

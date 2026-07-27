@@ -153,11 +153,13 @@ come testo e committata** (`77eb27c`, progetto Unity).
 ~5ms/frame di base (~200 fps), ben sotto i 16,7ms del target 60fps. → [[Movimento Unità]]
 § *La misura*
 
-✅ **INC-5 progettato (2026-07-27)**: [[Ondate]] · [[Combattimento Base]] · [[Cuore del Regno]]
-scritte per intero. Risolta anche una tensione fra [[Il Rituale]] ("i sudditi non muoiono
-mai") e la morte in combattimento → [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]].
+✅ **INC-5 progettato e scritto (2026-07-27)**: [[Ondate]] · [[Combattimento Base]] ·
+[[Cuore del Regno]] hanno codice completo, riletto a freddo (due bug corretti prima del
+commit). Risolta anche una tensione fra [[Il Rituale]] ("i sudditi non muoiono mai") e la
+morte in combattimento → [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]].
 
-**Prossimo passo:** scrivere il codice di INC-5, un sistema alla volta.
+**Prossimo passo:** aprire Unity, eseguire i 3 tool di setup di INC-5 in ordine, verificare in
+Play Mode — **mai eseguito**, stessa cautela di [[2026-07-26 - Sessione 07]].
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 

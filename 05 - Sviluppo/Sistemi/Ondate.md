@@ -1,6 +1,6 @@
 ---
 tags: [sistema, ondate, nemici]
-stato: progettato
+stato: prototipato
 aggiornato: 2026-07-27
 ---
 
@@ -86,11 +86,20 @@ ondata == totalWaves e nessun nemico rimasto? ──► GameStateController.Win(
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato
+- [x] Prototipato (2026-07-27) — codice scritto, **non ancora verificato in Play Mode**
 - [ ] Implementato
 - [ ] Bilanciato ← insieme a [[Fame e Sussistenza]], è dove si decide se il gioco è teso o frustrante
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
+
+> [!warning] Da verificare col cronometro alla mano, come per INC-2
+> Il punto d'ingresso (x=28) è stato scelto perché dentro i confini del `Ground` (scala 6 →
+> 60×60 unità circa), ma non è stato ancora confermato che sia davvero sul NavMesh cotto — se
+> gli invasori non partono, è il primo posto da controllare.
+
+**File:** `Assets/_Project/Scripts/Data/WaveDefinition.cs` · `Gameplay/WaveManager.cs` ·
+`UI/WaveHUD.cs` · `Editor/WaveSetup.cs` (tool: punto d'ingresso, wiring, testo del conto alla
+rovescia in `HUD_Canvas`)
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Combattimento Base]] · [[Cadavere e Degrado]] · [[Cuore del Regno]]
