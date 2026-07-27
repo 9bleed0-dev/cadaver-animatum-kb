@@ -12,8 +12,10 @@ aggiornato: 2026-07-26
 
 **FASE 0 — Fondamenta** ✅ **chiusa (2026-07-26)** — ambiente pronto, progetto Unity creato
 **FASE 1 — Concept** ✅ (2026-07-25)
-**FASE 2 — Prototipo** 🔵 **INC-1…INC-4 hanno codice scritto, nessuno ancora verificato in
-Play Mode.** Prima cosa da fare: aprire Unity e provare. → [[Piano Prototipo]]
+**FASE 2 — Prototipo** ✅ **INC-1…INC-4 verificati in Play Mode dall'utente (2026-07-26).**
+Il loop fame → lavoro → risorse → sconfitta funziona per intero. Un difetto residuo: la
+scena su disco è ancora binaria (bug del NavMesh corretto, ma il tool va rilanciato per
+sanarla — vedi *Un solo passo resta*, sotto). → [[Piano Prototipo]]
 
 ## Il gioco
 
@@ -72,7 +74,7 @@ l'Inquisizione la **revochi**.
 | **IDE (Visual Studio + workload Unity)** | ✅ risolto |
 | **Progetto Unity** | ✅ creato — `C:\Dev\CadaverAnimatum`, Universal 3D, sotto Git |
 | Remoto GitHub del progetto Unity | ❌ manca — **non bloccante**, il commit locale esiste |
-| **Codice** | ✅ **7 commit** — INC-1…INC-4 scritti (camera, selezione, movimento su NavMesh, economia, lavoro, HUD, fame, stato partita). **Nessuno verificato in Play Mode** → [[2026-07-26 - Sessione 07]] |
+| **Codice** | ✅ **8+ commit** — INC-1…INC-4 scritti e **verificati in Play Mode dall'utente** (camera, selezione, movimento su NavMesh, economia, lavoro, HUD, fame, stato partita). Un passo resta: rigenerare la scena → *Un solo passo resta*, sotto → [[2026-07-26 - Sessione 07]] |
 
 ## Decisioni aperte
 
@@ -94,43 +96,29 @@ powershell -ExecutionPolicy Bypass -File "08 - Tool\setup-macchina\Verify-Setup.
 del progetto Unity, e provare Play in Unity per confermare Console vuota.
 → [[Checklist M0 - Setup]] § *Chiusura di INC-0*
 
-## Prossimo passo concreto — verificare, non costruire
+## Prossimo passo concreto — un solo passo resta
 
-**Prima di scrivere altro codice:** apri Unity, guarda la Console, esegui i setup, premi Play.
-Il codice di INC-1…INC-4 è stato scritto in una sessione senza Unity in primo piano e **non è
-mai stato eseguito.**
+**Verificato dall'utente in Play Mode (2026-07-26): selezione, movimento, produzione, HUD,
+sconfitta per carestia — tutto funziona.** Quattro difetti trovati e corretti durante questa
+prima prova reale (oltre ai sette della revisione a freddo): un `NullReferenceException`
+nell'HUD, un `NavMeshLoadTester` duplicato, i lavoratori che stavano sopra i cubi invece che
+accanto, e — il più importante — **la scena che diventava binaria**.
 
-**Stato verificato della scena** (letto da `SampleScene.unity` il 2026-07-26): contiene solo
-`CameraRig`, `Main Camera`, `Ground`, `TestCube`, luce e volume. In `_Project/Data/` c'è solo
-`CameraSettings.asset`.
+> [!danger] Un passo resta prima di poter committare la scena
+> `surface.BuildNavMesh()` non salva da sola i suoi dati come asset esterno: senza, Unity li
+> incorpora nel file della scena, forzandola in binario **anche con Force Text attivo** —
+> vanificando la ragione per cui l'avevamo scelto (ADR-0004, diff con Git).
+> **Il codice è già corretto** (commit `c7a7afb`), ma la scena **su disco è ancora quella
+> vecchia, binaria**: il fix si applica solo quando il tool viene rieseguito.
+>
+> **Da fare:** rilanciare `Cadaver Animatum ▸ Setup ▸ NavMesh e Unità di Prova (INC-2)`,
+> poi `Ctrl+S`. A quel punto la scena torna testo leggibile e si può committare.
+> → dettaglio in [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script rompe Force Text*
 
-> [!danger] I tool NON sono stati eseguiti
-> Solo i primi due (Camera Isometrica, Terreno di Prova) sono stati lanciati dall'utente prima
-> di andare a dormire. **Tutti gli altri no** — un'assistente non può cliccare le voci di menu
-> di Unity. Una prima versione di questa nota affermava il contrario: era falso, ed è stato
-> corretto controllando il file della scena invece di fidarsi della memoria.
-
-**Da eseguire, in quest'ordine** (l'ordine conta: ognuno usa ciò che il precedente crea):
-
-| # | Voce di menu | Serve perché |
-|---|---|---|
-| 1 | `Selezione (INC-1)` | crea layer + materiale, rende il `TestCube` cliccabile |
-| 2 | `NavMesh e Unità di Prova (INC-2)` | **cuoce il NavMesh**: senza, nessuna unità cammina |
-| 3 | `Economia (INC-3)` | crea le 4 risorse e l'`EconomyRunner` |
-| 4 | `Posti di Lavoro (INC-3)` | richiede il NavMesh (2) e l'`EconomyRunner` (3) |
-| 5 | `HUD Risorse (INC-3)` | richiede l'`EconomyRunner` (3) |
-| 6 | `Fame e Stato Partita (INC-4)` | richiede `EconomyRunner` (3) e `HUD_Canvas` (5) |
-
-I tool sono **idempotenti**: rilanciarli non duplica nulla. Se uno manca un prerequisito, lo
-dice in Console con il nome del tool da eseguire prima.
-
-Poi **`Ctrl+S`** (il NavMesh cotto va salvato) e **Play**: WASD/rotella/trascinamento, click sul
-cubo, e guarda se Pietra e Ferro salgono nell'angolo.
-→ dettaglio completo in [[2026-07-26 - Sessione 07]]
-
-Solo dopo aver verificato: **INC-2 resta da chiudere davvero** con la misura del tetto di
-agenti NavMesh al Profiler (Window ▸ Analysis ▸ Profiler) — è un umano davanti allo schermo,
-non automatizzabile.
+Dopo quel passo: **INC-2 resta da chiudere davvero** con la misura del tetto di agenti NavMesh
+al Profiler (Window ▸ Analysis ▸ Profiler) — richiede un umano davanti allo schermo, non è
+automatizzabile. Poi si passa a **INC-5**.
+→ dettaglio completo della sessione in [[2026-07-26 - Sessione 07]]
 
 > [!info] Da leggere prima di martedì (15 minuti in tutto)
 > [[Lezione 01 - Cosa costruiremo davvero]] ·
@@ -146,8 +134,8 @@ non automatizzabile.
 
 | Rischio | Dove si affronta |
 |---|---|
-| 🔴 **Pathfinding con molte unità** — il tetto va **misurato**, non desiderato. Codice scritto, misura non fatta | **INC-2** → [[Movimento Unità]] |
-| 🔴 **Nessun codice di questa sessione è stato eseguito** — scritto senza Unity in primo piano | verificare prima di continuare → [[2026-07-26 - Sessione 07]] |
+| 🔴 **Pathfinding con molte unità** — il tetto va **misurato**, non desiderato. Codice scritto e verificato, misura col Profiler non ancora fatta | **INC-2** → [[Movimento Unità]] |
+| 🟠 **La scena su disco è ancora binaria** — il fix del NavMesh è nel codice ma va rieseguito il tool per rigenerarla | vedi *Un solo passo resta*, sopra → [[2026-07-26 - Sessione 07]] |
 | 🔴 **UX del menu di scelta sul cadavere** — se è macchinoso, il gioco muore | **INC-6**, con due varianti a confronto → [[Scelta sul Cadavere]] |
 | ✅ ~~La KB non ha backup fuori dal disco~~ — risolto, remoto GitHub attivo | — |
 | 🟠 Tentazione del disegno libero delle mura | [[Costruzione su Griglia]] · [[Scope e Anti-Scope]] |
@@ -159,10 +147,12 @@ non automatizzabile.
 
 ## Ultima sessione
 
-- **2026-07-26 — Sessione 07** *(mentre l'utente dormiva)*: scritto tutto il codice di
-  INC-1…INC-4 — camera isometrica (verificata), selezione, movimento su NavMesh, economia,
-  posti di lavoro, HUD, fame, stato della partita. 7 commit. **Il primo loop chiude**
-  (fame → lavoro → risorse). Nessun codice oltre alla camera è stato verificato in Play Mode.
+- **2026-07-26 — Sessione 07**: scritto tutto il codice di INC-1…INC-4 (camera, selezione,
+  movimento su NavMesh, economia, posti di lavoro, HUD, fame, stato della partita), poi
+  **verificato dall'utente in Play Mode**. Il loop fame → lavoro → risorse **funziona per
+  intero**. 11 difetti trovati e corretti in tutto (7 in revisione a freddo, 4 alla prima
+  esecuzione reale, incluso il bug della scena resa binaria dal NavMesh). Resta un solo passo:
+  rilanciare il tool NavMesh una volta in più per rigenerare la scena come testo.
   → [[2026-07-26 - Sessione 07]]
 - **2026-07-26 — Sessione 06**: rinomina della cartella in `CadaverAnimatum-KB` e **revisione
   del mondo di gioco**. Abolito il raggio, introdotta l'operazione mai chiusa, definita la

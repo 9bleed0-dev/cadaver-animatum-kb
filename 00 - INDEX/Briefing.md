@@ -132,30 +132,32 @@ niente abbreviazioni.
 
 ## Dove siamo — 2026-07-26 (domenica notte)
 
-**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo): INC-1…INC-4 hanno codice
-scritto e committato (7 commit), NESSUNO verificato in Play Mode.**
+**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo): INC-1…INC-4 verificati in
+Play Mode dall'utente.** Selezione, movimento, produzione, HUD, sconfitta per carestia — **il
+loop funziona per intero**.
 
-Esiste: ~110 note di KB, **15 ADR**, ambiente e progetto Unity pronti
-(`C:\Dev\CadaverAnimatum`), e — scritto in [[2026-07-26 - Sessione 07]], mentre l'utente
-dormiva — il codice di: [[Camera Isometrica]] (✅ **verificata**, l'unica) ·
-[[Selezione e Comandi]] · [[Movimento Unità]] su NavMesh · [[Risorse e Magazzino]] (+5 test) ·
+Esiste: ~110 note di KB, **16 ADR**, ambiente e progetto Unity pronti
+(`C:\Dev\CadaverAnimatum`), e il codice di: [[Camera Isometrica]] · [[Selezione e Comandi]] ·
+[[Movimento Unità]] su NavMesh · [[Risorse e Magazzino]] (+5 test) ·
 [[Posto di Lavoro e Assegnazione]] · [[HUD Risorse]] · [[Fame e Sussistenza]] ·
-[[Stato della Partita]]. **Il primo loop chiude**: fame → lavoro → risorse.
+[[Stato della Partita]] — tutti provati dall'utente in questa sessione.
 
-> [!danger] Nulla di questo (tranne la camera) è stato eseguito
-> Scritto senza Unity in primo piano: niente compilazione live, niente Play Mode. Controllato
-> a occhio con cura, ma **la prima cosa da fare è aprire Unity, guardare la Console, e
-> giocare** — non aggiungere altro codice sopra a codice mai provato.
+> [!danger] Un solo passo resta prima di committare la scena
+> La prima prova reale ha trovato 4 difetti in più (oltre ai 7 della revisione a freddo):
+> `NullReferenceException` nell'HUD, `NavMeshLoadTester` duplicato, lavoratori mal posizionati,
+> e — il più serio — **la scena diventava binaria** perché `BuildNavMesh()` non salvava i suoi
+> dati come asset esterno. Tutti e quattro corretti nel codice (commit `c7a7afb` per l'ultimo).
+> **Ma la scena su disco è ancora quella vecchia, binaria**: serve rilanciare
+> `Cadaver Animatum ▸ Setup ▸ NavMesh e Unità di Prova (INC-2)` e poi `Ctrl+S` perché torni
+> testo leggibile e si possa committare. → [[Navigazione e Pathfinding]] §
+> *Cuocere il NavMesh via script rompe Force Text*
 
 **Prossimo passo, in ordine:**
-1. Apri Unity, aspetta la ricompilazione, **guarda la Console** — se rossa, dimmi cosa dice
-2. Premi **Play**: WASD/rotella/trascinamento (camera, già ok) → click sul cubo (selezione) →
-   guarda se Pietra/Ferro salgono nell'angolo (HUD) → aspetta ~50s e verifica la sconfitta
-   per carestia
-3. Se qualcosa manca nella scena, i tool sono già lì e idempotenti:
-   `Cadaver Animatum ▸ Setup ▸ <nome> (INC-N)`, nell'ordine in cui compaiono nel menu
-4. **Solo dopo**: la misura del tetto di agenti NavMesh col Profiler — è il criterio di
-   uscita vero di INC-2, e serve un umano davanti allo schermo
+1. Rilancia `Cadaver Animatum ▸ Setup ▸ NavMesh e Unità di Prova (INC-2)`, poi `Ctrl+S`
+2. Verifica che la scena sia tornata testo (dimensione ~19-25 KB, non ~90 KB) e committala
+3. **Poi**: la misura del tetto di agenti NavMesh col Profiler — è il criterio di uscita vero
+   di INC-2, e serve un umano davanti allo schermo (Window ▸ Analysis ▸ Profiler)
+4. **Solo dopo quello**: si passa a INC-5 (ondate, combattimento base, Cuore del Regno)
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 

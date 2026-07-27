@@ -1,6 +1,6 @@
 ---
 tags: [kb, unity, pathfinding, ai, rts]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-26
 ---
 
 # Navigazione e Pathfinding
@@ -91,6 +91,41 @@ Quando il giocatore costruisce, la superficie camminabile cambia. Due approcci:
 >
 > Alternativa da valutare: dato che costruiamo **su griglia**, si può usare una griglia
 > logica per la validazione della costruzione e il NavMesh solo per il movimento.
+
+---
+
+## Cuocere il NavMesh via script rompe Force Text — se non si salva l'asset
+
+> [!danger] Scoperto il 2026-07-26, dopo la prima prova reale in Play Mode
+> `surface.BuildNavMesh()` crea un `NavMeshData` **"sciolto"**: esiste solo in memoria,
+> referenziato dal componente `NavMeshSurface`, ma senza un file proprio su disco. Se non lo
+> si salva esplicitamente, Unity lo incorpora **dentro il file della scena** al primo
+> salvataggio — e i dati di triangolazione sono binari per natura, quindi **l'intera scena**
+> passa da YAML leggibile a binario puro, **anche con `Force Text` attivo** in Project
+> Settings. Non è un bug: è come Unity gestisce dati che non si possono scrivere come testo.
+>
+> Sintomo: una scena che pesava ~19 KB di testo diventa ~93 KB di binario, e `git diff` su
+> quel file non mostra più niente di leggibile — la ragione stessa per cui [[ADR-0004 - Version Control]]
+> aveva scelto Force Text va in fumo.
+>
+> **La correzione** — quella che il pulsante *Bake* dell'Inspector fa da solo — è salvare
+> `surface.navMeshData` come asset esterno subito dopo la cottura:
+>
+> ```csharp
+> surface.BuildNavMesh();
+> string path = AssetDatabase.GenerateUniqueAssetPath(
+>     "Assets/Scenes/NomeScena/NavMesh-" + surface.name + ".asset");
+> AssetDatabase.CreateAsset(surface.navMeshData, path);
+> ```
+>
+> Da quel momento la scena contiene solo un **riferimento** (GUID) all'asset, non i dati:
+> torna testo, torna diffabile. → verificato nei sorgenti del pacchetto
+> (`NavMeshAssetManager.CreateNavMeshAsset`, `com.unity.ai.navigation`).
+>
+> **Regola pratica:** ogni volta che uno script cuoce qualcosa che l'Inspector normalmente
+> salverebbe come asset a parte (NavMesh, ma anche lightmap e altri dati "bake"), il codice
+> deve fare esplicitamente quel salvataggio. L'API di runtime (`BuildNavMesh`) non lo fa da
+> sola: fa solo il calcolo.
 
 ---
 

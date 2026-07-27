@@ -211,6 +211,20 @@ per gli spawner a runtime che arrivano dopo `OnEnable`) fanno da sé.
 qualunque prova dell'economia. Si attiva a mano quando serve la misura col Profiler — che è il
 suo unico scopo.
 
+### Bug trovato dopo la prima esecuzione reale — 2026-07-26
+
+**La scena diventava binaria.** `surface.BuildNavMesh()` crea un `NavMeshData` "sciolto" (solo
+in memoria); senza salvarlo come asset esterno, Unity lo incorpora nel file della scena — e la
+triangolazione è binaria per natura, quindi l'**intera scena** passa da testo a binario **anche
+con Force Text attivo**, vanificando la ragione per cui l'avevamo scelto ([[ADR-0004 - Version Control]]).
+
+Corretto replicando ciò che fa il pulsante *Bake* dell'Inspector: `BakeNavMesh` ora salva
+`surface.navMeshData` con `AssetDatabase.CreateAsset` in
+`Assets/Scenes/SampleScene/NavMesh-Ground.asset`. Dettaglio tecnico completo →
+[[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script rompe Force Text*.
+
+⚠️ **La scena attuale sul disco è ancora binaria**: il fix vale dal prossimo rilancio del tool.
+
 ## Collegamenti
 - [[Piano Prototipo]] · [[Selezione e Comandi]] · [[Posto di Lavoro e Assegnazione]]
 - [[Navigazione e Pathfinding]] · [[Performance e Profiling]]
