@@ -1,6 +1,6 @@
 ---
 tags: [index, stato]
-aggiornato: 2026-07-26
+aggiornato: 2026-07-27
 ---
 
 # Stato del Progetto

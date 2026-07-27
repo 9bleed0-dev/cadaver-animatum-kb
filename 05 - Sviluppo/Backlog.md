@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, backlog, pianificazione]
-aggiornato: 2026-07-26
+aggiornato: 2026-07-27
 ---
 
 # Backlog
@@ -34,7 +34,6 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Dove |
 |---|---|---|
-| 35 | **Aprire Unity, guardare la Console, premere Play.** Sessione 07 ha scritto INC-1…INC-4 senza Unity in primo piano: **niente di tutto questo è stato verificato.** È il primo passo, prima di continuare a costruire | [[2026-07-26 - Sessione 07]] · `Cadaver Animatum ▸ Setup ▸ ...` (5 tool, in ordine) |
 | 22 | Cancellare la cartella `...\Bleed\VideoGame` residua e vuota — dopo aver riavviato Claude Code sulla cartella nuova | [[ADR-0013 - Nome delle cartelle di progetto]] |
 | 34 | Creare il repository GitHub del progetto Unity (separato da quello della KB) + push | [[ADR-0012 - Dove vivono KB e progetto Unity]] · [[Checklist M0 - Setup]] parte 5 |
 
@@ -44,7 +43,6 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Cosa | Note |
 |---|---|---|
-| 10 | **Misurare** il tetto di agenti NavMesh col Profiler | è il criterio di uscita di INC-2, non un extra → [[Movimento Unità]] |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
 
 ---
@@ -131,6 +129,8 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | **INC-3**: [[Risorse e Magazzino]] (Stockpile + 5 test), [[Posto di Lavoro e Assegnazione]], [[HUD Risorse]] — scritte, non verificate | 2026-07-26 |
 | **INC-4**: [[Fame e Sussistenza]], [[Stato della Partita]] — il **primo loop si chiude** (fame → lavoro → risorse) — scritte, non verificate | 2026-07-26 |
 | 5 tool editor da un click per costruire/collegare tutto quanto sopra (`Cadaver Animatum ▸ Setup`) | 2026-07-26 |
+| Prima prova reale in Play Mode: INC-1…INC-4 verificati dall'utente, 3 difetti in più trovati e corretti | 2026-07-26 |
+| **Misura del tetto di agenti NavMesh col Profiler**: ~200 unità, ~5ms/frame — criterio di uscita di INC-2 soddisfatto, **FASE 2 chiusa** | 2026-07-27 |
 
 ## Collegamenti
 - [[Scope e Anti-Scope]] · [[Piano Prototipo]] · [[Roadmap e Milestone]]
