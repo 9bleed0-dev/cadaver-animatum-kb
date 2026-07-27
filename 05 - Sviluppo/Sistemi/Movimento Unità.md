@@ -170,7 +170,7 @@ parametro sulla *nostra* macchina.
 ## Stato
 
 - [x] Progettato
-- [x] Prototipato (una capsula cammina) — **non ancora verificato in Play Mode**
+- [x] Prototipato e **verificato in Play Mode** dall'utente (2026-07-26)
 - [ ] **Misurato col Profiler** ← criterio di uscita di INC-2, **ancora da fare**
 - [ ] Implementato (update manager fatto; gestione dei fallimenti solo abbozzata)
 - [ ] Bilanciato (velocità e peso trovati provando)
@@ -223,7 +223,8 @@ Corretto replicando ciò che fa il pulsante *Bake* dell'Inspector: `BakeNavMesh`
 `Assets/Scenes/SampleScene/NavMesh-Ground.asset`. Dettaglio tecnico completo →
 [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script rompe Force Text*.
 
-⚠️ **La scena attuale sul disco è ancora binaria**: il fix vale dal prossimo rilancio del tool.
+✅ Il tool è stato rilanciato: la scena è tornata testo e il fix è confermato in pratica,
+non solo in teoria.
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Selezione e Comandi]] · [[Posto di Lavoro e Assegnazione]]

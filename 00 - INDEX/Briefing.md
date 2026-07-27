@@ -142,22 +142,16 @@ Esiste: ~110 note di KB, **16 ADR**, ambiente e progetto Unity pronti
 [[Posto di Lavoro e Assegnazione]] · [[HUD Risorse]] · [[Fame e Sussistenza]] ·
 [[Stato della Partita]] — tutti provati dall'utente in questa sessione.
 
-> [!danger] Un solo passo resta prima di committare la scena
-> La prima prova reale ha trovato 4 difetti in più (oltre ai 7 della revisione a freddo):
-> `NullReferenceException` nell'HUD, `NavMeshLoadTester` duplicato, lavoratori mal posizionati,
-> e — il più serio — **la scena diventava binaria** perché `BuildNavMesh()` non salvava i suoi
-> dati come asset esterno. Tutti e quattro corretti nel codice (commit `c7a7afb` per l'ultimo).
-> **Ma la scena su disco è ancora quella vecchia, binaria**: serve rilanciare
-> `Cadaver Animatum ▸ Setup ▸ NavMesh e Unità di Prova (INC-2)` e poi `Ctrl+S` perché torni
-> testo leggibile e si possa committare. → [[Navigazione e Pathfinding]] §
-> *Cuocere il NavMesh via script rompe Force Text*
+✅ La prima prova reale aveva trovato 4 difetti in più (oltre ai 7 della revisione a freddo),
+incluso il più serio: **la scena diventava binaria** perché `BuildNavMesh()` non salvava i suoi
+dati come asset esterno. Tutti e quattro corretti nel codice, e la scena è stata **rigenerata
+come testo e committata** (`77eb27c`, progetto Unity) — il ciclo è chiuso.
+→ [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script rompe Force Text*
 
 **Prossimo passo, in ordine:**
-1. Rilancia `Cadaver Animatum ▸ Setup ▸ NavMesh e Unità di Prova (INC-2)`, poi `Ctrl+S`
-2. Verifica che la scena sia tornata testo (dimensione ~19-25 KB, non ~90 KB) e committala
-3. **Poi**: la misura del tetto di agenti NavMesh col Profiler — è il criterio di uscita vero
-   di INC-2, e serve un umano davanti allo schermo (Window ▸ Analysis ▸ Profiler)
-4. **Solo dopo quello**: si passa a INC-5 (ondate, combattimento base, Cuore del Regno)
+1. La misura del tetto di agenti NavMesh col Profiler — è il criterio di uscita vero di
+   INC-2, e serve un umano davanti allo schermo (Window ▸ Analysis ▸ Profiler)
+2. **Solo dopo quello**: si passa a INC-5 (ondate, combattimento base, Cuore del Regno)
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 

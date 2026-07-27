@@ -13,9 +13,9 @@ aggiornato: 2026-07-26
 **FASE 0 — Fondamenta** ✅ **chiusa (2026-07-26)** — ambiente pronto, progetto Unity creato
 **FASE 1 — Concept** ✅ (2026-07-25)
 **FASE 2 — Prototipo** ✅ **INC-1…INC-4 verificati in Play Mode dall'utente (2026-07-26).**
-Il loop fame → lavoro → risorse → sconfitta funziona per intero. Un difetto residuo: la
-scena su disco è ancora binaria (bug del NavMesh corretto, ma il tool va rilanciato per
-sanarla — vedi *Un solo passo resta*, sotto). → [[Piano Prototipo]]
+Il loop fame → lavoro → risorse → sconfitta funziona per intero. La scena è tornata testo
+e committata. Resta solo la misura del tetto NavMesh al Profiler prima di INC-5.
+→ [[Piano Prototipo]]
 
 ## Il gioco
 
@@ -96,28 +96,22 @@ powershell -ExecutionPolicy Bypass -File "08 - Tool\setup-macchina\Verify-Setup.
 del progetto Unity, e provare Play in Unity per confermare Console vuota.
 → [[Checklist M0 - Setup]] § *Chiusura di INC-0*
 
-## Prossimo passo concreto — un solo passo resta
+## Prossimo passo concreto — solo la misura resta
 
 **Verificato dall'utente in Play Mode (2026-07-26): selezione, movimento, produzione, HUD,
-sconfitta per carestia — tutto funziona.** Quattro difetti trovati e corretti durante questa
-prima prova reale (oltre ai sette della revisione a freddo): un `NullReferenceException`
-nell'HUD, un `NavMeshLoadTester` duplicato, i lavoratori che stavano sopra i cubi invece che
-accanto, e — il più importante — **la scena che diventava binaria**.
+sconfitta per carestia — tutto funziona.** Undici difetti trovati e corretti in tutto (sette
+in revisione a freddo, quattro alla prima esecuzione reale — incluso il bug per cui la scena
+diventava binaria).
 
-> [!danger] Un passo resta prima di poter committare la scena
-> `surface.BuildNavMesh()` non salva da sola i suoi dati come asset esterno: senza, Unity li
-> incorpora nel file della scena, forzandola in binario **anche con Force Text attivo** —
-> vanificando la ragione per cui l'avevamo scelto (ADR-0004, diff con Git).
-> **Il codice è già corretto** (commit `c7a7afb`), ma la scena **su disco è ancora quella
-> vecchia, binaria**: il fix si applica solo quando il tool viene rieseguito.
->
-> **Da fare:** rilanciare `Cadaver Animatum ▸ Setup ▸ NavMesh e Unità di Prova (INC-2)`,
-> poi `Ctrl+S`. A quel punto la scena torna testo leggibile e si può committare.
-> → dettaglio in [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script rompe Force Text*
+✅ **La scena è stata rigenerata come testo e committata** (`77eb27c`, progetto Unity): il tool
+`NavMesh e Unità di Prova (INC-2)` è stato rilanciato, il `NavMeshData` ora vive come asset
+esterno (`Assets/Scenes/SampleScene/NavMesh-Ground.asset`), la scena torna YAML leggibile e
+diffabile. → dettaglio in [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script
+rompe Force Text*
 
-Dopo quel passo: **INC-2 resta da chiudere davvero** con la misura del tetto di agenti NavMesh
-al Profiler (Window ▸ Analysis ▸ Profiler) — richiede un umano davanti allo schermo, non è
-automatizzabile. Poi si passa a **INC-5**.
+**Resta un solo passo prima di poter chiudere davvero INC-2:** la misura del tetto di agenti
+NavMesh al Profiler (Window ▸ Analysis ▸ Profiler) — richiede un umano davanti allo schermo,
+non è automatizzabile. Poi si passa a **INC-5**.
 → dettaglio completo della sessione in [[2026-07-26 - Sessione 07]]
 
 > [!info] Da leggere prima di martedì (15 minuti in tutto)
@@ -135,7 +129,6 @@ automatizzabile. Poi si passa a **INC-5**.
 | Rischio | Dove si affronta |
 |---|---|
 | 🔴 **Pathfinding con molte unità** — il tetto va **misurato**, non desiderato. Codice scritto e verificato, misura col Profiler non ancora fatta | **INC-2** → [[Movimento Unità]] |
-| 🟠 **La scena su disco è ancora binaria** — il fix del NavMesh è nel codice ma va rieseguito il tool per rigenerarla | vedi *Un solo passo resta*, sopra → [[2026-07-26 - Sessione 07]] |
 | 🔴 **UX del menu di scelta sul cadavere** — se è macchinoso, il gioco muore | **INC-6**, con due varianti a confronto → [[Scelta sul Cadavere]] |
 | ✅ ~~La KB non ha backup fuori dal disco~~ — risolto, remoto GitHub attivo | — |
 | 🟠 Tentazione del disegno libero delle mura | [[Costruzione su Griglia]] · [[Scope e Anti-Scope]] |
