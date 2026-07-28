@@ -49,7 +49,7 @@ aggiornato: 2026-07-25
 - [[Fondamenti Unity]] · [[MonoBehaviour e Ciclo di Vita]] · [[GameObject Component Prefab]]
 - [[ScriptableObject]] · [[Input System]] · [[Fisica e Collisioni]]
 - [[Render Pipeline]] · [[Pacchetti e Tool Unity]] · [[Performance e Profiling]]
-- [[Navigazione e Pathfinding]] · [[UI in Unity]]
+- [[Navigazione e Pathfinding]] · [[UI in Unity]] · [[Diagnosticare invece di indovinare]]
 
 **Arte e Audio**
 - [[Animazione in Unity]] · [[Modellazione 3D e Pipeline Blender-Unity]]

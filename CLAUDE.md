@@ -47,9 +47,14 @@ kb find cadavere                            titoli, tag e intestazioni
 kb toc  "Regole di Codice"                  la mappa: 15 righe invece di 226
 kb read "ADR-0009" -section "Le risorse"    una sezione sola
 kb grep NavMeshAgent                        il testo, riga per riga
+kb trap navmesh                             le trappole già pagate su quel sottosistema
 kb sys · kb adr · kb todo                   stato dei sistemi, degli ADR, dei task aperti
 kb help
 ```
+
+**`kb trap <sottosistema>` prima di toccarlo.** Costa cinque righe di contesto e la KB contiene
+trappole che sono già costate sessioni intere (il NavMesh su più livelli, la scena resa binaria
+dal bake). Riscoprirle a mano è il modo più caro di lavorare.
 
 **Il CLI è nostro: se una cosa la facciamo a mano più volte, `kb` deve imparare a farla.**
 Aggiungere un comando = una funzione `Cmd-Nome` + una riga nello `switch` + una in `kb help`.
@@ -127,6 +132,14 @@ Il progetto Unity **non sta qui**: vive in una cartella e in un repository separ
    verifica resta seriale. Ogni delega si dichiara.
 11. **La regola dell'imbuto vale anche per il codice**: `grep` mirato → lettura parziale →
    file intero. Un file appena modificato **non si rilegge**.
+12. **Prima si misura, poi si cambia.** Se **due** tentativi di sistemare la stessa cosa non
+   hanno funzionato, il terzo non è un altro tentativo: è un **tool di diagnosi** che stampi
+   lo stato reale. Cambiare parametri "a sentimento" aggiunge variabili a un problema che già
+   non capiamo. → `02 - Regole/Regole di Ingaggio.md` §6b ·
+   `04 - Knowledge Base/Unity/Diagnosticare invece di indovinare.md`
+13. **Un'affermazione tecnica non verificata si marca come tale**, anche quando ne sono
+   convinto: `> [!warning] Da verificare`. Una convinzione sbagliata scritta come decisione
+   diventa un invariante su cui costruiamo — è già costato una sessione (ADR-0022).
 
 ## Regole di codice (dettaglio in `Regole di Codice`)
 

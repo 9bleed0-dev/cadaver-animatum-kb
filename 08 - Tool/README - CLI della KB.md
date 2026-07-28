@@ -1,6 +1,6 @@
 ---
 tags: [tool, kb, cli, processo]
-aggiornato: 2026-07-27
+aggiornato: 2026-07-28
 ---
 
 # CLI della KB — `kb`
@@ -59,7 +59,22 @@ kb links "Core Loop"              chi linka questa nota, e chi linka lei
 kb adr                            tutti gli ADR, il loro stato, il prossimo numero libero
 kb sys                            le schede sistema e quanto sono avanzate
 kb todo                           tutte le caselle non spuntate nelle note di piano
+kb trap                           la MAPPA: quante trappole per nota, i danger per primi
+kb trap navmesh                   il DETTAGLIO su un sottosistema
 ```
+
+> [!tip] `kb trap` si lancia **prima** di toccare un sottosistema, non dopo
+> Raccoglie ogni riquadro `[!danger]` / `[!warning]` / `[!caution]` / `[!failure]` della KB.
+> `tip` e `info` restano fuori: sono consigli, non trappole.
+>
+> **Senza argomenti** non stampa l'elenco — sono oltre 140 riquadri, sarebbe rumore: stampa
+> *dove* stanno, una riga per nota. **Con un argomento** dà il dettaglio, con la sezione in cui
+> vive ogni riquadro, così si legge il resto con un `kb read -lines`.
+>
+> Esiste per un motivo misurato: nella Sessione 10 tre trappole del NavMesh sono costate sei
+> giri di collaudo. Ora sono scritte — e il problema è diventato *trovarle* nel momento giusto.
+> Un elenco a mano invecchierebbe; questo comando legge i riquadri veri, quindi non può mentire.
+> → [[Regole di Ingaggio]] § *6b. Prima si misura, poi si cambia*
 
 ### Igiene della KB
 
@@ -76,6 +91,7 @@ kb stats      quanto pesa la KB, quali note stanno sforando le 300 righe
 | frontmatter senza `tags` / `aggiornato` | [[Definition of Done]] |
 | nota di `04 - Knowledge Base` senza `## Fonti` | `CLAUDE.md` — niente contenuti inventati |
 | un link interno che punta a una nota inesistente | link rotto |
+| un rimando `Nota#Sezione` verso una sezione che non esiste (più) | **rimando che mente** — è la forma di riferimento che invecchia più in fretta: basta rinominare un titolo |
 | nota che nessuno linka (**orfana**) | [[Definition of Done]] |
 | nota oltre 300 righe | `CLAUDE.md` — una nota = un concetto |
 | `AAAA-MM-GG` rimasto da un template | template non compilato |
@@ -156,6 +172,18 @@ serva davvero ([[Regole di Ingaggio]]: niente feature non richieste).
 - **Nessun comando conosce i branch.** Con il workflow di [[Workflow di Sviluppo]] servirà
   sapere a colpo d'occhio se i due repository sono sullo stesso branch — la divergenza fra KB e
   codice è un rischio dichiarato ([[Backlog]] #45).
+- **Niente verifica che la KB dica il vero sul codice.** Nella Sessione 10 una scheda ha
+  continuato a citare un tasto (`G`) già cambiato nel codice, e i footprint degli edifici sono
+  passati per tre valori diversi lasciando dietro affermazioni vecchie. Un comando che
+  confronti i simboli citati nelle schede con quelli davvero presenti in `C:\Dev\CadaverAnimatum`
+  chiuderebbe la classe di errore — ma serve prima decidere *quali* citazioni sono verificabili
+  meccanicamente, o produce solo falsi allarmi.
+
+> [!tip] Come è nato `kb trap`, per contrasto
+> Non è stato immaginato: è nato da un costo misurato (sei giri di collaudo nella Sessione 10 per
+> trappole del NavMesh che nessuno aveva scritto). E ha una proprietà che un elenco a mano non
+> avrebbe: **legge i riquadri veri delle note**, quindi non può invecchiare separatamente da
+> loro. È il criterio da applicare a ogni comando nuovo — deve leggere la realtà, non una copia.
 
 ### Vincoli da non rompere quando lo si estende
 

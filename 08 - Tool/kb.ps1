@@ -122,6 +122,8 @@ function New-Note {
         Lunghezza   = ''
         Headings    = @()
         LinksOut    = @()
+        Anchors     = @()
+        Callouts    = @()
     }
 
     # frontmatter
@@ -143,6 +145,7 @@ function New-Note {
 
     # title, summary, headings
     $seenTitle = $false
+    $curHeading = ''
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $l = $lines[$i]
         if ($l -match '^(#{1,6})\s+(.*\S)\s*$') {
@@ -152,11 +155,22 @@ function New-Note {
                 $note.Title = $text
                 $seenTitle = $true
             }
+            else { $curHeading = $text }
             $note.Headings += ,@{ Level = $level; Text = $text; Line = ($i + 1) }
             continue
         }
         if ($seenTitle -and $note.Summary -eq '' -and $l -match '^>\s*(?!\[!)(.+)$') {
             $note.Summary = ($matches[1] -replace '\*\*', '').Trim()
+        }
+        # Riquadri di avviso: sono la memoria delle trappole. "kb trap" li raccoglie tutti,
+        # cosi si leggono PRIMA di toccare un sottosistema invece di riscoprirli a mano.
+        if ($l -match '^>\s*\[!(\w+)\]\s*(.*)$') {
+            $note.Callouts += ,@{
+                Kind    = $matches[1].ToLower()
+                Title   = ($matches[2] -replace '\*\*', '').Trim()
+                Section = $curHeading
+                Line    = ($i + 1)
+            }
         }
     }
     if ($note.Title -eq '') { $note.Title = $note.Base }
@@ -173,8 +187,21 @@ function New-Note {
         if ($pipe -ge 0) { $raw = $raw.Substring(0, $pipe) }
         $raw = $raw.TrimEnd('\').Trim()
         if (-not $raw) { continue }
-        if ($raw.StartsWith('#')) { continue }   # link a una sezione della stessa nota
         if ($script:LinkIgnore -contains $raw) { continue }
+
+        # Candidato ancora di sezione: [[#Sezione]] o [[Nota#Sezione]]. Si registra come
+        # CANDIDATO perche' qui non sappiamo ancora quali note esistono, e alcuni titoli
+        # contengono un cancelletto per conto loro ("C# Style Guide"): a distinguerli e'
+        # Cmd-Check, che ha l'elenco completo delle note.
+        $cut = $raw.LastIndexOf('#')
+        if ($cut -ge 0) {
+            $sec = $raw.Substring($cut + 1).Trim()
+            if ($sec) {
+                $note.Anchors += ,@{ Target = $raw.Substring(0, $cut).Trim(); Section = $sec }
+            }
+        }
+
+        if ($raw.StartsWith('#')) { continue }   # link a una sezione della stessa nota
         [void]$set.Add($raw)
     }
     $note.LinksOut = @($set)
@@ -246,6 +273,8 @@ kb - CLI della Knowledge Base                        (08 - Tool/kb.ps1)
     kb adr                         tutti gli ADR con stato + prossimo numero
     kb sys                         schede sistema e loro stato
     kb todo  [-in <nota>]          checkbox non spuntate nelle note di piano
+    kb trap  [query]               le trappole note (riquadri danger/warning):
+                                   si leggono PRIMA di toccare un sottosistema
 
   IGIENE DELLA KB
     kb check [-days N]             lint completo (esce 1 se ci sono errori)
@@ -463,6 +492,73 @@ function Cmd-Todo {
     }
 }
 
+function Cmd-Trap {
+    # Le trappole del progetto, tutte insieme: si leggono PRIMA di toccare un sottosistema.
+    # Nasce dalla Sessione 10, dove tre trappole del NavMesh sono costate sei giri di
+    # collaudo perche' nessuno le aveva ancora scritte - e ora che sono scritte, il problema
+    # diventa trovarle.
+    $query = (@($P) -join ' ').Trim()
+    $notes = @(Get-Notes | Where-Object { $_.Rel -notlike '99 - Templates\*' })
+
+    # danger prima: sono le cose che rompono. Il resto dopo. tip/info restano fuori: sono
+    # consigli, non trappole, e sarebbero solo rumore.
+    $order = @{ 'danger' = 0; 'failure' = 1; 'caution' = 2; 'warning' = 3 }
+    $rows = @()
+    foreach ($n in $notes) {
+        foreach ($c in $n.Callouts) {
+            if (-not $order.ContainsKey($c.Kind)) { continue }
+            if ($query) {
+                $hay = ($c.Title + ' ' + $c.Section + ' ' + $n.Base + ' ' + $n.Title)
+                if ($hay -notlike "*$query*") { continue }
+            }
+            $rows += ,[pscustomobject]@{
+                Rank    = $order[$c.Kind]
+                Kind    = $c.Kind
+                Title   = $c.Title
+                Section = $c.Section
+                Note    = $n.Base
+                Rel     = $n.Rel
+                Line    = $c.Line
+            }
+        }
+    }
+
+    if ($rows.Count -eq 0) {
+        if ($query) { Write-Output "Nessuna trappola per '$query'." } else { Write-Output "Nessuna trappola registrata." }
+        return
+    }
+
+    # SENZA query: una mappa di DOVE stanno, non l'elenco. Con oltre cento riquadri in KB un
+    # elenco piatto e' rumore: quello che serve e' sapere quale nota leggere.
+    if (-not $query) {
+        Write-Output ("Trappole nella KB: {0} riquadri. Ecco DOVE stanno." -f $rows.Count)
+        Write-Output "Per il dettaglio:  kb trap <sottosistema>     es. kb trap navmesh"
+        Write-Output ""
+        Write-Output ("  {0,-6} {1,-8} {2}" -f 'DANGER', 'altri', 'nota')
+        $rows | Group-Object Note | ForEach-Object {
+            $d = @($_.Group | Where-Object { $_.Kind -eq 'danger' }).Count
+            [pscustomobject]@{ Note = $_.Name; Danger = $d; Other = ($_.Count - $d) }
+        } | Sort-Object Danger, Other -Descending | ForEach-Object {
+            Write-Output ("  {0,-6} {1,-8} {2}" -f $_.Danger, $_.Other, $_.Note)
+        }
+        return
+    }
+
+    Write-Output "Trappole e avvisi per '$query' ($($rows.Count)):"
+    Write-Output ""
+    foreach ($r in ($rows | Sort-Object Rank, Note, Line)) {
+        $tag = $r.Kind.ToUpper()
+        $title = $r.Title
+        if (-not $title) { $title = '(senza titolo)' }
+        Write-Output ("  [{0,-7}] {1}" -f $tag, $title)
+        $where = $r.Note
+        if ($r.Section) { $where = $where + '  SS ' + $r.Section }
+        Write-Output ("            {0}  (riga {1})" -f $where, $r.Line)
+    }
+    Write-Output ""
+    Write-Output "Per leggerne una:  kb read ""<nota>"" -lines <riga>-<riga+15>"
+}
+
 function Cmd-Stale {
     $days = OptInt 'days' 30
     $limit = (Get-Date).AddDays(-$days)
@@ -539,6 +635,28 @@ function Cmd-Check {
                     if ($bases.Contains($head)) { continue }
                 }
                 $errs.Add("LINK ROTTO [[$l]] in $($n.Rel)")
+            }
+        }
+
+        # 3b. ancore di sezione rotte: [[Nota#Sezione]] o [[#Sezione]] verso una sezione che
+        #     non esiste (piu') nella nota bersaglio. Sono la forma di riferimento che
+        #     invecchia piu' in fretta: basta rinominare un titolo e il rimando mente.
+        if ($n.Rel -notlike '99 - Templates\*') {
+            foreach ($a in $n.Anchors) {
+                $target = $n
+                if ($a.Target) {
+                    if (-not $bases.Contains($a.Target)) { continue }  # non e' un'ancora: e' un '#' nel nome
+                    $target = Resolve-Note -Name $a.Target -Quiet
+                    if ($null -eq $target) { continue }
+                }
+                $found = $false
+                foreach ($h in $target.Headings) {
+                    if ($h.Text -ieq $a.Section -or $h.Text -like "*$($a.Section)*") { $found = $true; break }
+                }
+                if (-not $found) {
+                    $where = if ($a.Target) { $a.Target } else { 'questa nota' }
+                    $errs.Add("ANCORA ROTTA [[$($a.Target)#$($a.Section)]] -> sezione assente in $where : $($n.Rel)")
+                }
             }
         }
 
@@ -675,6 +793,8 @@ switch ($Command.ToLower()) {
     'adr' { Cmd-Adr }
     'sys' { Cmd-Sys }
     'todo' { Cmd-Todo }
+    'trap' { Cmd-Trap }
+    'trappole' { Cmd-Trap }
     'stale' { Cmd-Stale }
     'stats' { Cmd-Stats }
     'check' { Cmd-Check }
