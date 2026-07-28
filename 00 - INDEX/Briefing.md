@@ -176,10 +176,19 @@ tre tentazioni pericolose", riaperta consapevolmente). Il camminamento è costat
 collaudo per **tre trappole del NavMesh**, ora scritte in [[Navigazione e Pathfinding]]: chi
 tocca il NavMesh su più livelli le legga **prima**.
 
-**Prossimo passo:** **verifica d'insieme in Play Mode e merge di
-`inc-7a-costruzione-su-griglia` su `main`** nei due repo — dopo aver **salvato la scena Unity**
-(alla chiusura della Sessione 10 era ancora `SampleScene*`, non salvata). Poi il resto di INC-7:
-[[Fucina]] · [[Reclutamento e Ruoli]] · [[Stato della Partita]], ancora schede stub.
+✅ **`inc-7a-costruzione-su-griglia` mergiato su `main`** nei due repo (2026-07-28), dopo la
+verifica in Play Mode: `main` è di nuovo un gioco che parte — e che si può perdere.
+
+**Prossimo passo:** **INC-7b — l'economia estesa**: Boscaiolo (Legna), Carpentiere
+(Arco/Balestra), Fucina (Spada). Schede [[Fucina]] e [[Carpentiere]], ancora stub: si
+progettano prima del codice. Poi INC-7c ([[Reclutamento e Ruoli]]) e INC-7d (bilanciamento).
+
+> [!warning] Il bilanciamento è INC-7d, e viene DOPO — non è una dimenticanza
+> Oggi si perde perché 2 Soldati fissi non reggono una curva che cresce. Non è un numero mal
+> tarato: è una **leva che manca**, ed è la Caserma di INC-7c. Tarare la curva adesso vuol dire
+> tarare un sistema che sta per cambiare struttura, e nascondere la domanda vera — *quanti
+> cadaveri costa un soldato?* — che si risponde solo quando la leva esiste.
+> Attenzione però: con la Caserma il sistema diventa **bilanciabile**, non bilanciato.
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 

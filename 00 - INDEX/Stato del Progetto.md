@@ -34,8 +34,11 @@ e spiegato, quando la cima non è raggiungibile. → [[Costruzione su Griglia]] 
 [[Mura Difensive e Combattimento in Elevazione]] ·
 [[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]]
 
-**Prossimo: verifica d'insieme, salvare la scena, mergiare `inc-7a-costruzione-su-griglia`.**
-Poi il resto di INC-7 ([[Fucina]], [[Reclutamento e Ruoli]], [[Stato della Partita]]).
+✅ **Mergiato su `main`** nei due repo (2026-07-28), dopo la verifica in Play Mode.
+
+**Prossimo: INC-7b — l'economia estesa** ([[Fucina]], [[Carpentiere]], Boscaiolo). Poi INC-7c
+([[Reclutamento e Ruoli]]) e **solo allora** INC-7d, il bilanciamento: oggi si perde perché
+manca una **leva** (la Caserma), non perché un numero è tarato male.
 → [[Piano Prototipo]]
 
 ## Il gioco
@@ -202,7 +205,7 @@ non è installato, va creato a mano su GitHub.
   trappole del NavMesh, ora documentate in [[Navigazione e Pathfinding]]; la svolta è arrivata
   scrivendo un tool di **diagnosi** invece di continuare a indovinare. Aggiunto anche un
   pannello di test in HUD, perché gli shortcut non erano scopribili.
-  ⚠️ La scena Unity **non era salvata** alla chiusura, e il branch **non è mergiato**.
+  Chiusa col merge su `main` nei due repo, dopo la verifica in Play Mode.
   → [[2026-07-28 - Sessione 10]]
 - **2026-07-28 — Sessione 09**: progettato **e scritto** INC-6 per intero: [[Cadavere e
   Degrado]] e [[Scelta sul Cadavere]]. Il design è cambiato durante l'implementazione (click
