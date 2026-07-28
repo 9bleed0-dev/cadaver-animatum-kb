@@ -132,7 +132,7 @@ conseguenza.
   rispetto a [[Combattimento Base]] (INC-5, già "Done" — va esteso, non riscritto). Nessuno
   dei due si stima bene finché non esiste una scheda tecnica.
 - **INC-7a si ferma qui per ora**: la parte "piazzamento su griglia" (già scritta e verificata)
-  resta valida e non si tocca; le mura scalabili sono un sotto-incremento nuovo (INC-7c o
+  resta valida e non si tocca; le mura scalabili sono un sotto-incremento nuovo (**INC-7e**, o
   simile, da nominare quando si apre la scheda), non un'estensione improvvisata del codice
   appena scritto.
 

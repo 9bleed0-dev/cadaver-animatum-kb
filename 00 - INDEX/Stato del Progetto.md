@@ -27,7 +27,7 @@ contatori (+1/+5/MAX) della Mortuary tutti confermati. Il design è cambiato in 
 al piano iniziale: niente più click sul campo, raccolta automatica + assegnazione in blocco
 → [[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]].
 
-**INC-7a e INC-7c verificati in Play Mode dall'utente (2026-07-28)**: si costruisce su griglia
+**INC-7a e INC-7e verificati in Play Mode dall'utente (2026-07-28)**: si costruisce su griglia
 (fantasma di piazzamento, mura a trascinamento con anteprima veritiera cella per cella,
 demolizione) e **le unità salgono sulle mura e combattono in quota** — con rifiuto ragionato,
 e spiegato, quando la cima non è raggiungibile. → [[Costruzione su Griglia]] ·
@@ -195,7 +195,7 @@ non è installato, va creato a mano su GitHub.
 - **2026-07-28 — Sessione 10**: progettati, scritti e **verificati in Play Mode** due
   sotto-incrementi: **INC-7a** [[Costruzione su Griglia]] (griglia logica testabile + 8 test,
   fantasma di piazzamento, trascinamento mura con anteprima cella per cella, demolizione) e
-  **INC-7c** [[Mura Difensive e Combattimento in Elevazione]] — le mura sono **calpestabili**,
+  **INC-7e** [[Mura Difensive e Combattimento in Elevazione]] — le mura sono **calpestabili**,
   cioè la "prima delle tre tentazioni pericolose" riaperta consapevolmente
   ([[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]]) accettando di
   **sforare la finestra di settembre**. Il camminamento è costato ~6 giri di collaudo per tre

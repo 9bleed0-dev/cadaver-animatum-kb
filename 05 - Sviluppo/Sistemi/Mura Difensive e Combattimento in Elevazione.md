@@ -9,7 +9,7 @@ aggiornato: 2026-07-28
 > Le unità possono salire in cima a un segmento di muro e combattere da lì, con un
 > vantaggio tattico reale — il feeling di un castello assediato, non solo un ostacolo.
 
-**Incremento:** INC-7c (nuovo, da nominare in [[Piano Prototipo]]) · **Namespace:** `Bleed.Gameplay`
+**Incremento:** INC-7e (nuovo, da nominare in [[Piano Prototipo]]) · **Namespace:** `Bleed.Gameplay`
 
 > [!warning] Design chiuso, struttura tecnica ancora da scrivere
 > Le decisioni di scope e di design sono chiuse (sotto). Manca ancora la struttura tecnica
@@ -213,10 +213,10 @@ Demolizione del muro mentre occupato
   è il metodo che un futuro sistema di comando (Backlog #38) chiamerà sull'unità selezionata.
   Oggi lo chiama solo `WallTopDebugCommand` (**click destro** su un muro), l'unica imbracatura
   di test di questo passaggio — esplicitamente temporanea, a differenza del resto.
-- **`MuraDifensiveSetup` (INC-7c)** crea un `Difensore_Test` (capsula, Sudditi,
+- **`MuraDifensiveSetup` (INC-7e)** crea un `Difensore_Test` (capsula, Sudditi,
   `CombatUnitDefinition_DifensoreTest`: melee, +3 raggio e ×1.5 danno in quota) per poter
   verificare l'intera catena senza aspettare [[Reclutamento e Ruoli]] (non ancora scritto):
-  Cadaver Animatum ▸ Setup ▸ Mura Difensive - Test (INC-7c), dopo Costruzione su Griglia,
+  Cadaver Animatum ▸ Setup ▸ Mura Difensive - Test (INC-7e), dopo Costruzione su Griglia,
   Combattimento e NavMesh (INC-2).
 - **Correzioni al combattimento e all'input**, trovate rileggendo a freddo prima di ritestare:
   il combattimento **congelava chi stava salendo** (`CombatUnit.Tick` chiama `SetStopped(true)`

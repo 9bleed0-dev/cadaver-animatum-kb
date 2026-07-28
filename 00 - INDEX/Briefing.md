@@ -142,7 +142,7 @@ niente abbreviazioni.
 ## Dove siamo — 2026-07-28 (martedì)
 
 **Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo) ✅ chiusa.** INC-1…INC-6
-verificati in Play Mode dall'utente, **più INC-7a (costruzione su griglia) e INC-7c (mura
+verificati in Play Mode dall'utente, **più INC-7a (costruzione su griglia) e INC-7e (mura
 calpestabili)**, verificati il 2026-07-28.
 
 Esiste: ~122 note di KB, **22 ADR**, ambiente e progetto Unity pronti
@@ -168,7 +168,7 @@ raccolta automatica (`CorpseCarrier`) + assegnazione in blocco alla Mortuary con
 difetto di INC-6): il Cuore del Regno è caduto all'Ondata 2 — 2 Soldati fissi contro una curva
 che cresce, da bilanciare a INC-7 ([[Backlog]] #43).
 
-✅ **INC-7a + INC-7c verificati in Play Mode (2026-07-28)**: si piazzano edifici e mura su
+✅ **INC-7a + INC-7e verificati in Play Mode (2026-07-28)**: si piazzano edifici e mura su
 griglia (fantasma verde/rosso, trascinamento a linea con anteprima cella per cella,
 demolizione), e **le unità salgono sulle mura e ci combattono**
 ([[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]] — la "prima delle

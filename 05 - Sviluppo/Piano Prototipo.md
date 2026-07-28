@@ -167,6 +167,15 @@ il proiettile per l'Arciere. Sistema: [[Reclutamento e Ruoli]]. *Uscita: un sudd
 disoccupato diventa un difensore a scelta del giocatore, e un Arciere colpisce davvero da
 lontano.*
 
+**INC-7e — Mura calpestabili** ✅ *fatto il 2026-07-28, ma **fuori dall'ordine del piano***:
+non era previsto qui — è nato a metà di INC-7a da
+[[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]], cioè dalla
+riapertura consapevole della "prima delle tre tentazioni pericolose". Sistema:
+[[Mura Difensive e Combattimento in Elevazione]]. *Uscita raggiunta: un difensore sale una
+Scala, presidia un segmento di muro e combatte da lì, fuori portata del corpo a corpo.*
+Porta la lettera **e** e non **b**/**c** per non spostare la numerazione di ciò che era già
+pianificato: è stato svolto prima, non al posto di qualcos'altro.
+
 **INC-7d — Bilanciamento per una partita lunga**: curva di ondate, numeri di
 `WaveDefinition`/`CombatUnitDefinition`, condizione di vittoria a N ondate. Sistema:
 [[Stato della Partita]]. *Uscita: una partita completa stile They Are Billions, con inizio e
