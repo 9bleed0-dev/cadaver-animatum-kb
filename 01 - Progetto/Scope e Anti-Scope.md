@@ -53,7 +53,12 @@ Definito il 2026-07-25 sulla base di [[ADR-0007 - Genere, core loop e scope del 
 
 - ⏸️ Espansione della mappa e diffusione della piaga *(è il pilastro 4: arriva nella slice)*
 - ⏸️ **Disegno libero delle mura alla Stronghold** → nel prototipo mura su griglia
-- ⏸️ Albero tecnologico, evoluzioni di truppe e strutture
+- ⏸️ Albero tecnologico, evoluzioni di truppe e strutture — **eccezione dichiarata
+  (2026-07-28)**: la scelta di cosa produce un edificio (Fucina/Carpentiere) e la scelta di
+  classe alla Caserma (Guerriero/Arciere) **entrano** nel prototipo
+  → [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]].
+  Resta fuori tutto il resto che questa riga intendeva: niente ricerca, niente sblocchi
+  progressivi, niente livelli di truppa.
 - ⏸️ Tipi multipli di nemico, macchine d'assedio, IA d'assedio
 - ⏸️ Ciclo giorno/notte
 - ⏸️ Trama, prologo giocabile (Atto 0), dialoghi, consigliere
@@ -69,6 +74,11 @@ Definito il 2026-07-25 sulla base di [[ADR-0007 - Genere, core loop e scope del 
 >    costosa in assoluto: auto-tiling, unità che camminano sopra i muri, IA che li assedia.
 > 2. **Aggiungere risorse.** Ogni risorsa in più moltiplica le interazioni da bilanciare.
 >    Tre bastano per provare il loop.
+>    ⚠️ **Ceduta consapevolmente il 2026-07-28**: il prototipo è salito a 7 risorse e 9
+>    edifici su richiesta esplicita dell'utente, con il rischio di budget dichiarato invece
+>    di ignorato → [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]].
+>    Questa voce resta scritta **apposta**: la prossima volta che la tentazione si ripresenta
+>    (un'ottava, una nona risorsa), il filtro va riapplicato da capo, non esteso per inerzia.
 > 3. **Costruire il prologo narrativo per primo.** È la parte più divertente da immaginare
 >    e la meno utile da avere: la trama non dice se il gioco funziona.
 
@@ -149,6 +159,25 @@ Il budget è 135-180 ore. Quindi:
    al primo colpo.
 2. **L'Iterazione B (Icore + Putridarium) è fuori dalla finestra di settembre.** Resta progettata
    nei dati fin da subito — ma non si costruisce.
+
+> [!danger] Il target "M3 entro settembre" non è più garantito (2026-07-28)
+> INC-7 ha accumulato **quattro** decisioni che allargano lo scope oltre il piano originale:
+> una durata di partita stile *They Are Billions* invece di 2-5 minuti
+> ([[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]]), una
+> filiera produttiva più ricca (Carpentiere, Caserma, 4 risorse in più, combattimento a
+> distanza — [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]), le **mura scalabili** con combattimento in elevazione — proprio la "prima delle
+> tre tentazioni pericolose" elencata sopra — e ora anche **gli invasori che possono salire
+> una scala vicina**, che riapre la riga separata "IA d'assedio" più sotto
+> ([[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]]).
+>
+> Per tutte e quattro l'utente ha scelto esplicitamente **di non tagliare nulla per
+> compensare**: si accetta di sforare la finestra di settembre. Non è più un rischio
+> dichiarato-ma-forse-evitabile: è una conseguenza accettata. La prossima revisione onesta del
+> piano è a fine INC-7, con in mano le ore realmente spese.
+>
+> **Distinzione importante**: "gli invasori possono salire una scala" ≠ "IA d'assedio fatta
+> bene". Solo il primo entra ora; la sofisticazione tattica dell'IA nemica resta fuori scope,
+> in [[Backlog]], per una sessione futura — scelta dell'utente stesso.
 
 > [!tip] Perché il numero conta più del piano
 > Un piano senza budget di tempo produce sempre lo stesso esito: si arriva alla scadenza con

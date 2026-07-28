@@ -31,6 +31,12 @@ try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 $script:Root = Split-Path -Parent $PSScriptRoot
 $script:Utf8 = New-Object System.Text.UTF8Encoding($false)
 
+# Il repository del progetto Unity vive fuori da qui (ADR-0012, ADR-0013). Il percorso e'
+# fissato da quell'ADR, ma resta scavalcabile con la variabile d'ambiente per non legare il
+# CLI a una sola macchina. Se non esiste, i comandi che lo usano lo dicono e non falliscono.
+$script:CodeRoot = $env:CADAVER_UNITY
+if (-not $script:CodeRoot) { $script:CodeRoot = 'C:\Dev\CadaverAnimatum' }
+
 # ---------------------------------------------------------------- arg parsing
 
 $script:ValueOpts = @('tag', 'folder', 'section', 'days', 'limit', 'lines', 'in', 'date', 'num')
@@ -122,6 +128,8 @@ function New-Note {
         Lunghezza   = ''
         Headings    = @()
         LinksOut    = @()
+        Anchors     = @()
+        Callouts    = @()
     }
 
     # frontmatter
@@ -143,6 +151,7 @@ function New-Note {
 
     # title, summary, headings
     $seenTitle = $false
+    $curHeading = ''
     for ($i = 0; $i -lt $lines.Count; $i++) {
         $l = $lines[$i]
         if ($l -match '^(#{1,6})\s+(.*\S)\s*$') {
@@ -152,11 +161,22 @@ function New-Note {
                 $note.Title = $text
                 $seenTitle = $true
             }
+            else { $curHeading = $text }
             $note.Headings += ,@{ Level = $level; Text = $text; Line = ($i + 1) }
             continue
         }
         if ($seenTitle -and $note.Summary -eq '' -and $l -match '^>\s*(?!\[!)(.+)$') {
             $note.Summary = ($matches[1] -replace '\*\*', '').Trim()
+        }
+        # Riquadri di avviso: sono la memoria delle trappole. "kb trap" li raccoglie tutti,
+        # cosi si leggono PRIMA di toccare un sottosistema invece di riscoprirli a mano.
+        if ($l -match '^>\s*\[!(\w+)\]\s*(.*)$') {
+            $note.Callouts += ,@{
+                Kind    = $matches[1].ToLower()
+                Title   = ($matches[2] -replace '\*\*', '').Trim()
+                Section = $curHeading
+                Line    = ($i + 1)
+            }
         }
     }
     if ($note.Title -eq '') { $note.Title = $note.Base }
@@ -173,8 +193,21 @@ function New-Note {
         if ($pipe -ge 0) { $raw = $raw.Substring(0, $pipe) }
         $raw = $raw.TrimEnd('\').Trim()
         if (-not $raw) { continue }
-        if ($raw.StartsWith('#')) { continue }   # link a una sezione della stessa nota
         if ($script:LinkIgnore -contains $raw) { continue }
+
+        # Candidato ancora di sezione: [[#Sezione]] o [[Nota#Sezione]]. Si registra come
+        # CANDIDATO perche' qui non sappiamo ancora quali note esistono, e alcuni titoli
+        # contengono un cancelletto per conto loro ("C# Style Guide"): a distinguerli e'
+        # Cmd-Check, che ha l'elenco completo delle note.
+        $cut = $raw.LastIndexOf('#')
+        if ($cut -ge 0) {
+            $sec = $raw.Substring($cut + 1).Trim()
+            if ($sec) {
+                $note.Anchors += ,@{ Target = $raw.Substring(0, $cut).Trim(); Section = $sec }
+            }
+        }
+
+        if ($raw.StartsWith('#')) { continue }   # link a una sezione della stessa nota
         [void]$set.Add($raw)
     }
     $note.LinksOut = @($set)
@@ -246,6 +279,12 @@ kb - CLI della Knowledge Base                        (08 - Tool/kb.ps1)
     kb adr                         tutti gli ADR con stato + prossimo numero
     kb sys                         schede sistema e loro stato
     kb todo  [-in <nota>]          checkbox non spuntate nelle note di piano
+    kb trap  [query]               le trappole note (riquadri danger/warning):
+                                   si leggono PRIMA di toccare un sottosistema
+
+  I DUE REPOSITORY (KB + progetto Unity)
+    kb branch                      branch, stato e distanza da main nei DUE repo
+    kb code                        classi del codice che nessuna nota nomina
 
   IGIENE DELLA KB
     kb check [-days N]             lint completo (esce 1 se ci sono errori)
@@ -463,6 +502,228 @@ function Cmd-Todo {
     }
 }
 
+function Git-In {
+    # Un comando git in una cartella, senza far esplodere lo script se git manca o se la
+    # cartella non e' un repository.
+    #
+    # Restituisce SEMPRE una hashtable @{ Ok; Lines }, mai direttamente le righe. Due ragioni,
+    # entrambe imparate rompendolo:
+    #  - PowerShell "srotola" un array di un solo elemento in uno scalare: chi riceveva le
+    #    righe e faceva $out[0] otteneva il primo CARATTERE del branch invece del nome.
+    #  - "nessuna riga" e' un esito legittimo (git status di un repo pulito non stampa niente)
+    #    e va distinto da "il comando e' fallito". Con un solo valore di ritorno non si puo'.
+    param([string]$Path, [string[]]$GitArgs)
+    if (-not (Test-Path -LiteralPath $Path)) { return @{ Ok = $false; Lines = @() } }
+    try {
+        $out = & git -C $Path @GitArgs 2>$null
+        if ($LASTEXITCODE -ne 0) { return @{ Ok = $false; Lines = @() } }
+        return @{ Ok = $true; Lines = @($out | Where-Object { $null -ne $_ }) }
+    }
+    catch { return @{ Ok = $false; Lines = @() } }
+}
+
+function Get-RepoState {
+    param([string]$Label, [string]$Path)
+    $state = [ordered]@{
+        Label   = $Label
+        Path    = $Path
+        Exists  = (Test-Path -LiteralPath $Path)
+        Branch  = $null
+        Dirty   = -1
+        Ahead   = -1
+        Behind  = -1
+    }
+    if (-not $state.Exists) { return [pscustomobject]$state }
+
+    $b = Git-In -Path $Path -GitArgs @('rev-parse', '--abbrev-ref', 'HEAD')
+    if ($b.Ok -and $b.Lines.Count -gt 0) { $state.Branch = ([string]$b.Lines[0]).Trim() }
+
+    $st = Git-In -Path $Path -GitArgs @('status', '--porcelain')
+    if ($st.Ok) { $state.Dirty = $st.Lines.Count }   # zero righe = repo pulito, non errore
+
+    # Quanto siamo avanti/indietro rispetto a main. Se il branch E' main, esce 0 e 0.
+    if ($state.Branch) {
+        $counts = Git-In -Path $Path -GitArgs @('rev-list', '--left-right', '--count', 'main...HEAD')
+        if ($counts.Ok -and $counts.Lines.Count -gt 0) {
+            $parts = @(([string]$counts.Lines[0]) -split '\s+' | Where-Object { $_ })
+            if ($parts.Count -ge 2) {
+                $state.Behind = [int]$parts[0]
+                $state.Ahead = [int]$parts[1]
+            }
+        }
+    }
+    return [pscustomobject]$state
+}
+
+function Cmd-Branch {
+    # I due repository devono stare sullo STESSO branch: la divergenza fra note e codice e' un
+    # rischio dichiarato (Backlog #45), e ADR-0018 impone un branch per incremento con lo
+    # stesso nome nei due repo. Farlo a mano vuol dire due comandi in due cartelle, ogni volta.
+    $repos = @(
+        (Get-RepoState -Label 'KB   ' -Path $script:Root),
+        (Get-RepoState -Label 'Unity' -Path $script:CodeRoot)
+    )
+
+    foreach ($r in $repos) {
+        if (-not $r.Exists) {
+            Write-Output ("{0}  CARTELLA ASSENTE: {1}" -f $r.Label, $r.Path)
+            continue
+        }
+        if (-not $r.Branch) {
+            Write-Output ("{0}  git non disponibile o non e' un repository: {1}" -f $r.Label, $r.Path)
+            continue
+        }
+        $dirty = if ($r.Dirty -gt 0) { "$($r.Dirty) file da committare" } elseif ($r.Dirty -eq 0) { 'pulito' } else { 'stato ignoto' }
+        $sync = ''
+        if ($r.Ahead -ge 0) {
+            if ($r.Branch -eq 'main') { $sync = '' }
+            elseif ($r.Ahead -eq 0 -and $r.Behind -eq 0) { $sync = '  (identico a main: niente da mergiare)' }
+            else { $sync = ("  ({0} avanti, {1} indietro rispetto a main)" -f $r.Ahead, $r.Behind) }
+        }
+        Write-Output ("{0}  {1,-34} {2}{3}" -f $r.Label, $r.Branch, $dirty, $sync)
+    }
+
+    $known = @($repos | Where-Object { $_.Branch })
+    if ($known.Count -eq 2) {
+        Write-Output ""
+        if ($known[0].Branch -eq $known[1].Branch) {
+            Write-Output "OK - i due repository sono sullo stesso branch."
+        }
+        else {
+            Write-Output "ATTENZIONE - branch DIVERSI nei due repository."
+            Write-Output "  E' il rischio n.45 del Backlog: note e codice che si separano."
+            Write-Output "  ADR-0018: un branch per incremento, stesso nome nei due repo."
+        }
+    }
+}
+
+function Get-CodeClasses {
+    # Nel progetto vale la regola "nome file = nome classe" (Regole di Codice), quindi
+    # l'elenco dei nostri tipi E' l'elenco dei file .cs sotto Assets/_Project/Scripts.
+    # Niente euristiche: e' un dato esatto.
+    $dir = Join-Path $script:CodeRoot 'Assets\_Project\Scripts'
+    if (-not (Test-Path -LiteralPath $dir)) { return $null }
+    return @(Get-ChildItem -LiteralPath $dir -Recurse -Filter *.cs -File |
+        Where-Object { $_.FullName -notmatch '\\ThirdParty\\' } |
+        ForEach-Object {
+            [pscustomobject]@{
+                Name   = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
+                Folder = (Split-Path -Parent $_.FullName).Substring($dir.Length).TrimStart('\')
+            }
+        } | Sort-Object Folder, Name)
+}
+
+function Cmd-Code {
+    # "Se non e' scritto qui, non esiste" (CLAUDE.md) reso verificabile: quali classi del
+    # progetto Unity non sono nominate da nessuna nota.
+    #
+    # Si controlla SOLO questa direzione. L'inverso - una nota che cita una classe non piu
+    # esistente - richiederebbe di distinguere i nostri tipi da quelli di Unity
+    # (NavMeshAgent, MonoBehaviour, Vector3...) con un elenco da mantenere a mano, e
+    # produrrebbe piu falsi allarmi che informazione. Vedi il README.
+    $classes = Get-CodeClasses
+    if ($null -eq $classes) {
+        Write-Output "Non trovo il progetto Unity in: $($script:CodeRoot)"
+        Write-Output "Impostare la variabile d'ambiente CADAVER_UNITY se vive altrove."
+        exit 2
+    }
+
+    $body = ''
+    foreach ($n in Get-Notes) {
+        if ($n.Rel -like '99 - Templates\*') { continue }
+        $body += [string]::Join("`n", $n.Lines) + "`n"
+    }
+
+    $missing = @($classes | Where-Object { $body.IndexOf($_.Name, [System.StringComparison]::Ordinal) -lt 0 })
+    $total = @($classes).Count
+
+    Write-Output ("Classi nel progetto Unity: {0}    citate in KB: {1}    mai citate: {2}" -f `
+        $total, ($total - $missing.Count), $missing.Count)
+
+    if ($missing.Count -eq 0) {
+        Write-Output "Ogni classe del codice e' nominata da almeno una nota."
+        return
+    }
+
+    Write-Output ""
+    Write-Output "Mai citate da nessuna nota (la KB non le conosce):"
+    $missing | Group-Object Folder | Sort-Object Name | ForEach-Object {
+        Write-Output ("  " + $_.Name + "\")
+        foreach ($c in $_.Group) { Write-Output ("      " + $c.Name) }
+    }
+    Write-Output ""
+    Write-Output "Informativo, non un errore: un tool dell'editor o un manager minuto puo"
+    Write-Output "vivere dentro la scheda di un sistema senza essere nominato. Ma una classe"
+    Write-Output "di gameplay che non compare in nessuna nota e' codice senza memoria."
+}
+
+function Cmd-Trap {
+    # Le trappole del progetto, tutte insieme: si leggono PRIMA di toccare un sottosistema.
+    # Nasce dalla Sessione 10, dove tre trappole del NavMesh sono costate sei giri di
+    # collaudo perche' nessuno le aveva ancora scritte - e ora che sono scritte, il problema
+    # diventa trovarle.
+    $query = (@($P) -join ' ').Trim()
+    $notes = @(Get-Notes | Where-Object { $_.Rel -notlike '99 - Templates\*' })
+
+    # danger prima: sono le cose che rompono. Il resto dopo. tip/info restano fuori: sono
+    # consigli, non trappole, e sarebbero solo rumore.
+    $order = @{ 'danger' = 0; 'failure' = 1; 'caution' = 2; 'warning' = 3 }
+    $rows = @()
+    foreach ($n in $notes) {
+        foreach ($c in $n.Callouts) {
+            if (-not $order.ContainsKey($c.Kind)) { continue }
+            if ($query) {
+                $hay = ($c.Title + ' ' + $c.Section + ' ' + $n.Base + ' ' + $n.Title)
+                if ($hay -notlike "*$query*") { continue }
+            }
+            $rows += ,[pscustomobject]@{
+                Rank    = $order[$c.Kind]
+                Kind    = $c.Kind
+                Title   = $c.Title
+                Section = $c.Section
+                Note    = $n.Base
+                Rel     = $n.Rel
+                Line    = $c.Line
+            }
+        }
+    }
+
+    if ($rows.Count -eq 0) {
+        if ($query) { Write-Output "Nessuna trappola per '$query'." } else { Write-Output "Nessuna trappola registrata." }
+        return
+    }
+
+    # SENZA query: una mappa di DOVE stanno, non l'elenco. Con oltre cento riquadri in KB un
+    # elenco piatto e' rumore: quello che serve e' sapere quale nota leggere.
+    if (-not $query) {
+        Write-Output ("Trappole nella KB: {0} riquadri. Ecco DOVE stanno." -f $rows.Count)
+        Write-Output "Per il dettaglio:  kb trap <sottosistema>     es. kb trap navmesh"
+        Write-Output ""
+        Write-Output ("  {0,-6} {1,-8} {2}" -f 'DANGER', 'altri', 'nota')
+        $rows | Group-Object Note | ForEach-Object {
+            $d = @($_.Group | Where-Object { $_.Kind -eq 'danger' }).Count
+            [pscustomobject]@{ Note = $_.Name; Danger = $d; Other = ($_.Count - $d) }
+        } | Sort-Object Danger, Other -Descending | ForEach-Object {
+            Write-Output ("  {0,-6} {1,-8} {2}" -f $_.Danger, $_.Other, $_.Note)
+        }
+        return
+    }
+
+    Write-Output "Trappole e avvisi per '$query' ($($rows.Count)):"
+    Write-Output ""
+    foreach ($r in ($rows | Sort-Object Rank, Note, Line)) {
+        $tag = $r.Kind.ToUpper()
+        $title = $r.Title
+        if (-not $title) { $title = '(senza titolo)' }
+        Write-Output ("  [{0,-7}] {1}" -f $tag, $title)
+        $where = $r.Note
+        if ($r.Section) { $where = $where + '  SS ' + $r.Section }
+        Write-Output ("            {0}  (riga {1})" -f $where, $r.Line)
+    }
+    Write-Output ""
+    Write-Output "Per leggerne una:  kb read ""<nota>"" -lines <riga>-<riga+15>"
+}
+
 function Cmd-Stale {
     $days = OptInt 'days' 30
     $limit = (Get-Date).AddDays(-$days)
@@ -539,6 +800,28 @@ function Cmd-Check {
                     if ($bases.Contains($head)) { continue }
                 }
                 $errs.Add("LINK ROTTO [[$l]] in $($n.Rel)")
+            }
+        }
+
+        # 3b. ancore di sezione rotte: [[Nota#Sezione]] o [[#Sezione]] verso una sezione che
+        #     non esiste (piu') nella nota bersaglio. Sono la forma di riferimento che
+        #     invecchia piu' in fretta: basta rinominare un titolo e il rimando mente.
+        if ($n.Rel -notlike '99 - Templates\*') {
+            foreach ($a in $n.Anchors) {
+                $target = $n
+                if ($a.Target) {
+                    if (-not $bases.Contains($a.Target)) { continue }  # non e' un'ancora: e' un '#' nel nome
+                    $target = Resolve-Note -Name $a.Target -Quiet
+                    if ($null -eq $target) { continue }
+                }
+                $found = $false
+                foreach ($h in $target.Headings) {
+                    if ($h.Text -ieq $a.Section -or $h.Text -like "*$($a.Section)*") { $found = $true; break }
+                }
+                if (-not $found) {
+                    $where = if ($a.Target) { $a.Target } else { 'questa nota' }
+                    $errs.Add("ANCORA ROTTA [[$($a.Target)#$($a.Section)]] -> sezione assente in $where : $($n.Rel)")
+                }
             }
         }
 
@@ -675,6 +958,10 @@ switch ($Command.ToLower()) {
     'adr' { Cmd-Adr }
     'sys' { Cmd-Sys }
     'todo' { Cmd-Todo }
+    'trap' { Cmd-Trap }
+    'trappole' { Cmd-Trap }
+    'branch' { Cmd-Branch }
+    'code' { Cmd-Code }
     'stale' { Cmd-Stale }
     'stats' { Cmd-Stats }
     'check' { Cmd-Check }

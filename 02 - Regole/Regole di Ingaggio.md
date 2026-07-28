@@ -1,6 +1,6 @@
 ---
 tags: [regole, processo]
-aggiornato: 2026-07-25
+aggiornato: 2026-07-28
 ---
 
 # Regole di Ingaggio
@@ -66,6 +66,39 @@ riunione un numero che bastava provare.
 - Non aggiungo pacchetti, asset store o dipendenze senza dirtelo e senza ADR.
 - Non "sistemo" cose fuori dal compito assegnato: te le segnalo e le metto in [[Backlog]].
 - Se qualcosa non funziona, te lo dico chiaramente. Non fingo che sia fatto.
+
+## 6b. Prima si misura, poi si cambia
+
+> [!danger] La regola dei due tentativi
+> Se **due** tentativi di sistemare la stessa cosa non hanno funzionato, il terzo **non è un
+> altro tentativo**: è un **tool di diagnosi** che stampi cosa sta accadendo davvero.
+>
+> Nata dalla Sessione 10, dove il camminamento sulle mura è costato **sei giri** di collaudo in
+> Play Mode. I primi tre erano ipotesi ragionevoli e sbagliate (dimensione dei voxel, soglie di
+> area minima, sovrapposizioni geometriche): curavano il sintomo. La svolta è arrivata scrivendo
+> uno strumento che elencasse i triangoli di NavMesh realmente esistenti — con quel dato in
+> mano, la causa è emersa in un colpo, ed era una cosa che nessuna delle tre ipotesi sfiorava.
+
+Cosa significa in pratica:
+- **Non toccare i parametri "a sentimento"** sperando che uno funzioni. Ogni cambio senza una
+  misura è una nuova variabile in un problema che già non capiamo.
+- Il tool di diagnosi va nel progetto, non in chat: sopravvive alla sessione, e serve di nuovo
+  la prossima volta. → [[Diagnosticare invece di indovinare]]
+- Quando riferisco un sintomo, riferisco anche **il numero** che l'ho fatto dire.
+
+E la sua gemella, sulle affermazioni tecniche:
+
+> [!warning] Se una cosa non l'ho verificata, lo scrivo — anche quando sono convinto
+> Nella stessa sessione ho messo in un ADR, **come decisione di progetto**, l'affermazione che
+> due `NavMeshSurface` con lo stesso Agent Type si fondono in un grafo unico. È falsa, e mi
+> sembrava ovvia. È costata la sessione.
+>
+> Una convinzione non verificata va marcata `> [!warning] Da verificare` **anche se sono
+> sicuro**: il costo di scriverlo è cinque secondi, il costo di non scriverlo è che diventa un
+> invariante su cui costruiamo.
+
+Le trappole già pagate si consultano con `kb trap [query]` **prima** di toccare un
+sottosistema, non dopo.
 
 ## 7. La KB si aggiorna, sempre
 

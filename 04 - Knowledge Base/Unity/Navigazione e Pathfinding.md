@@ -94,6 +94,45 @@ Quando il giocatore costruisce, la superficie camminabile cambia. Due approcci:
 
 ---
 
+## Tre trappole del NavMesh su più livelli
+
+> [!danger] Scoperte una per una in Play Mode il 2026-07-28, costruendo le mura calpestabili
+> Tutte e tre invisibili leggendo il codice, e tutte e tre trovate **misurando**. Il contesto
+> completo è in [[Mura Difensive e Combattimento in Elevazione]].
+
+**1. `NavMeshObstacle` esclude l'oggetto dal bake.** Un GameObject che porta un
+`NavMeshObstacle` **non viene raccolto** quando si cuoce il NavMesh: l'ostacolo serve a
+*ritagliare* la superficie a runtime, quindi Unity presume che non debba finirci dentro.
+Conseguenza pratica: un muro con l'ostacolo **non ha cima percorribile**, perché la sua
+geometria non entra mai nella bake.
+
+> Regola operativa: un edificio blocca il NavMesh in **uno dei due modi, mai entrambi** — o col
+> carving del suo `NavMeshObstacle`, o entrando nella bake come geometria (se deve restare
+> calpestabile sopra). Da qui la scelta di **non** mettere
+> `[RequireComponent(typeof(NavMeshObstacle))]` su `PlacedBuilding`.
+
+**2. Il bake ERODE ogni superficie del raggio dell'agente, su ogni lato.** Con l'Agent Type
+"Humanoid" (raggio **0.5**) qualunque superficie larga 1 unità diventa larga **zero** e
+scompare dal pathfinding. Serve larghezza **> 2 × raggio**. Vale anche per le rampe, non solo
+per i camminamenti.
+
+⚠️ Il raggio del bake vive nelle **impostazioni dell'Agent Type** (`Window ▸ AI ▸ Navigation`),
+non nel `NavMeshAgent`: sono due numeri diversi che *devono* combaciare — vedi l'avviso in
+[[Movimento Unità]] § *Dati e parametri*.
+
+**3. Due `NavMeshSurface` separate NON si fondono**, nemmeno con lo stesso Agent Type e con le
+geometrie che si toccano: restano `NavMeshData` distinti, cioè **isole scollegate**, e nessun
+percorso passa dall'una all'altra. Per collegare due livelli servono o **una sola bake** che li
+contenga entrambi, o un **`NavMeshLink`** esplicito.
+
+E anche dentro una bake sola, un contatto geometrico *quasi* perfetto non basta: due superfici
+che si sovrappongono a quote leggermente diverse producono strisce camminabili di pochi
+centimetri che l'erosione (punto 2) cancella. Il sintomo è un NavMesh che **esiste** ma dà
+`PathPartial`. Il `NavMeshLink` non dipende dalla voxelizzazione: dichiara la connessione e
+basta — è lo strumento giusto per una giunzione, non un ripiego.
+
+---
+
 ## Cuocere il NavMesh via script rompe Force Text — se non si salva l'asset
 
 > [!danger] Scoperto il 2026-07-26, dopo la prima prova reale in Play Mode

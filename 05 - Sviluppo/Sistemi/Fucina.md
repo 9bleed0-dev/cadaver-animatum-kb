@@ -24,25 +24,31 @@ introduce la concorrenza fra il breve termine (mangiare) e il medio (difendersi)
 
 ## Vincoli già decisi
 
-- Uno dei 6 edifici del prototipo → [[ADR-0007 - Genere, core loop e scope del prototipo]]
-- Consuma **Ferro** e produce armi; le armi rendono più efficaci i soldati
-  → [[Combattimento Base]]
-- **Niente albero tecnologico, niente evoluzioni di truppe** → [[Scope e Anti-Scope]]
+- Uno dei 9 edifici del prototipo (esteso da 6 il 2026-07-28)
+  → [[ADR-0007 - Genere, core loop e scope del prototipo]],
+  [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
+- Consuma **Ferro** e produce **Spada** (risorsa numerica, non un attributo — deciso il
+  2026-07-28): un unico output per ora, non perché il design lo richieda ma perché "abbiamo
+  pochi modelli". L'architettura della scelta di cosa produrre è condivisa col
+  [[Carpentiere]] (Arco/Balestra), pronta per un secondo output di Fucina in futuro.
+- Le armi (Spada/Arco/Balestra) sono consumate dalla **Caserma** al reclutamento di un
+  Guerriero o Arciere → [[Reclutamento e Ruoli]], non dai soldati fissi esistenti
+  (Soldato_A/B restano fuori da questo sistema).
 - È un [[Posto di Lavoro e Assegnazione]] come Cava e Miniera: la differenza è che **consuma**
   una risorsa invece di estrarla dal terreno
 
 ## Le domande da chiudere quando si progetta
 
-- Le armi sono una **risorsa** (un quinto numero) o un **attributo** del soldato?
-  *La seconda è più semplice e probabilmente basta: un soldato è armato o no.*
-- Un soldato armato è "più forte" o "più forte in un modo specifico"? *Nel prototipo: più forte,
-  e basta. La varietà è fuori scope.*
-- Serve una scorta di armi, o si arma direttamente al momento del rialzo?
+- Serve una scorta di armi, o si arma direttamente al momento del reclutamento alla Caserma?
+- Se in futuro la Fucina guadagna un secondo output, che meccanismo di scelta usa (stesso
+  toggle del Carpentiere, o qualcosa di diverso)? *Non bloccante ora: un solo output.*
 
 > [!warning] Candidato al taglio
 > Se a INC-7 il tempo stringe, la Fucina è **il primo pezzo da tagliare**: il core loop
 > (fame → carne → cadaveri → nemici) funziona senza. Il Ferro diventerebbe temporaneamente
-> inutile, e va bene — è meglio un loop provato che una filiera completa mai giocata.
+> inutile, e va bene — è meglio un loop provato che una filiera completa mai giocata. Tagliare
+> la Fucina toglie la via Guerriero dalla [[Reclutamento e Ruoli|Caserma]] (niente Spada), ma
+> lascia in piedi la via Arciere se il [[Carpentiere]] esiste ancora — non sono legate.
 > → [[Scope e Anti-Scope]] § *Come si taglia*
 
 ## Stato
@@ -56,5 +62,7 @@ introduce la concorrenza fra il breve termine (mangiare) e il medio (difendersi)
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Risorse e Magazzino]] · [[Posto di Lavoro e Assegnazione]] · [[Combattimento Base]]
+- [[Carpentiere]] · [[Reclutamento e Ruoli]]
+- [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
 - [[Stronghold e They Are Billions]] · [[Scope e Anti-Scope]]
 - [[_Indice Sistemi]] · [[TEMPLATE-Sistema]]

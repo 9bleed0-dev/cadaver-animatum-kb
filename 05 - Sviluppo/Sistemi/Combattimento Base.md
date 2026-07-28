@@ -53,8 +53,25 @@ aggiornato: 2026-07-27
 ## Struttura tecnica
 
 **Classi**
-- `IDamageable` (Bleed.Core) — `bool IsAlive { get; }` · `void TakeDamage(float amount)`.
+- `IDamageable` (Bleed.Core) — `bool IsAlive` · `void TakeDamage(float)` · `bool IsElevated`
+  (in cima a un muro → un corpo a corpo da terra non lo raggiunge) · `float TargetRadius`.
   Chi attacca conosce solo questa interfaccia, mai la classe concreta.
+
+> [!danger] Il raggio d'ingaggio si misura dalla SUPERFICIE del bersaglio, non dal suo centro
+> È la differenza fra un edificio attaccabile e uno inattaccabile, ed è stata pagata due volte
+> nello stesso giorno (2026-07-28, seconda volta segnalata dall'utente: *"i nemici non attaccano
+> il Cuore"*).
+>
+> Il conto: il carving del NavMesh si allarga del **raggio dell'agente** (0.5) e l'agente si
+> ferma **`stoppingDistance`** prima della destinazione (0.3). Un assediante finisce quindi a
+> ~1.8 dal centro di un cubo 2×2 — e il raggio d'ingaggio dell'Invasore è **1.5**. Misurando dal
+> centro non attacca mai, e il sintomo ("i nemici non combattono") non punta da nessuna parte.
+>
+> `TargetRadius` è **0 per le unità** — la loro taglia è già dentro i raggi tarati a INC-5, e
+> dichiararla allargherebbe ogni ingaggio corpo a corpo spostando un bilanciamento verificato —
+> e **ricavato dal collider per gli edifici**, non scritto a mano: così il Cuore resta
+> attaccabile anche quando diventerà davvero 6×6 celle, senza che nessuno debba ricordarsi di
+> aggiornare un numero.
 - `CombatUnitDefinition` (ScriptableObject) — `maxHp` · `damage` · `attackRate` (colpi/secondo)
   · `engageRange`. Un asset per tipo di combattente (Soldato non morto, Invasore).
 - `Faction` (enum, Bleed.Core) — `Sudditi` · `Invasori`. Decide chi ingaggia chi: mai la stessa

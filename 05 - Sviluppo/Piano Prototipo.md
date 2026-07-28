@@ -131,11 +131,55 @@ salvare** prima che scada — con la manodopera che hai, non quella che vorresti
 > Le opzioni sono già raccolte in [[UI in Unity]] → *Il punto critico del nostro gioco*.
 
 ### INC-7 — La partita
-**Prodotto:** ondate crescenti, mura **su griglia** (non a mano libera), Fucina che trasforma
-Ferro in armi, vittoria a N ondate, sconfitta per carestia o Cuore distrutto. Tutti i valori
-in ScriptableObject per poterli cambiare mentre giochi.
-**Sistemi:** [[Costruzione su Griglia]] · [[Fucina]] · [[Stato della Partita]]
-**Uscita:** una partita completa di 2-5 minuti, con inizio e fine.
+
+> [!info] Spezzato in sotto-incrementi (deciso il 2026-07-28)
+> Cresciuto troppo per un solo passo verificabile: mura su griglia, tre edifici nuovi
+> (Boscaiolo, Carpentiere, Caserma), una risorsa in più, un sistema di combattimento a
+> distanza mai scritto, e un ribilanciamento per una partita 5-15 volte più lunga del piano
+> originale. Ogni sotto-incremento ha il suo branch (`inc-7a-...`, `inc-7b-...`, ...) e la sua
+> verifica in Play Mode prima di passare al successivo — stessa disciplina di ADR-0018,
+> applicata dentro un incremento invece che fra incrementi.
+
+**Prodotto finale (a fine 7d):** ondate crescenti, mura su griglia, Fucina + Carpentiere +
+Boscaiolo, sudditi disoccupati reclutabili alla Caserma come Guerriero o Arciere (con
+combattimento a distanza vero), vittoria a N ondate, sconfitta per carestia o Cuore distrutto.
+Tutti i valori in ScriptableObject.
+
+**Uscita finale:** una partita completa **di durata stile They Are Billions (20-60+ minuti)**,
+non più i 2-5 minuti del piano originale
+→ [[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]].
+
+> [!warning] Rischio di budget accettato consapevolmente
+> Il budget di tempo del progetto (135-180 ore) non cambia. Se bilanciare una partita lunga
+> costa più delle stime, si taglia — [[Fucina]] (o l'intero [[Carpentiere]]) resta il primo
+> candidato. → [[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]] · [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
+
+**INC-7a — Costruzione su Griglia**: celle, anteprima di piazzamento, mura a trascinamento di
+linea, demolizione. Sistema: [[Costruzione su Griglia]]. *Uscita: si piazzano Mura e i 6
+edifici esistenti su griglia, invece che a mano libera fuori scena.*
+
+**INC-7b — L'economia estesa**: Boscaiolo (Legna), Carpentiere (Arco/Balestra a scelta),
+Fucina aggiornata (Spada). Sistemi: [[Fucina]] · [[Carpentiere]]. *Uscita: le 4 risorse nuove
+si producono e si accumulano nel magazzino, senza ancora un modo di spenderle.*
+
+**INC-7c — Reclutamento e combattimento a distanza**: la Caserma, le classi Guerriero/Arciere,
+il proiettile per l'Arciere. Sistema: [[Reclutamento e Ruoli]]. *Uscita: un suddito
+disoccupato diventa un difensore a scelta del giocatore, e un Arciere colpisce davvero da
+lontano.*
+
+**INC-7e — Mura calpestabili** ✅ *fatto il 2026-07-28, ma **fuori dall'ordine del piano***:
+non era previsto qui — è nato a metà di INC-7a da
+[[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]], cioè dalla
+riapertura consapevole della "prima delle tre tentazioni pericolose". Sistema:
+[[Mura Difensive e Combattimento in Elevazione]]. *Uscita raggiunta: un difensore sale una
+Scala, presidia un segmento di muro e combatte da lì, fuori portata del corpo a corpo.*
+Porta la lettera **e** e non **b**/**c** per non spostare la numerazione di ciò che era già
+pianificato: è stato svolto prima, non al posto di qualcos'altro.
+
+**INC-7d — Bilanciamento per una partita lunga**: curva di ondate, numeri di
+`WaveDefinition`/`CombatUnitDefinition`, condizione di vittoria a N ondate. Sistema:
+[[Stato della Partita]]. *Uscita: una partita completa stile They Are Billions, con inizio e
+fine, giocata per intero almeno una volta.*
 
 ### INC-8 — Il verdetto
 **Prodotto:** nessun codice. Due persone che non sono te ci giocano, guardate senza aiutare,
