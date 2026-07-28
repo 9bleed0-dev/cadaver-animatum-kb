@@ -1,6 +1,6 @@
 ---
 tags: [index, briefing, stato]
-aggiornato: 2026-07-27
+aggiornato: 2026-07-28
 ---
 
 # Briefing
@@ -80,6 +80,7 @@ deriva da lì o da una fonte documentata.
 | Struttura | una partita = una mappa = una run · vinci **chiudendo** l'operazione coi 2 fogli del proemio | 0015 |
 | Rogue-lite | **vittoria e fallimento lasciano cose diverse**: Frammenti vs Postille · una run fallita lascia una **rovina abitata** a cui puoi tornare · l'hub è il Re | 0015 |
 | Input | Input System **nuovo** (già nel template, `com.unity.inputsystem 1.19.0`) | 0016 |
+| Interazione col cadavere | **niente click sul campo**: raccolta automatica (`CorpseCarrier`) + assegnazione in blocco per quantità alla Mortuary, i corpi restano individuali in giacenza | 0019 |
 
 Fuori dagli ADR: **tempo** = 15-20 h/settimana · **IDE** = ✅ risolto, VS Community 2026
 (canale stabile) con workload Unity → [[Asset e Tool]].
@@ -135,39 +136,39 @@ niente abbreviazioni.
 
 ---
 
-## Dove siamo — 2026-07-26 (domenica notte)
+## Dove siamo — 2026-07-28 (martedì)
 
-**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo) ✅ chiusa.** INC-1…INC-5
+**Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo) ✅ chiusa.** INC-1…INC-6
 verificati in Play Mode dall'utente. Selezione, movimento, produzione, HUD, sconfitta per
-carestia, **e ora anche l'assedio**: ondata avvistata, invasori intercettati dai Soldati,
-caduti (nostri e nemici) rimasti sul campo come cadaveri invece di sparire.
+carestia, l'assedio (INC-5), **e ora anche il bivio del cadavere (INC-6)**: raccolta
+automatica, degrado visibile, Macella/Rialza in blocco alla Mortuary.
 
-Esiste: ~110 note di KB, **16 ADR**, ambiente e progetto Unity pronti
+Esiste: ~113 note di KB, **19 ADR**, ambiente e progetto Unity pronti
 (`C:\Dev\CadaverAnimatum`), e il codice di: [[Camera Isometrica]] · [[Selezione e Comandi]] ·
 [[Movimento Unità]] su NavMesh · [[Risorse e Magazzino]] (+5 test) ·
 [[Posto di Lavoro e Assegnazione]] · [[HUD Risorse]] · [[Fame e Sussistenza]] ·
-[[Stato della Partita]] — tutti provati dall'utente in questa sessione.
-
-✅ La prima prova reale aveva trovato 4 difetti in più (oltre ai 7 della revisione a freddo),
-incluso il più serio: **la scena diventava binaria** perché `BuildNavMesh()` non salvava i suoi
-dati come asset esterno. Tutti e quattro corretti nel codice, e la scena è stata **rigenerata
-come testo e committata** (`77eb27c`, progetto Unity).
-→ [[Navigazione e Pathfinding]] § *Cuocere il NavMesh via script rompe Force Text*
+[[Stato della Partita]] · [[Ondate]] · [[Combattimento Base]] · [[Cuore del Regno]] ·
+[[Cadavere e Degrado]] · [[Scelta sul Cadavere]] — tutti provati dall'utente.
 
 ✅ **Criterio di uscita di INC-2 soddisfatto**: misurato col Profiler, ~200 unità reggono a
 ~5ms/frame di base (~200 fps), ben sotto i 16,7ms del target 60fps. → [[Movimento Unità]]
 § *La misura*
 
-✅ **INC-5 progettato, scritto e verificato in Play Mode (2026-07-27)**: [[Ondate]] ·
-[[Combattimento Base]] · [[Cuore del Regno]]. L'utente ha confermato: conto alla rovescia,
-invasori intercettati dai Soldati, caduti (nostri e nemici) rimasti sul campo come cadaveri —
-nessun errore in Console. [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]]
-confermato in pratica: un Soldato è caduto ed è rimasto un cadavere, non è sparito. Il Cuore
-del Regno non ha ancora incassato un colpo (i Soldati fermano sempre l'ondata prima).
+✅ **INC-5 verificato in Play Mode (2026-07-27)**: ondata, combattimento, cadaveri persistenti.
+[[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] confermato in pratica.
 
-**Prossimo passo:** **INC-6 — il bivio del cadavere** ([[Cadavere e Degrado]] +
-[[Scelta sul Cadavere]]). Sono ancora schede stub: si progettano prima del codice, come
-INC-5.
+✅ **INC-6 progettato, scritto e verificato in Play Mode (2026-07-28)**: [[Cadavere e Degrado]]
+· [[Scelta sul Cadavere]]. Il design è cambiato **durante** l'implementazione — non più click
+sul campo (le due varianti pianificate sono state scartate dopo essere state scritte), ma
+raccolta automatica (`CorpseCarrier`) + assegnazione in blocco alla Mortuary con contatori
++1/+5/MAX che non superano mai la giacenza → [[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]]. Osservato durante il collaudo (non un
+difetto di INC-6): il Cuore del Regno è caduto all'Ondata 2 — 2 Soldati fissi contro una curva
+che cresce, da bilanciare a INC-7 ([[Backlog]] #43).
+
+**Prossimo passo:** **INC-7 — la partita** ([[Costruzione su Griglia]] · [[Fucina]] ·
+[[Stato della Partita]]). Ancora schede stub: si progettano prima del codice, su un nuovo
+branch `inc-7-<slug>` — solo dopo aver mergiato `inc-6-bivio-cadavere` su `main` in entrambi
+i repo.
 
 Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
 

@@ -1,6 +1,6 @@
 ---
 tags: [index, stato]
-aggiornato: 2026-07-27
+aggiornato: 2026-07-28
 ---
 
 # Stato del Progetto
@@ -19,7 +19,14 @@ margine sotto i 16,7ms del target 60fps.
 **INC-5 verificato in Play Mode dall'utente (2026-07-27)**: ondata avvistata, invasori
 intercettati dai Soldati, caduti (nostri e loro) rimasti sul campo come cadaveri — nessun
 errore in Console. Incluso [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]],
-confermato in pratica. **Prossimo: INC-6, il bivio del cadavere.** → [[Piano Prototipo]]
+confermato in pratica.
+
+**INC-6 verificato in Play Mode dall'utente (2026-07-28): il bivio del cadavere funziona**.
+Raccolta automatica, trasporto visibile, degrado del colore, Macella, Rialza e il pannello a
+contatori (+1/+5/MAX) della Mortuary tutti confermati. Il design è cambiato in corsa rispetto
+al piano iniziale: niente più click sul campo, raccolta automatica + assegnazione in blocco
+→ [[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]].
+**Prossimo: INC-7, la partita.** → [[Piano Prototipo]]
 
 ## Il gioco
 
@@ -125,15 +132,29 @@ resta da vedere girare quella parte. La curva delle ondate (`waveIntervalSeconds
 provvisoria, abbassata solo per il collaudo.
 
 🔀 **Nuovo workflow, in vigore da INC-6** ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]]): si lavora su **un branch per incremento**, merge su `main` solo dopo la verifica in
-Play Mode. Motivo: INC-6 è il primo incremento che **modifica** logica già verificata invece di
-aggiungerne di nuova. → [[Workflow di Sviluppo]] per i comandi.
+Play Mode. → [[Workflow di Sviluppo]] per i comandi.
 
-**Prossimo passo:** **INC-6 — il bivio del cadavere** ([[Cadavere e Degrado]] +
-[[Scelta sul Cadavere]]): ancora schede stub, da progettare prima del codice, come **nuova
-sessione** sul branch `inc-6-bivio-cadavere`.
-⚠️ **Prerequisito**: creare il remoto del repo Unity ([[Backlog]] #34) — `gh` non è installato,
-va creato a mano su GitHub.
-→ [[Piano Prototipo]] · dettaglio completo in [[2026-07-27 - Sessione 08]]
+✅ **INC-6 progettato, scritto, e verificato in Play Mode (2026-07-28)**: [[Cadavere e Degrado]]
+e [[Scelta sul Cadavere]] hanno codice completo su `inc-6-bivio-cadavere`. Il design
+dell'interazione è cambiato **durante** l'implementazione: prima progettata come click sul
+campo (due varianti da confrontare), poi corretta dall'utente in raccolta automatica +
+assegnazione in blocco alla Mortuary → [[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]]. Il codice della prima versione è stato scritto e poi
+scartato prima di qualunque Play Mode — nessun tempo perso in produzione, solo in stesura.
+Corretti in corso d'opera: Carne iniziale troppo bassa per osservare il degrado (50/200 →
+300/300), cadavere invisibile durante il trasporto (ora agganciato visivamente al portatore),
+pannello con campo numerico libero sostituito da contatori +1/+5/MAX che non superano mai la
+giacenza. Osservato (non un difetto di INC-6): il Cuore del Regno è caduto all'Ondata 2 durante
+il collaudo — 2 Soldati fissi contro una curva che cresce, da bilanciare a INC-7
+([[Backlog]] #43).
+
+**Prossimo passo:** **INC-7 — la partita** ([[Costruzione su Griglia]] · [[Fucina]] ·
+[[Stato della Partita]]): ondate crescenti, mura su griglia, Fucina che trasforma Ferro in
+armi, vittoria a N ondate. Ancora schede stub, da progettare prima del codice, su un nuovo
+branch `inc-7-<slug>` — **solo dopo aver mergiato `inc-6-bivio-cadavere` su `main`** in
+entrambi i repo (ADR-0018).
+⚠️ **Prerequisito ancora aperto**: creare il remoto del repo Unity ([[Backlog]] #34) — `gh`
+non è installato, va creato a mano su GitHub.
+→ [[Piano Prototipo]] · dettaglio completo in [[2026-07-28 - Sessione 09]]
 
 > [!info] Da leggere prima di martedì (15 minuti in tutto)
 > [[Lezione 01 - Cosa costruiremo davvero]] ·
@@ -150,7 +171,7 @@ va creato a mano su GitHub.
 | Rischio | Dove si affronta |
 |---|---|
 | 🔴 **Pathfinding con molte unità** — il tetto va **misurato**, non desiderato. Codice scritto e verificato, misura col Profiler non ancora fatta | **INC-2** → [[Movimento Unità]] |
-| 🔴 **UX del menu di scelta sul cadavere** — se è macchinoso, il gioco muore | **INC-6**, con due varianti a confronto → [[Scelta sul Cadavere]] |
+| ✅ ~~UX del menu di scelta sul cadavere~~ — risolto in INC-6 (2026-07-28) spostando la decisione dal campo a un pannello in blocco → [[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]] | — |
 | ✅ ~~La KB non ha backup fuori dal disco~~ — risolto, remoto GitHub attivo | — |
 | 🟠 Tentazione del disegno libero delle mura | [[Costruzione su Griglia]] · [[Scope e Anti-Scope]] |
 | 🟠 Costo emotivo del greyboxing | [[Lezione 02 - Perché il prototipo è fatto di cubi grigi]] |
@@ -161,6 +182,12 @@ va creato a mano su GitHub.
 
 ## Ultima sessione
 
+- **2026-07-28 — Sessione 09**: progettato **e scritto** INC-6 per intero: [[Cadavere e
+  Degrado]] e [[Scelta sul Cadavere]]. Il design è cambiato durante l'implementazione (click
+  sul campo → raccolta automatica + Mortuary) → [[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]]. **Verificato dall'utente in Play
+  Mode**, con tre correttivi trovati e risolti in corso d'opera (Carne iniziale, trasporto
+  invisibile, campo numerico libero). Segnalato in [[Backlog]] (#43) lo squilibrio del
+  combattimento osservato durante il collaudo, da affrontare a INC-7. → [[2026-07-28 - Sessione 09]]
 - **2026-07-27 — Sessione 08**: chiusi gli ultimi allineamenti post-misura Profiler, progettato
   **e scritto** INC-5 per intero: [[Ondate]], [[Combattimento Base]], [[Cuore del Regno]].
   Trovato e risolto un conflitto fra la regola "i sudditi non muoiono mai" e la morte in
