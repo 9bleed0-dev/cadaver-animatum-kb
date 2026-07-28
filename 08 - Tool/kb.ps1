@@ -31,6 +31,12 @@ try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 $script:Root = Split-Path -Parent $PSScriptRoot
 $script:Utf8 = New-Object System.Text.UTF8Encoding($false)
 
+# Il repository del progetto Unity vive fuori da qui (ADR-0012, ADR-0013). Il percorso e'
+# fissato da quell'ADR, ma resta scavalcabile con la variabile d'ambiente per non legare il
+# CLI a una sola macchina. Se non esiste, i comandi che lo usano lo dicono e non falliscono.
+$script:CodeRoot = $env:CADAVER_UNITY
+if (-not $script:CodeRoot) { $script:CodeRoot = 'C:\Dev\CadaverAnimatum' }
+
 # ---------------------------------------------------------------- arg parsing
 
 $script:ValueOpts = @('tag', 'folder', 'section', 'days', 'limit', 'lines', 'in', 'date', 'num')
@@ -276,6 +282,10 @@ kb - CLI della Knowledge Base                        (08 - Tool/kb.ps1)
     kb trap  [query]               le trappole note (riquadri danger/warning):
                                    si leggono PRIMA di toccare un sottosistema
 
+  I DUE REPOSITORY (KB + progetto Unity)
+    kb branch                      branch, stato e distanza da main nei DUE repo
+    kb code                        classi del codice che nessuna nota nomina
+
   IGIENE DELLA KB
     kb check [-days N]             lint completo (esce 1 se ci sono errori)
     kb stale [-days N]             note non aggiornate da N giorni
@@ -490,6 +500,161 @@ function Cmd-Todo {
         foreach ($o in $open) { Write-Output $o }
         Write-Output ""
     }
+}
+
+function Git-In {
+    # Un comando git in una cartella, senza far esplodere lo script se git manca o se la
+    # cartella non e' un repository.
+    #
+    # Restituisce SEMPRE una hashtable @{ Ok; Lines }, mai direttamente le righe. Due ragioni,
+    # entrambe imparate rompendolo:
+    #  - PowerShell "srotola" un array di un solo elemento in uno scalare: chi riceveva le
+    #    righe e faceva $out[0] otteneva il primo CARATTERE del branch invece del nome.
+    #  - "nessuna riga" e' un esito legittimo (git status di un repo pulito non stampa niente)
+    #    e va distinto da "il comando e' fallito". Con un solo valore di ritorno non si puo'.
+    param([string]$Path, [string[]]$GitArgs)
+    if (-not (Test-Path -LiteralPath $Path)) { return @{ Ok = $false; Lines = @() } }
+    try {
+        $out = & git -C $Path @GitArgs 2>$null
+        if ($LASTEXITCODE -ne 0) { return @{ Ok = $false; Lines = @() } }
+        return @{ Ok = $true; Lines = @($out | Where-Object { $null -ne $_ }) }
+    }
+    catch { return @{ Ok = $false; Lines = @() } }
+}
+
+function Get-RepoState {
+    param([string]$Label, [string]$Path)
+    $state = [ordered]@{
+        Label   = $Label
+        Path    = $Path
+        Exists  = (Test-Path -LiteralPath $Path)
+        Branch  = $null
+        Dirty   = -1
+        Ahead   = -1
+        Behind  = -1
+    }
+    if (-not $state.Exists) { return [pscustomobject]$state }
+
+    $b = Git-In -Path $Path -GitArgs @('rev-parse', '--abbrev-ref', 'HEAD')
+    if ($b.Ok -and $b.Lines.Count -gt 0) { $state.Branch = ([string]$b.Lines[0]).Trim() }
+
+    $st = Git-In -Path $Path -GitArgs @('status', '--porcelain')
+    if ($st.Ok) { $state.Dirty = $st.Lines.Count }   # zero righe = repo pulito, non errore
+
+    # Quanto siamo avanti/indietro rispetto a main. Se il branch E' main, esce 0 e 0.
+    if ($state.Branch) {
+        $counts = Git-In -Path $Path -GitArgs @('rev-list', '--left-right', '--count', 'main...HEAD')
+        if ($counts.Ok -and $counts.Lines.Count -gt 0) {
+            $parts = @(([string]$counts.Lines[0]) -split '\s+' | Where-Object { $_ })
+            if ($parts.Count -ge 2) {
+                $state.Behind = [int]$parts[0]
+                $state.Ahead = [int]$parts[1]
+            }
+        }
+    }
+    return [pscustomobject]$state
+}
+
+function Cmd-Branch {
+    # I due repository devono stare sullo STESSO branch: la divergenza fra note e codice e' un
+    # rischio dichiarato (Backlog #45), e ADR-0018 impone un branch per incremento con lo
+    # stesso nome nei due repo. Farlo a mano vuol dire due comandi in due cartelle, ogni volta.
+    $repos = @(
+        (Get-RepoState -Label 'KB   ' -Path $script:Root),
+        (Get-RepoState -Label 'Unity' -Path $script:CodeRoot)
+    )
+
+    foreach ($r in $repos) {
+        if (-not $r.Exists) {
+            Write-Output ("{0}  CARTELLA ASSENTE: {1}" -f $r.Label, $r.Path)
+            continue
+        }
+        if (-not $r.Branch) {
+            Write-Output ("{0}  git non disponibile o non e' un repository: {1}" -f $r.Label, $r.Path)
+            continue
+        }
+        $dirty = if ($r.Dirty -gt 0) { "$($r.Dirty) file da committare" } elseif ($r.Dirty -eq 0) { 'pulito' } else { 'stato ignoto' }
+        $sync = ''
+        if ($r.Ahead -ge 0) {
+            if ($r.Branch -eq 'main') { $sync = '' }
+            elseif ($r.Ahead -eq 0 -and $r.Behind -eq 0) { $sync = '  (identico a main: niente da mergiare)' }
+            else { $sync = ("  ({0} avanti, {1} indietro rispetto a main)" -f $r.Ahead, $r.Behind) }
+        }
+        Write-Output ("{0}  {1,-34} {2}{3}" -f $r.Label, $r.Branch, $dirty, $sync)
+    }
+
+    $known = @($repos | Where-Object { $_.Branch })
+    if ($known.Count -eq 2) {
+        Write-Output ""
+        if ($known[0].Branch -eq $known[1].Branch) {
+            Write-Output "OK - i due repository sono sullo stesso branch."
+        }
+        else {
+            Write-Output "ATTENZIONE - branch DIVERSI nei due repository."
+            Write-Output "  E' il rischio n.45 del Backlog: note e codice che si separano."
+            Write-Output "  ADR-0018: un branch per incremento, stesso nome nei due repo."
+        }
+    }
+}
+
+function Get-CodeClasses {
+    # Nel progetto vale la regola "nome file = nome classe" (Regole di Codice), quindi
+    # l'elenco dei nostri tipi E' l'elenco dei file .cs sotto Assets/_Project/Scripts.
+    # Niente euristiche: e' un dato esatto.
+    $dir = Join-Path $script:CodeRoot 'Assets\_Project\Scripts'
+    if (-not (Test-Path -LiteralPath $dir)) { return $null }
+    return @(Get-ChildItem -LiteralPath $dir -Recurse -Filter *.cs -File |
+        Where-Object { $_.FullName -notmatch '\\ThirdParty\\' } |
+        ForEach-Object {
+            [pscustomobject]@{
+                Name   = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
+                Folder = (Split-Path -Parent $_.FullName).Substring($dir.Length).TrimStart('\')
+            }
+        } | Sort-Object Folder, Name)
+}
+
+function Cmd-Code {
+    # "Se non e' scritto qui, non esiste" (CLAUDE.md) reso verificabile: quali classi del
+    # progetto Unity non sono nominate da nessuna nota.
+    #
+    # Si controlla SOLO questa direzione. L'inverso - una nota che cita una classe non piu
+    # esistente - richiederebbe di distinguere i nostri tipi da quelli di Unity
+    # (NavMeshAgent, MonoBehaviour, Vector3...) con un elenco da mantenere a mano, e
+    # produrrebbe piu falsi allarmi che informazione. Vedi il README.
+    $classes = Get-CodeClasses
+    if ($null -eq $classes) {
+        Write-Output "Non trovo il progetto Unity in: $($script:CodeRoot)"
+        Write-Output "Impostare la variabile d'ambiente CADAVER_UNITY se vive altrove."
+        exit 2
+    }
+
+    $body = ''
+    foreach ($n in Get-Notes) {
+        if ($n.Rel -like '99 - Templates\*') { continue }
+        $body += [string]::Join("`n", $n.Lines) + "`n"
+    }
+
+    $missing = @($classes | Where-Object { $body.IndexOf($_.Name, [System.StringComparison]::Ordinal) -lt 0 })
+    $total = @($classes).Count
+
+    Write-Output ("Classi nel progetto Unity: {0}    citate in KB: {1}    mai citate: {2}" -f `
+        $total, ($total - $missing.Count), $missing.Count)
+
+    if ($missing.Count -eq 0) {
+        Write-Output "Ogni classe del codice e' nominata da almeno una nota."
+        return
+    }
+
+    Write-Output ""
+    Write-Output "Mai citate da nessuna nota (la KB non le conosce):"
+    $missing | Group-Object Folder | Sort-Object Name | ForEach-Object {
+        Write-Output ("  " + $_.Name + "\")
+        foreach ($c in $_.Group) { Write-Output ("      " + $c.Name) }
+    }
+    Write-Output ""
+    Write-Output "Informativo, non un errore: un tool dell'editor o un manager minuto puo"
+    Write-Output "vivere dentro la scheda di un sistema senza essere nominato. Ma una classe"
+    Write-Output "di gameplay che non compare in nessuna nota e' codice senza memoria."
 }
 
 function Cmd-Trap {
@@ -795,6 +960,8 @@ switch ($Command.ToLower()) {
     'todo' { Cmd-Todo }
     'trap' { Cmd-Trap }
     'trappole' { Cmd-Trap }
+    'branch' { Cmd-Branch }
+    'code' { Cmd-Code }
     'stale' { Cmd-Stale }
     'stats' { Cmd-Stats }
     'check' { Cmd-Check }

@@ -126,6 +126,8 @@ Il progetto Unity **non sta qui**: vive in una cartella e in un repository separ
 9. **Un branch per incremento** (`inc-N-slug`, stesso nome nei due repo), **mai commit di
    codice di gioco su `main`** se non un merge verificato. Il merge richiede la verifica in
    Play Mode dell'utente: `main` deve sempre essere un gioco che parte.
+   **`kb branch` ogni volta che si riprende**: dice branch, stato e distanza da `main` nei due
+   repo in un colpo, e avvisa se divergono.
    → `02 - Regole/Workflow di Sviluppo.md` · `ADR-0018`
 10. **Sub-agenti solo per lettura e analisi** (audit, ricerche, riletture a freddo su file
    diversi), mai per scrivere codice di gioco o toccare la scena: c'è un solo Unity e la

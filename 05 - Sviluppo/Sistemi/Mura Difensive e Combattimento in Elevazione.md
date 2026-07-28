@@ -229,8 +229,8 @@ Demolizione del muro mentre occupato
   piazzamento, quando il camminamento che deve raggiungere ancora non esiste.
 
 - **Pannello di test in HUD**, aggiunto dopo il primo tentativo dell'utente ("non so come
-  costruire una scala, non so lo shortcut"): `BuildMenuPanel` +
-  `Cadaver Animatum ▸ Setup ▸ Pannello di Test - Costruzione e Mura (Debug)` — un bottone per
+  costruire una scala, non so lo shortcut"): `BuildMenuPanel` (UI) creato da `BuildMenuSetup`
+  → `Cadaver Animatum ▸ Setup ▸ Pannello di Test - Costruzione e Mura (Debug)` — un bottone per
   edificio, letto dagli hotkey già collegati (nessuna lista duplicata da tenere in sincrono),
   guidato dagli eventi `SelectionChanged`/`DemolitionModeChanged` invece che da un polling in
   `Update`. I tasti restano attivi in parallelo.

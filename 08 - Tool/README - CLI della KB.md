@@ -76,6 +76,33 @@ kb trap navmesh                   il DETTAGLIO su un sottosistema
 > Un elenco a mano invecchierebbe; questo comando legge i riquadri veri, quindi non può mentire.
 > → [[Regole di Ingaggio]] § *6b. Prima si misura, poi si cambia*
 
+### I due repository
+
+La KB e il progetto Unity vivono in **due repository separati**
+([[ADR-0012 - Dove vivono KB e progetto Unity]]), e [[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] impone un branch per incremento **con lo stesso nome nei due**.
+
+```bash
+kb branch     branch, stato e distanza da main nei DUE repo, con l'avviso se divergono
+kb code       classi del codice che nessuna nota nomina
+```
+
+`kb branch` esiste perché controllarlo a mano vuol dire due comandi in due cartelle, **ogni
+volta che si riprende** (`CLAUDE.md` regola 9). La divergenza fra note e codice è il rischio
+n.45 del [[Backlog]]: se i branch non coincidono, lo dice a voce alta.
+
+`kb code` rende verificabile *"se non è scritto qui, non esiste"*: elenca le classi del progetto
+che nessuna nota nomina. Si appoggia alla regola **nome file = nome classe**
+([[Regole di Codice]]), quindi l'elenco dei nostri tipi è un dato esatto, non un'euristica.
+
+> [!warning] Perché NON controlla anche il contrario
+> Verificare che una nota non citi una classe **scomparsa** richiederebbe di distinguere i
+> nostri tipi da quelli di Unity (`NavMeshAgent`, `MonoBehaviour`, `Vector3`…) con un elenco da
+> mantenere a mano: produrrebbe più falsi allarmi che informazione. È il motivo per cui questa
+> metà è stata scritta e l'altra no — non una dimenticanza.
+>
+> Il percorso del progetto Unity è quello di ADR-0013, scavalcabile con la variabile d'ambiente
+> `CADAVER_UNITY` per non legare il CLI a una sola macchina.
+
 ### Igiene della KB
 
 ```bash
