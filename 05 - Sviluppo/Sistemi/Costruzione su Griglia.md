@@ -232,6 +232,20 @@ BuildPlacementController.BeginPlacement(def)
 - Test automatici in `GridServiceTests.cs` (EditMode, nessun Play Mode) per `GridService`,
   stesso schema di `StockpileTests.cs`.
 
+> [!danger] Il ritaglio del NavMesh si dimensiona sull'oggetto reale, non sul footprint
+> Sono due cose diverse e possono divergere: il footprint decide le **celle riservate** (dato di
+> progetto), il `NavMeshObstacle` deve descrivere la **realtà fisica**.
+>
+> Averle confuse ha rotto il combattimento (2026-07-28, trovato dall'utente): `GridBootstrap`
+> dava al Cuore del Regno un ostacolo di **6×6** — il footprint dichiarato — mentre in scena il
+> Cuore è un cubo **2×2×2**. Il ritaglio teneva gli invasori a ~3.5 unità dal centro, ben oltre
+> il loro raggio d'ingaggio di 1.5: **arrivavano e non attaccavano più**, e nulla nel sintomo
+> puntava alla griglia.
+>
+> Ora `PlacedBuilding` ricava le misure dell'ostacolo dal collider dell'oggetto. Per gli edifici
+> piazzati dal giocatore le due misure coincidono, quindi non cambia nulla: la regola vale per
+> tutti proprio per non avere due strade da tenere allineate.
+
 ## Stato
 
 - [x] Progettato
