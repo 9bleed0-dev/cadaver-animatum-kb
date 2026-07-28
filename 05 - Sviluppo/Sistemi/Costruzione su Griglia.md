@@ -31,8 +31,10 @@ aggiornato: 2026-07-25
   nessuno ci lavora → [[Posto di Lavoro e Assegnazione]]
 - I costi sono `ResourceAmount[]` e il prelievo è **atomico**: se non basta tutto, non si spende
   niente → [[Risorse e Magazzino]]
-- **6 edifici**, non uno di più: Cuore/Cripta · Fossa · Cava · Miniera · Fucina · Muro
-  → [[ADR-0007 - Genere, core loop e scope del prototipo]]
+- **9 edifici** (esteso da 6 il 2026-07-28): Cuore/Cripta · Fossa/Mortuary · Cava · Miniera ·
+  Fucina · Muro · **Boscaiolo/Segheria** (Legna) · **Carpentiere** (Arco/Balestra) · **Caserma**
+  (reclutamento a classe) → [[ADR-0007 - Genere, core loop e scope del prototipo]],
+  [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
 
 ## Il problema tecnico noto
 
