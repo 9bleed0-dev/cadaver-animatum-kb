@@ -160,14 +160,24 @@ Il budget è 135-180 ore. Quindi:
 2. **L'Iterazione B (Icore + Putridarium) è fuori dalla finestra di settembre.** Resta progettata
    nei dati fin da subito — ma non si costruisce.
 
-> [!warning] Rischio di budget cresciuto due volte in una sessione (2026-07-28)
-> INC-7 ha accumulato due decisioni che allargano lo scope oltre il piano originale: una
-> durata di partita stile *They Are Billions* invece di 2-5 minuti
-> ([[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]]) e una
+> [!danger] Il target "M3 entro settembre" non è più garantito (2026-07-28)
+> INC-7 ha accumulato **quattro** decisioni che allargano lo scope oltre il piano originale:
+> una durata di partita stile *They Are Billions* invece di 2-5 minuti
+> ([[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]]), una
 > filiera produttiva più ricca (Carpentiere, Caserma, 4 risorse in più, combattimento a
-> distanza — [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]). Il budget dichiarato **non cambia**: se INC-7 sfora, i tagli vanno decisi
-> esplicitamente (Fucina con scelta multipla → Fucina a output singolo → Carpentiere intero),
-> non assorbiti allungando le ore.
+> distanza — [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]), le **mura scalabili** con combattimento in elevazione — proprio la "prima delle
+> tre tentazioni pericolose" elencata sopra — e ora anche **gli invasori che possono salire
+> una scala vicina**, che riapre la riga separata "IA d'assedio" più sotto
+> ([[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]]).
+>
+> Per tutte e quattro l'utente ha scelto esplicitamente **di non tagliare nulla per
+> compensare**: si accetta di sforare la finestra di settembre. Non è più un rischio
+> dichiarato-ma-forse-evitabile: è una conseguenza accettata. La prossima revisione onesta del
+> piano è a fine INC-7, con in mano le ore realmente spese.
+>
+> **Distinzione importante**: "gli invasori possono salire una scala" ≠ "IA d'assedio fatta
+> bene". Solo il primo entra ora; la sofisticazione tattica dell'IA nemica resta fuori scope,
+> in [[Backlog]], per una sessione futura — scelta dell'utente stesso.
 
 > [!tip] Perché il numero conta più del piano
 > Un piano senza budget di tempo produce sempre lo stesso esito: si arriva alla scadenza con

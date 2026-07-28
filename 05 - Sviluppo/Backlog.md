@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, backlog, pianificazione]
-aggiornato: 2026-07-27
+aggiornato: 2026-07-28
 ---
 
 # Backlog
@@ -47,6 +47,10 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | 42 | **Ribilanciare `WaveDefinition.waveIntervalSeconds`**: oggi è `15`, abbassato solo per far arrivare un'ondata prima della carestia durante il collaudo. Il valore vero si decide quando esisterà un modo di procurarsi Carne dai cadaveri | [[Ondate]] · [[Fame e Sussistenza]] |
 | 43 | **2 Soldati fissi contro una curva che cresce (+2 invasori/ondata) senza modo di aggiungerne altri**: atteso finché non esiste [[Scelta sul Cadavere]] (INC-6). **Osservato in pratica il 2026-07-28**: il Cuore del Regno è caduto all'Ondata 2 durante il collaudo di INC-6 — non un difetto di INC-6 (Mortuary/degrado hanno funzionato), ma la conferma che senza un modo di trasformare i Rialzati in nuovi difensori il muro non regge. **Risolto in design il 2026-07-28**: nuovo sistema [[Reclutamento e Ruoli]] (sudditi disoccupati reclutabili come Soldati), primo pezzo di INC-7 da progettare | [[Combattimento Base]] · [[Ondate]] · [[Reclutamento e Ruoli]] |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
+| 47 | **Menu di costruzione reale in HUD**: oggi [[Costruzione su Griglia]] si seleziona con i tasti 1-5 (imbracatura di test), non con un pannello cliccabile | [[Costruzione su Griglia]] · [[HUD Risorse]] |
+| 51 | **Orientare anche la Scala**: il Muro si orienta da sé secondo la direzione del trascinamento, la Scala no (sale sempre lungo Z per il vincolo "niente rotazione"): per una cinta che corre lungo Z non c'è modo di salire. Da fare insieme alla skin da scala vera | [[Mura Difensive e Combattimento in Elevazione]] · [[Costruzione su Griglia]] |
+| 50 | **Allineare il raggio dell'agente**: `UnitDefinition.radius` è 0.35 ma l'Agent Type "Humanoid" con cui si cuoce il NavMesh ha raggio 0.5 — è l'errore silenzioso contro cui avverte [[Movimento Unità]]. Non fatale oggi (l'agente è più piccolo, quindi tiene solo più margine), ma va deciso quale dei due è il valore vero: cambiarlo impone di ricuocere e riverificare tutto ciò che cammina | [[Movimento Unità]] · [[Mura Difensive e Combattimento in Elevazione]] |
+| 49 | **IA di assedio fatta bene**: oggi (ADR-0022) un invasore può solo salire una scala vicina se è la via più diretta; una vera IA d'assedio (cerca deliberatamente una scala, coordina un assalto su più fronti, sceglie di abbattere un muro invece di aggirarlo) resta esplicitamente fuori scope — decisione dell'utente, non dimenticanza | [[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]] · [[Mura Difensive e Combattimento in Elevazione]] |
 
 ---
 
@@ -96,7 +100,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 
 | # | Idea | Da chi / quando |
 |---|---|---|
-| — | *(vuoto)* | |
+| 46 | **Costruttore zombie animato**: durante il piazzamento, un rialzato dedicato cammina fino al cantiere e recita/anima la costruzione invece che l'edificio comparisse istantaneo. Tematicamente forte (il macabro-burocratico che lavora), ma richiede uno stato di "cantiere in corso" che oggi non esiste — [[Costruzione su Griglia]] resta a costruzione istantanea per INC-7a | utente, 2026-07-28, durante la progettazione tecnica di [[Costruzione su Griglia]] |
 
 ---
 
@@ -140,6 +144,9 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | **INC-5 verificato in Play Mode dall'utente**: ondata, combattimento, cadaveri che restano in scena (nostri e nemici) — nessun errore in Console | 2026-07-27 |
 | **UnityYAMLMerge configurato** (era la voce 12): verificato — `merge.unityyamlmerge.driver` attivo e `.gitattributes` mappa scene/prefab/asset/meta | 2026-07-27 |
 | **Workflow di sviluppo deciso**: branch per incremento, task vs Backlog, sub-agenti solo lettura, imbuto esteso al codice ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] + [[Workflow di Sviluppo]]) | 2026-07-27 |
+| **INC-7a progettato, scritto e verificato in Play Mode**: [[Costruzione su Griglia]] — griglia logica pura (+8 test EditMode), fantasma di piazzamento, mura a trascinamento con anteprima veritiera cella per cella, demolizione a modalità dedicata | 2026-07-28 |
+| **INC-7c progettato, scritto e verificato in Play Mode**: [[Mura Difensive e Combattimento in Elevazione]] — mura calpestabili, Scala, combattimento in quota, rifiuto ragionato se la cima non è raggiungibile ([[ADR-0022 - Mura scalabili - camminamento e combattimento in elevazione]]) | 2026-07-28 |
+| **Tre trappole del NavMesh su più livelli documentate** in [[Navigazione e Pathfinding]] (ostacolo che esclude dalla bake, erosione per raggio agente, superfici che non si fondono) — costate ~6 giri di collaudo, risolte scrivendo un tool di diagnosi invece di indovinare | 2026-07-28 |
 | **INC-6 progettato, scritto e verificato in Play Mode**: [[Cadavere e Degrado]], [[Scelta sul Cadavere]] — raccolta automatica, degrado visibile, Macella/Rialza in blocco alla Mortuary ([[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]]), branch `inc-6-bivio-cadavere` mergiato su `main` | 2026-07-28 |
 
 ## Collegamenti
