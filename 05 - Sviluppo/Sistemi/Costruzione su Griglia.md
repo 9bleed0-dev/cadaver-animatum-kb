@@ -99,6 +99,37 @@ va reso visibile, non impedito.
   bottone esce dalla modalità. Stesso schema del piazzamento — nessun rischio di demolire per
   un click accidentale durante il gioco normale.
 
+## Decisioni di progetto — round 3, 2026-07-28 (INC-7b)
+
+- **Legna, Ferro e Pietra hanno un doppio uso**: sono sia l'ingresso di produzione di
+  [[Fucina]] e [[Carpentiere]], sia il **costo di costruzione** degli edifici stessi —
+  richiesto esplicitamente dall'utente, che non erano due economie separate nella sua idea.
+  Il costo di costruzione si preleva dallo stesso `Stockpile` con lo stesso
+  `TryWithdraw(cost)` già usato dal Muro, nessun meccanismo nuovo.
+- **Boscaiolo/Fucina/Carpentiere/Caserma escono dal costo zero**: ora hanno un costo reale,
+  placeholder come tutto il resto del bilanciamento (stesso principio di
+  [[Posto di Lavoro e Assegnazione]] § *Dati e parametri* — un numero per far vedere la
+  meccanica funzionare, non un valore tarato):
+
+  | Edificio | Footprint | Costo (placeholder) |
+  |---|---|---|
+  | Muro | 1×1 | 5 Pietra *(invariato da INC-7a)* |
+  | Boscaiolo/Segheria | 3×3 | 15 Pietra |
+  | Carpentiere | 4×4 | 15 Legna + 10 Pietra |
+  | Fucina | 4×4 | 15 Ferro + 10 Pietra |
+  | Caserma | 4×4 | 20 Pietra |
+
+  > [!warning] Nessuna risorsa costa se stessa
+  > Il Boscaiolo (produce Legna) costa solo Pietra, non Legna — altrimenti il primo Boscaiolo
+  > sarebbe bloccato finché non esiste già un Boscaiolo. Stesso principio implicito per
+  > Carpentiere e Fucina: costano anche la loro stessa risorsa di *output* mescolata a Pietra,
+  > ma **mai** la risorsa che consumano come *input* di produzione in quantità tale da
+  > impedire il primo esemplare — la Pietra (sempre disponibile da Cava fin dall'inizio) resta
+  > la base comune.
+- Questi numeri **non sono nello scope di bilanciamento di questa scheda**: si rivedono a
+  INC-7d insieme al resto della curva, stesso principio già scritto in [[Briefing]] per i
+  Soldati fissi — una leva prima si costruisce, poi si tara.
+
 ## Struttura tecnica
 
 **Classi**
@@ -215,8 +246,9 @@ BuildPlacementController.BeginPlacement(def)
   già in scena dagli incrementi precedenti — non si piazzano, li registra `GridBootstrap`. I
   piazzabili tramite `BuildPlacementController` sono **Muro** (1×1, costo reale: 5 Pietra) e,
   solo per provare la griglia su footprint più grandi, **Boscaiolo/Segheria (3×3)**,
-  **Fucina/Caserma/Carpentiere (4×4)** a costo zero — le loro schede restano "da progettare"
-  ([[Fucina]] e sorelle), non è nello scope di questa scheda decidere la loro economia.
+  **Fucina/Caserma/Carpentiere (4×4)** a costo zero — le loro schede restavano "da progettare"
+  ([[Fucina]] e sorelle), non era nello scope di questa scheda decidere la loro economia.
+  **Superato in INC-7b**, vedi sotto.
 - **Menu di costruzione non ancora reale**: tasti 1-5 selezionano i piazzabili sopra, `M`
   entra/esce dalla modalità demolizione, `Esc` annulla — un'imbracatura di test, non l'HUD
   finale (→ Backlog #47).

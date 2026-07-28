@@ -1,50 +1,110 @@
 ---
-tags: [sistema, economia, edifici, stub]
-stato: da-progettare
+tags: [sistema, economia, edifici]
+stato: progettato
 aggiornato: 2026-07-28
 ---
 
 # Sistema: Carpentiere
 
-> Trasforma Legna in Arco **oppure** Balestra, a scelta del giocatore.
+> Trasforma Legna in Arco **oppure** Balestra. La scelta è **fissa per edificio**: resta
+> attiva finché il giocatore non la cambia esplicitamente da un pannello dedicato.
 
-**Incremento:** INC-7 di [[Piano Prototipo]] · **Namespace:** `Bleed.Gameplay`
+**Incremento:** INC-7b di [[Piano Prototipo]] · **Namespace:** `Bleed.Gameplay` + `Bleed.UI`
 
-> [!warning] Scheda non ancora progettata
-> Nasce durante la preparazione di INC-7 (2026-07-28), non nel piano originale — parte
-> dell'espansione di scope decisa in
-> [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]].
+## Scopo di design
 
-## Perché esiste
-
-Dà a Legna un motivo di esistere, esattamente come [[Fucina]] lo dà al Ferro — ma con una
+Dà a Legna un motivo di esistere, esattamente come la [[Fucina]] lo dà al Ferro — ma con una
 differenza: qui la scelta di **cosa** produrre (Arco o Balestra) è del giocatore, non fissa.
 È il primo edificio del prototipo con un vero bivio di produzione, non solo un input→output.
 
-## Vincoli già decisi
+## Comportamento atteso
 
-- Uno dei 9 edifici del prototipo (esteso da 6) → [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
-- Consuma **Legna** (prodotta da Boscaiolo/Segheria, un `WorkSite` come Cava/Miniera) e
-  produce **Arco** o **Balestra** — il giocatore sceglie quale, non entrambi insieme.
-- È un [[Posto di Lavoro e Assegnazione]] come Cava/Miniera/Fucina: un lavoratore assegnato
-  produce nel tempo. La differenza è solo la scelta dell'output.
-- Le armi prodotte (Arco/Balestra) sono consumate dalla **Caserma** per reclutare un Arciere
-  → [[Reclutamento e Ruoli]].
+Un lavoratore assegnato al Carpentiere lavora come a Cava/Miniera/Fucina: cammina, arriva,
+produce a tick. La differenza è che il Carpentiere ha un **toggle persistente** (Arco o
+Balestra) che decide quale risorsa esce da quella produzione — un solo output alla volta, mai
+entrambi insieme.
 
-## Le domande da chiudere quando si progetta
+Il giocatore seleziona l'edificio e vede un pannello dedicato (non il pattern a pulsanti di
+[[Scelta sul Cadavere]], che è pensato per una selezione di oggetti sul campo, non per un
+edificio con uno stato persistente): mostra quale delle due armi è attiva ora, con un comando
+per cambiarla. Cambiare il toggle non richiede conferma — non distrugge nulla, cambia solo cosa
+produrrà il *prossimo* tick.
 
-- La scelta Arco/Balestra è per edificio (un Carpentiere produce sempre lo stesso finché non
-  la cambi) o per singolo ciclo di produzione (puoi alternare liberamente)?
-- Arco e Balestra hanno rese/tempi diversi, o sono equivalenti come quantità e cambia solo cosa
-  rappresentano per l'Arciere che le usa? *(Nel prototipo, probabilmente equivalenti: la
-  differenza vera si gioca in [[Reclutamento e Ruoli]], non qui.)*
-- Come si mostra in UI la scelta attiva del Carpentiere? Riusa il pattern a pulsanti di
-  [[Scelta sul Cadavere]] (ADR-0019) o serve qualcosa di diverso essendo legato a un edificio
-  specifico, non a una selezione di oggetti?
+## Regole e casi limite
+
+- **La scelta è per edificio, non per ciclo**: ogni Carpentiere ricorda la propria scelta
+  (Arco o Balestra) come stato persistente, non la rinegozia a ogni tick.
+- **Arco e Balestra sono equivalenti in produzione**: stessa resa (`_yieldPerTickPerWorker`),
+  stesso consumo di Legna, stesso comportamento — cambia solo quale `ResourceType` esce dal
+  magazzino. La differenza reale (danno, cadenza) si progetta più avanti sull'Arciere che le
+  userà → [[Reclutamento e Ruoli]]. *Deciso così per non bilanciare due economie diverse in un
+  sistema che sta già cambiando struttura.*
+- **Cambiare il toggle a metà ciclo**: il progresso del tick in corso verso l'output
+  precedente **non si porta dietro** al nuovo output — il ciclo in corso si azzera e riparte
+  con la nuova scelta al tick successivo. Nessuna conversione parziale da gestire.
+- Consuma **Legna** (prodotta da Boscaiolo/Segheria, un `WorkSite` semplice come Cava/Miniera —
+  nessuna scheda propria: stesso pattern, nessuna decisione nuova).
+- **Non risolto in questo incremento** (deliberatamente): nessun consumo di Arco/Balestra — la
+  Caserma arriva in INC-7c → [[Piano Prototipo]] § *INC-7b*.
+- **La Legna ha un doppio uso**: è sia l'ingresso di produzione del Carpentiere sia parte del
+  costo di costruzione del Carpentiere stesso (e di altri edifici) → [[Costruzione su Griglia]]
+  § *Decisioni di progetto — round 3*. Nessun meccanismo nuovo: la costruzione preleva dallo
+  stesso `Stockpile`, con lo stesso `TryWithdraw` già usato dal Muro.
+
+## Dati e parametri
+
+| Parametro | Tipo | Default | Dove sta |
+|---|---|---|---|
+| `_activeOutput` | `ResourceType` | Arco | sul componente, **persistente per istanza** (serializzato, si mostra in UI) |
+| `_consumedResource` | `ResourceType` | Legna | sul componente |
+| `_consumedPerUnit` | float | 1 | Legna richiesta per 1 unità d'arma, non bilanciato |
+| `_yieldPerTickPerWorker` | float | 1 | invariato, uguale per Arco e Balestra |
+| `_maxWorkers` | int | 1 | invariato dal pattern esistente |
+
+## Struttura tecnica
+
+**Classi**
+- Stessa base del [[Fucina|Fucina]] (`WorkSite` con consumo in ingresso), con l'aggiunta di
+  `_activeOutput` come campo scelto dal giocatore invece che fisso in editor. La "scelta
+  dell'output" è pensata come architettura condivisa fra Fucina e Carpentiere (vedi scheda
+  Fucina § *Struttura tecnica*): qui il toggle è attivo, lì è predisposto e basta.
+- Un componente/pannello UI dedicato (`CarpenterPanel` o simile, nome definitivo in fase di
+  codice) che appare alla selezione dell'edificio: mostra l'output attivo, espone il comando
+  per cambiarlo. **Diverso** dal pattern di [[Scelta sul Cadavere]] — quello agisce su una
+  batch di oggetti selezionati sul campo (i cadaveri), questo su uno stato persistente di un
+  singolo edificio.
+
+**Dipendenze**
+- [[Risorse e Magazzino]] (via `EconomyRunner`), [[Movimento Unità]] (via `Worker`) — come
+  ogni `WorkSite`.
+- [[Selezione e Comandi]]: il pannello si apre alla selezione dell'edificio, stesso principio
+  già usato per mostrare informazioni su un'unità/edificio selezionato.
+
+**Assembly**: `Bleed.Gameplay` (logica) + `Bleed.UI` (pannello)
+
+## Diagramma
+
+```
+Giocatore seleziona il Carpentiere
+      │
+      ▼
+CarpenterPanel mostra _activeOutput, espone "Cambia"
+      │ (giocatore preme Cambia)
+      ▼
+Carpentiere._activeOutput = altro valore   (azzera il progresso del tick in corso)
+
+EconomyRunner.EconomyTicked  ──►  Carpentiere.HandleEconomyTicked
+                                        │
+                          Stockpile ha abbastanza Legna? ──► no ──► salta il tick
+                                        │ sì
+                                        ▼
+                         Stockpile.Withdraw(Legna, consumo × arrivati)
+                         Stockpile.Deposit(_activeOutput, resa × arrivati)
+```
 
 ## Stato
 
-- [ ] Progettato
+- [x] Progettato — 2026-07-28
 - [ ] Prototipato
 - [ ] Implementato
 - [ ] Bilanciato
@@ -53,6 +113,7 @@ differenza: qui la scelta di **cosa** produrre (Arco o Balestra) è del giocator
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Fucina]] · [[Reclutamento e Ruoli]] · [[Posto di Lavoro e Assegnazione]]
+- [[Selezione e Comandi]] · [[Scelta sul Cadavere]] · [[Costruzione su Griglia]]
 - [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
 - [[Risorse e Magazzino]] · [[Stronghold e They Are Billions]] · [[Scope e Anti-Scope]]
 - [[_Indice Sistemi]] · [[TEMPLATE-Sistema]]
