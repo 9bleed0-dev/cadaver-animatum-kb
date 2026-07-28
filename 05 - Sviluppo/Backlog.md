@@ -45,7 +45,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 |---|---|---|
 | 39 | **Il menu di [[Scelta sul Cadavere]] (INC-6) deve distinguere il "di chi era" il cadavere**: nemico (tutte le opzioni), rialzato caduto (solo Rialzare), suddito iniziale caduto (solo Rialzare, mai altro) | [[ADR-0017 - I rialzati caduti in combattimento tornano cadavere]] — il tag nasce a INC-5, la regola si applica a INC-6 |
 | 42 | **Ribilanciare `WaveDefinition.waveIntervalSeconds`**: oggi è `15`, abbassato solo per far arrivare un'ondata prima della carestia durante il collaudo. Il valore vero si decide quando esisterà un modo di procurarsi Carne dai cadaveri | [[Ondate]] · [[Fame e Sussistenza]] |
-| 43 | **2 Soldati fissi contro una curva che cresce (+2 invasori/ondata) senza modo di aggiungerne altri**: atteso finché non esiste [[Scelta sul Cadavere]] (INC-6), ma da tenere d'occhio quando si bilancia INC-7 | [[Combattimento Base]] |
+| 43 | **2 Soldati fissi contro una curva che cresce (+2 invasori/ondata) senza modo di aggiungerne altri**: atteso finché non esiste [[Scelta sul Cadavere]] (INC-6). **Osservato in pratica il 2026-07-28**: il Cuore del Regno è caduto all'Ondata 2 durante il collaudo di INC-6 — non un difetto di INC-6 (Mortuary/degrado hanno funzionato), ma la conferma che senza un modo di trasformare i Rialzati in nuovi difensori il muro non regge. Da bilanciare quando si passa a INC-7 | [[Combattimento Base]] · [[Ondate]] |
 | 11 | Congelare `pitch` e `yaw` della camera dopo averli provati | [[Camera Isometrica]] |
 
 ---
@@ -140,6 +140,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | **INC-5 verificato in Play Mode dall'utente**: ondata, combattimento, cadaveri che restano in scena (nostri e nemici) — nessun errore in Console | 2026-07-27 |
 | **UnityYAMLMerge configurato** (era la voce 12): verificato — `merge.unityyamlmerge.driver` attivo e `.gitattributes` mappa scene/prefab/asset/meta | 2026-07-27 |
 | **Workflow di sviluppo deciso**: branch per incremento, task vs Backlog, sub-agenti solo lettura, imbuto esteso al codice ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]] + [[Workflow di Sviluppo]]) | 2026-07-27 |
+| **INC-6 progettato, scritto e verificato in Play Mode**: [[Cadavere e Degrado]], [[Scelta sul Cadavere]] — raccolta automatica, degrado visibile, Macella/Rialza in blocco alla Mortuary ([[ADR-0019 - Interazione col cadavere - raccolta automatica e assegnazione in blocco alla Mortuary]]), branch `inc-6-bivio-cadavere` mergiato su `main` | 2026-07-28 |
 
 ## Collegamenti
 - [[Scope e Anti-Scope]] · [[Piano Prototipo]] · [[Roadmap e Milestone]]
