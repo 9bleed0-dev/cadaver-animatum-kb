@@ -113,8 +113,8 @@ UnitTextureSetup (Editor)          SudditiMaterial / InvasoriMaterial (cache run
 ## Stato
 
 - [x] Progettato
-- [ ] Prototipato (funziona coi cubi) — **da verificare dall'utente in Unity**: il codice non è
-  ancora stato eseguito, questa sessione non ha accesso all'Editor
+- [x] Prototipato (funziona coi cubi) — **verificato dall'utente in Play Mode il 2026-07-29**:
+  texture visibili su unità in scena e su unità spawnate a runtime
 - [x] Implementato (unità in scena **e** spawn a runtime)
 - [ ] Bilanciato
 - [ ] Rifinito (game feel)
