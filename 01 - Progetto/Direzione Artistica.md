@@ -1,7 +1,7 @@
 ---
 tags: [progetto, grafica, arte, animazione]
 stato: bozza-approvata
-aggiornato: 2026-07-28
+aggiornato: 2026-07-29
 ---
 
 # Direzione Artistica
@@ -119,9 +119,20 @@ Fredda e piatta di giorno. La luce fa gran parte del lavoro atmosferico ed è gr
 > le capsule grigie, senza nessun modello né animazione nuova. Quando arriveranno i modelli
 > veri, erediteranno lo stesso colore: niente di questo lavoro si butta.
 
+> [!warning] Seconda eccezione, in **contraddizione diretta** con questa nota — ADR-0025 (2026-07-29)
+> Questa nota dice esplicitamente *"distinzione tra unità affidata a silhouette e colore, non
+> ai dettagli"* e riserva l'80% del budget di attenzione alle animazioni, il 20% ai modelli.
+> [[ADR-0025 - Texture procedurali per le unita - supera parzialmente ADR-0024]] va nella
+> direzione opposta per le sole unità: aggiunge texture procedurali (pattern di superficie
+> generati in C#, non modelli né animazioni) sopra il colore fisso, su richiesta esplicita
+> dell'utente e dopo essere stato avvertito della contraddizione. Non cambia questa nota per
+> il gioco finito — resta la direzione di riferimento — ma per il prototipo, da oggi, la
+> distinzione delle unità non è più solo colore.
+
 ## Collegamenti
 - [[ADR-0008 - Stile visivo e dimensione]]
 - [[ADR-0024 - Leggibilita minima nel prototipo - colore prima dei modelli]]
+- [[ADR-0025 - Texture procedurali per le unita - supera parzialmente ADR-0024]]
 - [[Pilastri di Design]]
 - [[Game Feel e Juice]]
 - [[Lezione 02 - Perché il prototipo è fatto di cubi grigi]]

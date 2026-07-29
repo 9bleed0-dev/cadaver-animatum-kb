@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, backlog, pianificazione]
-aggiornato: 2026-07-28
+aggiornato: 2026-07-29
 ---
 
 # Backlog
@@ -79,6 +79,7 @@ Prima di entrare nel progetto deve passare il filtro di [[Scope e Anti-Scope]]:
 | 33 | **L'assalto annunciato** che porta il frammento | è la condizione di fine run (ADR-0015): un ufficiale dell'Inquisizione in un'ondata dichiarata → [[Ondate]] |
 | 29 | **Decidere il secolo** dell'ambientazione | le credenze sulla peste sono del 1348, le cronache dei revenant del XII sec., il grimorio del XV: ~250 anni mescolati sotto un pilastro che vieta gli anacronismi. Finestra proposta: **fine XIV / inizio XV** |
 | 30 | **Confermare: i sudditi iniziali sono morti?** | [[Il Rituale]] contiene due letture non conciliate. Proposta: sì, sono `cadaver animatum` |
+| 56 | **Verificare la granularità dei colori per ruolo dopo il merge di INC-7b**: `ReadabilitySetup.cs` oggi tinge solo Sudditi/Invasori, non i singoli ruoli reclutati (Guerriero, Arciere, Balestriere). [[Texture delle Unità]] (INC-9) ha bisogno di sapere quanti colori-base distinti esisteranno prima di decidere quanti pattern-texture servono | [[ADR-0025 - Texture procedurali per le unita - supera parzialmente ADR-0024]] · [[ADR-0024 - Leggibilita minima nel prototipo - colore prima dei modelli]] |
 
 ---
 
