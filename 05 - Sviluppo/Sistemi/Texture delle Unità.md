@@ -44,13 +44,12 @@ assegnato da `ReadabilityPalette` — la texture non lo sostituisce, ci si sovra
 - Le unità create a runtime (spawn ondate, reclutamento) devono ricevere la texture giusta
   allo spawn, non solo quelle già presenti in scena all'avvio — stesso problema già risolto da
   ADR-0024 per il colore su `WaveManager`/`Mortuary`.
-  > [!warning] Non ancora fatto
-  > `WaveManager.cs` e `Mortuary.cs`/`Recruiter.cs` sono file attivamente modificati da INC-7b
-  > (non ancora mergiato). Toccarli ora in questo worktree isolato significherebbe biforcarli
-  > da una versione che sta per cambiare molto, con conflitti di merge quasi garantiti. Per
-  > ora la texture si applica solo a ciò che esiste già in scena (`Worker_A/B`, `Soldato_A/B`)
-  > tramite il tool dell'editor. L'aggancio allo spawn a runtime resta un passo separato, da
-  > fare **dopo** il merge di INC-7b.
+  > [!info] Fatto — dopo il merge di INC-7b in `main`
+  > `WaveManager.cs`, `Recruiter.cs` e `Mortuary.cs` erano file attivamente modificati da
+  > INC-7b: si è aspettato il merge di `main` dentro `inc-9-texture-unita` prima di toccarli,
+  > per non biforcare codice in movimento. Ora che INC-7b è stabile, le tre righe che
+  > impostavano solo `.material.color` sono state sostituite con
+  > `.sharedMaterial = UnitTextureCatalog.SudditiMaterial` (o `.InvasoriMaterial`).
 - Nessuna texture generata deve richiedere un file immagine esterno: se in futuro serve un
   asset importato, è un cambio di scope che torna a passare da un ADR, non una scelta silenziosa
   qui.
@@ -76,19 +75,24 @@ assegnato da `ReadabilityPalette` — la texture non lo sostituisce, ci si sovra
   per pattern (`Grana` = rumore valore, `Righe` = strisce orizzontali, `Maglie` = griglia
   puntinata, `Chiazze` = macchie a blob). Pura funzione dati-in dati-out, testabile senza
   Unity Editor in esecuzione.
+- `UnitTextureCatalog` (classe statica, `Bleed.Data`) — la **fonte unica** della coppia
+  tipo→pattern (Sudditi→Chiazze, Invasori→Righe): sia `UnitTextureSetup` (Editor) sia i tre
+  punti di spawn a runtime la leggono da qui, non la duplicano. Espone anche `SudditiMaterial`/
+  `InvasoriMaterial`: materiali generati e messi in cache una sola volta (non uno per unità
+  spawnata), costruiti con `ProceduralTextureGenerator` senza toccare `AssetDatabase` (che non
+  esiste fuori dall'Editor) — sicuro anche in una build.
 - `UnitTextureSetup` (Editor tool, `Bleed.Editor`) — stesso ruolo di `ReadabilitySetup.cs` ma
-  per le texture: per ogni `UnitTextureDefinition` genera (o rigenera) il `Texture2D`, lo
-  salva come asset `.png` sotto `Assets/_Project/Art/Textures/`, costruisce un `Material` che
-  lo referenzia (stesso pattern di `LoadOrCreateColorMaterial`, esteso con `SetTexture` oltre
-  a `SetColor`) e lo applica alle unità esistenti in scena.
+  per le texture: per ogni `UnitTextureDefinition` (letta da `UnitTextureCatalog`) genera (o
+  rigenera) il `Texture2D`, lo salva come asset `.png` sotto `Assets/_Project/Art/Textures/`,
+  costruisce un `Material` persistente (per l'Inspector) e lo applica alle unità già in scena.
 
 **Dipendenze**
 - Dipende da `ReadabilityPalette` (ADR-0024) per il colore di base di ogni tipo — copiato alla
   creazione dell'asset, non un riferimento vivo (vedi tabella sopra).
-- **Non ancora agganciato** allo spawn a runtime (`WaveManager` per gli Invasori,
-  `Mortuary`/`Recruiter` per Sudditi e ruoli): quei file sono in modifica attiva su INC-7b,
-  toccarli ora avrebbe biforcato codice che sta per cambiare. Oggi copre solo le unità già
-  presenti in scena (`Worker_A/B`, `Soldato_A/B`), applicate dal tool dell'editor.
+- Agganciato allo spawn a runtime: `WaveManager.SpawnEnemy` (Invasori),
+  `Recruiter.SpawnRecruit` e `Mortuary.RaiseSubject` (Sudditi) assegnano
+  `UnitTextureCatalog.InvasoriMaterial`/`.SudditiMaterial` come `sharedMaterial` appena l'unità
+  nasce — un materiale condiviso e cacheato, non un'istanza per unità.
 - Non emette e non ascolta eventi: è un livello visivo puro, non tocca gameplay/logica.
 
 **Assembly**: `Bleed.Data` (definizione + generatore, in `Scripts/Data/`), `Bleed.Editor`
@@ -98,14 +102,12 @@ namespace, la separazione Editor/runtime viene dalla cartella `Editor/` speciale
 ## Diagramma
 
 ```
-UnitTextureDefinition (Sudditi, Invasori — un asset per tipo)
-        ↓
-ProceduralTextureGenerator → Texture2D
-        ↓
-UnitTextureSetup → salva .png + Material (baseColor + texture)
-        ↓
-applicato oggi a: Worker_A/B, Soldato_A/B in scena (menu editor)
-non ancora a: unità spawnate da WaveManager/Recruiter (dopo il merge di INC-7b)
+UnitTextureCatalog (fonte unica: Sudditi→Chiazze, Invasori→Righe)
+        ↓                                   ↓
+UnitTextureSetup (Editor)          SudditiMaterial / InvasoriMaterial (cache runtime)
+  → asset persistenti                        ↓
+  → Worker_A/B, Soldato_A/B         WaveManager.SpawnEnemy, Recruiter.SpawnRecruit,
+    in scena                         Mortuary.RaiseSubject → sharedMaterial allo spawn
 ```
 
 ## Stato
@@ -113,7 +115,7 @@ non ancora a: unità spawnate da WaveManager/Recruiter (dopo il merge di INC-7b)
 - [x] Progettato
 - [ ] Prototipato (funziona coi cubi) — **da verificare dall'utente in Unity**: il codice non è
   ancora stato eseguito, questa sessione non ha accesso all'Editor
-- [x] Implementato (per le unità in scena — non per lo spawn a runtime, vedi sopra)
+- [x] Implementato (unità in scena **e** spawn a runtime)
 - [ ] Bilanciato
 - [ ] Rifinito (game feel)
 - [ ] Done secondo [[Definition of Done]]
@@ -140,6 +142,13 @@ non ancora a: unità spawnate da WaveManager/Recruiter (dopo il merge di INC-7b)
 - **Come verificare**: aprire il progetto in Unity, menu `Cadaver Animatum ▸ Setup ▸ Texture
   delle Unità (ADR-0025)` (richiede aver già eseguito `Leggibilità Minima (ADR-0024)` prima).
   Genera gli asset in `Assets/_Project/Data/UnitTextures/`, `Art/Textures/`, `Art/Materials/`.
+  Poi Play Mode: un'ondata (Invasori) e un reclutamento/rialzo (Sudditi) devono mostrare la
+  texture senza rieseguire nulla — il materiale arriva da `UnitTextureCatalog` allo spawn.
+- **Aggancio a runtime aggiunto il 2026-07-29**, dopo il merge di `main` (INC-7b) dentro
+  questo branch: `WaveManager.SpawnEnemy`, `Recruiter.SpawnRecruit`, `Mortuary.RaiseSubject`
+  ora assegnano `sharedMaterial` da `UnitTextureCatalog` invece di impostare solo `.color` su
+  un'istanza di materiale. Prima del merge questo non era possibile senza biforcare file in
+  modifica attiva sull'altro branch.
 
 ## Collegamenti
 - [[ADR-0025 - Texture procedurali per le unita - supera parzialmente ADR-0024]]
