@@ -1,6 +1,6 @@
 ---
 tags: [sviluppo, piano, prototipo, milestone]
-aggiornato: 2026-07-27
+aggiornato: 2026-07-29
 ---
 
 # Piano Prototipo
@@ -43,6 +43,22 @@ L'ordine non è "dal facile al difficile". È: **prima i rischi, e la fame prima
 | **INC-6** | **Il bivio** | macelli o rialzi ogni cadavere, e i corpi scadono | **è il gioco.** Tutto prima esiste per arrivare qui |
 | **INC-7** | La partita | giochi 5 minuti, vinci o perdi | serve una partita, non una sandbox |
 | **INC-8** | Il verdetto | due persone ci giocano e tu decidi | il prototipo esiste per **rispondere**, non per crescere |
+| **INC-9** | Texture delle unità *(non pianificato, aperto il 2026-07-29)* | ogni tipo di unità ha una texture procedurale distinta, non solo colore | vedi nota sotto — inserito **fuori ordine**, prima del verdetto |
+
+> [!warning] INC-9 è un'inserzione fuori piano, in parallelo a INC-7b
+> Aperta su richiesta esplicita dell'utente il 2026-07-29, **prima** che INC-7b/7f/7d fossero
+> verificati in Play Mode e prima di INC-8 (che a quella data non è comunque raggiungibile:
+> richiede INC-7 chiuso). Non è la stessa cosa di INC-8 — INC-8 resta "Il verdetto", zero
+> codice, playtest con due persone esterne. Va contro [[Direzione Artistica]] (silhouette e
+> colore, non dettagli) e contro il rischio di derapata già segnalato in
+> [[Lezione 02 - Perché il prototipo è fatto di cubi grigi]] — decisione presa consapevolmente
+> dall'utente comunque, dopo essere stato avvertito di entrambe le cose.
+> Lavorato in `git worktree` separato (branch `inc-9-texture-unita`), non nella stessa working
+> directory di `inc-7b-economia-estesa`, per il vincolo del singolo Unity
+> ([[ADR-0018 - Workflow di sviluppo - branch, task e sub-agenti]]). Il merge in `main` di
+> entrambi gli incrementi andrà verificato con attenzione per conflitti su file condivisi.
+> → [[ADR-0025 - Texture procedurali per le unita - supera parzialmente ADR-0024]] ·
+> [[Texture delle Unità]]
 
 > [!info] Stato al 2026-07-27
 > **INC-0, INC-1, INC-2, INC-3, INC-4, INC-5 tutti verificati in Play Mode dall'utente.**
