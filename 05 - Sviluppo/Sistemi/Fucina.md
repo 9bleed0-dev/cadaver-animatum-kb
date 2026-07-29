@@ -1,10 +1,18 @@
 ---
-tags: [sistema, economia, edifici]
-stato: progettato
+tags: [sistema, economia, edifici, tagliato]
+stato: tagliato
 aggiornato: 2026-07-28
 ---
 
 # Sistema: Fucina
+
+> [!danger] Tagliato — 2026-07-28
+> [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
+> ha cancellato la Fucina prima che venisse implementata (stato "progettato", zero codice
+> scritto). La Caserma ora recluta il Guerriero consumando materiali grezzi (Ferro/Legna)
+> direttamente, senza il passaggio intermedio della Spada → [[Reclutamento e Ruoli]]. Questa
+> scheda **resta come archivio**: se in futuro (fuori scope M3) si vorrà reintrodurre una
+> filiera produttiva a più stadi, il design qui sotto è pronto all'uso.
 
 > Trasforma Ferro in Spada. Un [[Posto di Lavoro e Assegnazione|WorkSite]] come Cava o
 > Miniera, con una differenza sola: **consuma** una risorsa dal magazzino invece di estrarla
@@ -96,24 +104,26 @@ EconomyRunner.EconomyTicked  ──►  Fucina.HandleEconomyTicked
                          Stockpile.Deposit(Spada, resa × arrivati)
 ```
 
-> [!warning] Candidato al taglio
-> Se il budget di [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]] stringe, la Fucina resta **il primo pezzo da tagliare**: il core loop (fame →
-> carne → cadaveri → nemici) funziona senza. Tagliarla toglie la via Guerriero dalla Caserma
-> (niente Spada), ma lascia in piedi la via Arciere se il [[Carpentiere]] esiste ancora — non
-> sono legate. → [[Scope e Anti-Scope]] § *Come si taglia*
+> [!warning] Candidato al taglio — **tagliato per davvero il 2026-07-28**
+> Questa scheda segnalava la Fucina come primo pezzo da tagliare in caso di budget stretto.
+> È successo prima ancora che il budget lo richiedesse: l'utente ha deciso di semplificare
+> l'intera filiera produttiva, non solo per budget → [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]. Il testo sotto resta
+> com'era progettato, per archivio.
 
 ## Stato
 
 - [x] Progettato — 2026-07-28
-- [ ] Prototipato
-- [ ] Implementato
-- [ ] Bilanciato
-- [ ] Rifinito
-- [ ] Done secondo [[Definition of Done]]
+- [x] **Tagliato — 2026-07-28**, prima di essere prototipato → [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
+- [ ] ~~Prototipato~~
+- [ ] ~~Implementato~~
+- [ ] ~~Bilanciato~~
+- [ ] ~~Rifinito~~
+- [ ] ~~Done secondo [[Definition of Done]]~~
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Risorse e Magazzino]] · [[Posto di Lavoro e Assegnazione]]
 - [[Carpentiere]] · [[Reclutamento e Ruoli]] · [[Combattimento Base]] · [[Costruzione su Griglia]]
 - [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
+- [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
 - [[Stronghold e They Are Billions]] · [[Scope e Anti-Scope]]
 - [[_Indice Sistemi]] · [[TEMPLATE-Sistema]]

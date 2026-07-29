@@ -1,7 +1,7 @@
 ---
 tags: [sistema, ondate, nemici]
 stato: prototipato
-aggiornato: 2026-07-27
+aggiornato: 2026-07-28
 ---
 
 # Sistema: Ondate
@@ -32,22 +32,26 @@ Il giocatore non deve mai poter dire *«vorrei che smettessero di attaccarmi»*.
 - **Un solo punto d'ingresso, fisso.** Un `Transform` a un bordo della mappa
   (`WaveSpawnPoint`). La varietà di fronti è il pilastro 4, e arriva dopo — qui serve solo un
   posto da cui far entrare i nemici.
-- **La curva (manopola principale della tensione): morbida, per iniziare.**
-  3 nemici alla prima ondata, **+2 per ondata**, un'ondata ogni **60 secondi**. Sono valori di
-  partenza, non un vincolo: vivono in `WaveDefinition` e si tarano giocando, non discutendo.
+- **La curva (manopola principale della tensione): stimata per una partita lunga, non tarata.**
+  3 nemici alla prima ondata, **+1 per ondata**, un'ondata ogni **90 secondi**, **20 ondate**
+  totali (~30 minuti se non si combatte mai in ritardo) — alzati da 3/+2/60/5 il 2026-07-28
+  per avvicinarsi a [[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]] (20-60 minuti), **prima** di aver mai osservato una partita intera con
+  l'economia di INC-7b. È una stima dichiarata, non una taratura: si rivede col primo
+  collaudo completo. Vivono in `WaveDefinition`, si cambiano senza toccare codice.
 - **Cadaveri non raccolti prima dell'ondata successiva: nessuna rete di sicurezza.**
   Restano lì, si accumulano, degradano secondo [[Cadavere e Degrado]] (INC-6). È il
   fallimento **giusto**: se il campo diventa ingestibile, il segnale è che il giocatore è
   indietro rispetto alla curva — non un bug da correggere con un aiuto invisibile. Coerente col
   pilastro 1: il nemico è il raccolto, e un raccolto che marcisce per negligenza è parte del
   gioco, non un errore di bilanciamento da nascondere. → [[ADR-0007 - Genere, core loop e scope del prototipo]]
-- **Vittoria: sopravvivere a N ondate.** `totalWaves` in `WaveDefinition`, default **5** — un
-  primo numero per far esistere `GameStateController.Win()` (oggi non chiamato da nessuno), da
-  tarare quando esisterà una partita giocabile per intero. → [[Stato della Partita]]
-- **Pooling dei nemici: non ora.** Ai numeri di questa curva (3, 5, 7, 9, 11 nella quinta
-  ondata) `Instantiate`/`Destroy` non pesa. Si misura se e quando le ondate cresceranno molto
-  di più — non si costruisce un pool per un problema che non esiste ancora
-  → [[Performance e Profiling]], [[Backlog]].
+- **Vittoria: sopravvivere a N ondate.** `totalWaves` in `WaveDefinition`, ora **20** (era 5).
+  `GameStateController.Win()` **è già chiamato** da `WaveManager` all'ultima ondata respinta —
+  il meccanismo esiste da INC-5, non ancora osservato per intero in Play Mode.
+  → [[Stato della Partita]]
+- **Pooling dei nemici: non ancora, ma da tenere d'occhio.** Con la curva alzata, la ventesima
+  ondata porta 22 nemici invece degli 11 di prima (a 5 ondate). Probabilmente ancora
+  economico per `Instantiate`/`Destroy`, ma non misurato — se il collaudo mostra un calo di
+  frame rate verso le ondate finali, è il primo sospetto → [[Performance e Profiling]], [[Backlog]].
 
 ## Struttura tecnica
 
@@ -90,20 +94,23 @@ ondata == totalWaves e nessun nemico rimasto? ──► GameStateController.Win(
 - [x] **Verificato in Play Mode dall'utente (2026-07-27)**: il conto alla rovescia in HUD
   funziona, gli invasori partono dal punto d'ingresso (sul NavMesh, confermato) e camminano
   verso il Cuore, l'ondata 2 è scattata dopo la 1. Nessun errore in Console.
-- [ ] Implementato (`totalWaves`/vittoria non ancora osservati: serve sopravvivere a 5 ondate,
-  non ancora provato per intero)
-- [ ] Bilanciato — la curva morbida (60s) è arrivata **dopo** la carestia di
-  [[Fame e Sussistenza]] (~40s): abbassata a **15s** solo per questo collaudo. Il valore
-  definitivo resta da decidere quando esisterà un modo di procurarsi Carne dai cadaveri
-  (INC-6) — prima di allora ogni valore è provvisorio.
+- [ ] Implementato (`totalWaves`/vittoria non ancora osservati: serve sopravvivere a 20
+  ondate, non ancora provato per intero)
+- [ ] Bilanciato — curva alzata a 3/+1/90s/20 ondate il 2026-07-28 (era 3/+2/60s/5, poi
+  scesa a 15s solo per il collaudo di INC-6): una **stima** per ~30 minuti di partita,
+  dichiarata come tale, non una taratura. Il conflitto ondate-vs-fame sotto va riosservato
+  con l'economia di oggi (Boscaiolo, Caserma, Poligono di Tiro cambiano quanti lavoratori
+  sono liberi) — non risolto a tavolino.
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
 
-> [!warning] Scoperto in Play Mode: il timer delle ondate va incrociato con quello della fame
-> Con `waveIntervalSeconds = 60` (il valore morbido originale) si moriva di carestia **prima**
-> che la prima ondata esistesse: 50 Carne, -120/min con 2 lavoratori → 25s per esaurirla, +15s
-> di tolleranza → sconfitta a ~40s, contro un'ondata a 60s. Corretto **temporaneamente** a
-> `15` per poter vedere il combattimento; è un valore di collaudo, non la curva finale.
+> [!warning] Scoperto in Play Mode (2026-07-27): il timer delle ondate va incrociato con quello della fame
+> Con `waveIntervalSeconds = 60` (il valore morbido originale, economia di INC-6) si moriva
+> di carestia **prima** che la prima ondata esistesse: 50 Carne, -120/min con 2 lavoratori →
+> 25s per esaurirla, +15s di tolleranza → sconfitta a ~40s, contro un'ondata a 60s. Il nuovo
+> valore (90s, 2026-07-28) **non è stato verificato** contro l'economia di INC-7b, che ha
+> più edifici e più lavoratori assegnabili: potrebbe risolversi da solo, o no. Primo indizio
+> da cercare nel collaudo unico.
 
 **File:** `Assets/_Project/Scripts/Data/WaveDefinition.cs` · `Gameplay/WaveManager.cs` ·
 `UI/WaveHUD.cs` · `Editor/WaveSetup.cs` (tool: punto d'ingresso, wiring, testo del conto alla

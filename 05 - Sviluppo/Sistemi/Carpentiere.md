@@ -1,10 +1,19 @@
 ---
-tags: [sistema, economia, edifici]
-stato: progettato
+tags: [sistema, economia, edifici, tagliato]
+stato: tagliato
 aggiornato: 2026-07-28
 ---
 
 # Sistema: Carpentiere
+
+> [!danger] Tagliato — 2026-07-28
+> [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
+> ha cancellato il Carpentiere prima che venisse implementato (stato "progettato", zero
+> codice scritto). Arciere e Balestriere restano come classi distinte, ma si reclutano al
+> **Poligono di Tiro** consumando Legna/Ferro grezzi direttamente — niente Arco/Balestra come
+> risorsa intermedia, niente pannello di scelta persistente → [[Reclutamento e Ruoli]].
+> Questa scheda **resta come archivio**: il design del toggle Arco/Balestra è pronto all'uso
+> se in futuro (fuori scope M3) servirà una filiera a più stadi.
 
 > Trasforma Legna in Arco **oppure** Balestra. La scelta è **fissa per edificio**: resta
 > attiva finché il giocatore non la cambia esplicitamente da un pannello dedicato.
@@ -105,15 +114,17 @@ EconomyRunner.EconomyTicked  ──►  Carpentiere.HandleEconomyTicked
 ## Stato
 
 - [x] Progettato — 2026-07-28
-- [ ] Prototipato
-- [ ] Implementato
-- [ ] Bilanciato
-- [ ] Rifinito
-- [ ] Done secondo [[Definition of Done]]
+- [x] **Tagliato — 2026-07-28**, prima di essere prototipato → [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
+- [ ] ~~Prototipato~~
+- [ ] ~~Implementato~~
+- [ ] ~~Bilanciato~~
+- [ ] ~~Rifinito~~
+- [ ] ~~Done secondo [[Definition of Done]]~~
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Fucina]] · [[Reclutamento e Ruoli]] · [[Posto di Lavoro e Assegnazione]]
 - [[Selezione e Comandi]] · [[Scelta sul Cadavere]] · [[Costruzione su Griglia]]
 - [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
+- [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
 - [[Risorse e Magazzino]] · [[Stronghold e They Are Billions]] · [[Scope e Anti-Scope]]
 - [[_Indice Sistemi]] · [[TEMPLATE-Sistema]]

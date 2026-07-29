@@ -1,7 +1,7 @@
 ---
 tags: [sistema, lavoro, economia]
 stato: prototipato
-aggiornato: 2026-07-26
+aggiornato: 2026-07-28
 ---
 
 # Sistema: Posto di Lavoro e Assegnazione
@@ -114,7 +114,10 @@ produce niente.
 - [x] Prototipato — Cava/Miniera/Fossa create, 2 lavoratori assegnati (Cava, Miniera) via
       tool editor. **Non ancora verificato in Play Mode**, ma i due bug che l'avrebbero reso
       inerte sono stati trovati e corretti in revisione.
-- [ ] Implementato (mancano: riassegnazione dall'utente, interruzione per fame)
+- [ ] Implementato (2026-07-28: `Worker.MoveTo` permette al giocatore di **liberare** un
+      lavoratore col movimento diretto, staccandolo dal WorkSite — vedi [[Selezione e Comandi]]
+      e [[Backlog]] #38. Manca ancora **assegnarlo** a un WorkSite scelto col mouse, e
+      l'interruzione per fame)
 - [ ] Bilanciato
 - [ ] Rifinito
 - [ ] Done secondo [[Definition of Done]]
@@ -125,4 +128,5 @@ produce niente.
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Risorse e Magazzino]] · [[Movimento Unità]] · [[HUD Risorse]]
+- [[Selezione e Comandi]] · [[Backlog]]
 - [[_Indice Sistemi]] · [[TEMPLATE-Sistema]]

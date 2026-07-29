@@ -101,12 +101,12 @@ va reso visibile, non impedito.
 
 ## Decisioni di progetto — round 3, 2026-07-28 (INC-7b)
 
-- **Legna, Ferro e Pietra hanno un doppio uso**: sono sia l'ingresso di produzione di
-  [[Fucina]] e [[Carpentiere]], sia il **costo di costruzione** degli edifici stessi —
-  richiesto esplicitamente dall'utente, che non erano due economie separate nella sua idea.
-  Il costo di costruzione si preleva dallo stesso `Stockpile` con lo stesso
-  `TryWithdraw(cost)` già usato dal Muro, nessun meccanismo nuovo.
-- **Boscaiolo/Fucina/Carpentiere/Caserma escono dal costo zero**: ora hanno un costo reale,
+- **Legna, Ferro e Pietra hanno un doppio uso**: sono sia il materiale consumato al
+  reclutamento (Caserma/Poligono di Tiro, [[Reclutamento e Ruoli]]) sia il **costo di
+  costruzione** degli edifici stessi — richiesto esplicitamente dall'utente, che non erano
+  due economie separate nella sua idea. Il costo di costruzione si preleva dallo stesso
+  `Stockpile` con lo stesso `TryWithdraw(cost)` già usato dal Muro, nessun meccanismo nuovo.
+- **Boscaiolo/Caserma/Poligono di Tiro escono dal costo zero**: ora hanno un costo reale,
   placeholder come tutto il resto del bilanciamento (stesso principio di
   [[Posto di Lavoro e Assegnazione]] § *Dati e parametri* — un numero per far vedere la
   meccanica funzionare, non un valore tarato):
@@ -115,20 +115,17 @@ va reso visibile, non impedito.
   |---|---|---|
   | Muro | 1×1 | 5 Pietra *(invariato da INC-7a)* |
   | Boscaiolo/Segheria | 3×3 | 15 Pietra |
-  | Carpentiere | 4×4 | 15 Legna + 10 Pietra |
-  | Fucina | 4×4 | 15 Ferro + 10 Pietra |
   | Caserma | 4×4 | 20 Pietra |
+  | Poligono di Tiro | 4×4 | 15 Legna + 10 Pietra |
 
   > [!warning] Nessuna risorsa costa se stessa
-  > Il Boscaiolo (produce Legna) costa solo Pietra, non Legna — altrimenti il primo Boscaiolo
-  > sarebbe bloccato finché non esiste già un Boscaiolo. Stesso principio implicito per
-  > Carpentiere e Fucina: costano anche la loro stessa risorsa di *output* mescolata a Pietra,
-  > ma **mai** la risorsa che consumano come *input* di produzione in quantità tale da
-  > impedire il primo esemplare — la Pietra (sempre disponibile da Cava fin dall'inizio) resta
-  > la base comune.
+  > Il Boscaiolo (produce Legna) costa solo Pietra — altrimenti il primo sarebbe bloccato
+  > finché non ne esiste già uno. La Pietra (sempre disponibile da Cava) è la base comune.
+
+  > [!info] Fucina e Carpentiere tolte dalla tabella — [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
+  > Tagliate prima di essere implementate. Il Poligono di Tiro le sostituisce come "quarto edificio".
 - Questi numeri **non sono nello scope di bilanciamento di questa scheda**: si rivedono a
-  INC-7d insieme al resto della curva, stesso principio già scritto in [[Briefing]] per i
-  Soldati fissi — una leva prima si costruisce, poi si tara.
+  INC-7d insieme al resto della curva — una leva prima si costruisce, poi si tara.
 
 ## Struttura tecnica
 
@@ -277,6 +274,13 @@ BuildPlacementController.BeginPlacement(def)
 > Ora `PlacedBuilding` ricava le misure dell'ostacolo dal collider dell'oggetto. Per gli edifici
 > piazzati dal giocatore le due misure coincidono, quindi non cambia nulla: la regola vale per
 > tutti proprio per non avere due strade da tenere allineate.
+
+> [!warning] `BuildMenuSetup.cs` non ripuliva i pulsanti orfani (trovato 2026-07-28)
+> Fucina/Carpentiere tagliate (ADR-0023): edifici piazzabili da 6 a 5, ma il pannello di
+> debug mostrava ancora "[3] Fucina"/"[5] Carpentiere" — `EnsureButton` aggiorna i pulsanti
+> fino all'indice corrente, non elimina l'eccesso di un'esecuzione precedente. Corretto con
+> `RemoveOrphanButtons`. Sono **due tool separati**: "Costruzione su Griglia" e "Pannello di
+> Test - Costruzione e Mura" vanno rieseguiti entrambi quando cambia il numero di edifici.
 
 ## Stato
 

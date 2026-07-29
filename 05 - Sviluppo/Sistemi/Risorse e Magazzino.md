@@ -1,7 +1,7 @@
 ---
 tags: [sistema, risorse, dati, economia]
 stato: progettato
-aggiornato: 2026-07-25
+aggiornato: 2026-07-28
 ---
 
 # Sistema: Risorse e Magazzino
@@ -31,8 +31,9 @@ un registro contabile della carne è più disturbante di una montagna di teschi.
 
 ## Comportamento atteso
 
-- Quattro risorse: **Carne**, **Icore**, **Pietra**, **Ferro**
-  ([[ADR-0009 - Risorse e ciclo del cadavere]]).
+- Cinque risorse: **Carne**, **Icore**, **Pietra**, **Ferro**
+  ([[ADR-0009 - Risorse e ciclo del cadavere]]) e **Legna**
+  ([[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]).
 - Nel prototipo, Iterazione A, l'Icore **esiste nei dati ma nessuno la produce né la consuma**.
 - Ogni risorsa ha una quantità e un **tetto** (capienza di magazzino).
 - Chi produce deposita, chi consuma prelieva. Nessuno tiene un contatore proprio.
@@ -68,19 +69,25 @@ un registro contabile della carne è più disturbante di una montagna di teschi.
 namespace Bleed.Data
 {
     /// Le risorse del gioco. Ichor esiste dall'inizio anche se l'Iterazione A
-    /// non la produce: vedi ADR-0009.
+    /// non la produce: vedi ADR-0009. Wood arriva con ADR-0023 (Boscaiolo, e
+    /// consumo diretto al reclutamento — niente risorse-arma intermedie).
     public enum ResourceType
     {
         Flesh = 0,   // Carne
         Ichor = 1,   // Icore
         Stone = 2,   // Pietra
         Iron  = 3,   // Ferro
+        Wood  = 4,   // Legna
     }
 }
 ```
 
 I valori numerici sono **espliciti**: gli asset ScriptableObject serializzano l'indice, e
-riordinare un enum senza valori espliciti riassegna silenziosamente i dati salvati.
+riordinare un enum senza valori espliciti riassegna silenziosamente i dati salvati. **Mai**
+aggiungere Spada/Arco/Balestra come `ResourceType`: erano previste da
+[[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]] ma
+tagliate da [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]] prima di essere implementate — il reclutamento consuma Ferro/Legna/Pietra
+direttamente, non un bene-arma intermedio.
 
 **Configurazione** — `ResourceDefinition` (ScriptableObject), uno per risorsa:
 

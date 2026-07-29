@@ -1,6 +1,6 @@
 ---
 tags: [index, briefing, stato]
-aggiornato: 2026-07-28
+aggiornato: 2026-07-29
 ---
 
 # Briefing
@@ -82,8 +82,9 @@ deriva da lì o da una fonte documentata.
 | Input | Input System **nuovo** (già nel template, `com.unity.inputsystem 1.19.0`) | 0016 |
 | Interazione col cadavere | **niente click sul campo**: raccolta automatica (`CorpseCarrier`) + assegnazione in blocco per quantità alla Mortuary, i corpi restano individuali in giacenza | 0019 |
 | Durata partita | stile *They Are Billions*, non 2-5 minuti | 0020 |
-| Filiera produttiva | 7 risorse e 9 edifici: Legna, Carpentiere, Caserma con classi, tiro a distanza vero | 0021 |
+| Filiera produttiva | 5 risorse, reclutamento diretto da materiali grezzi: Boscaiolo (Legna), Caserma (Guerriero), Poligono di Tiro (Arciere/Balestriere) — niente Fucina/Carpentiere/beni-arma intermedi | 0021, 0023 |
 | Mura | **calpestabili**: si sale con una Scala e si combatte in quota (fuori portata del corpo a corpo + bonus). Anche gli invasori salgono, ma senza tattica — l'IA d'assedio resta fuori | 0022 |
+| Leggibilità | colore fisso per tipo di edificio/unità/risorsa, confine mappa, marcatore ondate — **non** arte: niente modelli, animazioni, audio prima di INC-8 | 0024 |
 
 Fuori dagli ADR: **tempo** = 15-20 h/settimana · **IDE** = ✅ risolto, VS Community 2026
 (canale stabile) con workload Unity → [[Asset e Tool]].
@@ -139,13 +140,13 @@ niente abbreviazioni.
 
 ---
 
-## Dove siamo — 2026-07-28 (martedì)
+## Dove siamo — 2026-07-29 (mercoledì)
 
 **Fase:** FASE 0 (Fondamenta) ✅ chiusa · **FASE 2 (Prototipo) ✅ chiusa.** INC-1…INC-6
 verificati in Play Mode dall'utente, **più INC-7a (costruzione su griglia) e INC-7e (mura
 calpestabili)**, verificati il 2026-07-28.
 
-Esiste: ~122 note di KB, **22 ADR**, ambiente e progetto Unity pronti
+Esiste: ~125 note di KB, **24 ADR**, ambiente e progetto Unity pronti
 (`C:\Dev\CadaverAnimatum`), e il codice di: [[Camera Isometrica]] · [[Selezione e Comandi]] ·
 [[Movimento Unità]] su NavMesh · [[Risorse e Magazzino]] (+5 test) ·
 [[Posto di Lavoro e Assegnazione]] · [[HUD Risorse]] · [[Fame e Sussistenza]] ·
@@ -179,18 +180,89 @@ tocca il NavMesh su più livelli le legga **prima**.
 ✅ **`inc-7a-costruzione-su-griglia` mergiato su `main`** nei due repo (2026-07-28), dopo la
 verifica in Play Mode: `main` è di nuovo un gioco che parte — e che si può perdere.
 
-**Prossimo passo:** **INC-7b — l'economia estesa**: Boscaiolo (Legna), Carpentiere
-(Arco/Balestra), Fucina (Spada). Schede [[Fucina]] e [[Carpentiere]], ancora stub: si
-progettano prima del codice. Poi INC-7c ([[Reclutamento e Ruoli]]) e INC-7d (bilanciamento).
+✅ **Economia semplificata prima ancora di essere codificata (2026-07-28)**: rivedendo
+INC-7b, l'utente ha tagliato Fucina e Carpentiere (progettate ma mai implementate) e chiesto
+un reclutamento diretto dai materiali grezzi →
+[[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]].
+Zero codice buttato: il design tagliato resta archiviato in [[Fucina]] e [[Carpentiere]] per
+un'eventuale filiera più profonda in una futura vertical slice.
 
-> [!warning] Il bilanciamento è INC-7d, e viene DOPO — non è una dimenticanza
-> Oggi si perde perché 2 Soldati fissi non reggono una curva che cresce. Non è un numero mal
-> tarato: è una **leva che manca**, ed è la Caserma di INC-7c. Tarare la curva adesso vuol dire
-> tarare un sistema che sta per cambiare struttura, e nascondere la domanda vera — *quanti
-> cadaveri costa un soldato?* — che si risponde solo quando la leva esiste.
-> Attenzione però: con la Caserma il sistema diventa **bilanciabile**, non bilanciato.
+✅ **INC-7b scritto per intero e verificato in Play Mode (2026-07-29)**: Boscaiolo
+(Legna), Caserma (Guerriero) e Poligono di Tiro (Arciere/Balestriere) reclutano consumando
+Ferro/Legna/Pietra direttamente; combattimento a distanza vero (`Projectile` +
+`ProjectileManager`, mira alla posizione dello sparo, non insegue); bandierina di raduno
+(`IRallyPointReceiver`) e movimento diretto per i Soldati (`IMoveCommandReceiver`) via
+`UnitCommandInput`. Un bug reale nel cast di selezione è stato trovato e corretto **prima**
+del collaudo (vedi [[Reclutamento e Ruoli]] § *Struttura tecnica*). Chiusi anche Backlog #54
+(origine del cadavere per un suddito iniziale reclutato) e #55 (evidenziazione alla selezione).
 
-Non bloccante: repository GitHub del progetto Unity; cancellare `...\Bleed\VideoGame` vuota.
+✅ **INC-7f — Leggibilità minima aggiunta, scritta e verificata in Play Mode (2026-07-29)**:
+provando a immaginare il collaudo di INC-8 sul prototipo tutto-uguale-grigio, l'utente si è
+accorto che non si distingueva un edificio dall'altro né un suddito da un invasore —
+[[ADR-0024 - Leggibilita minima nel prototipo - colore prima dei modelli]]. Colori fissi
+(`ReadabilityPalette`) su edifici/unità/risorse, confine della mappa, marcatore del punto di
+arrivo delle ondate. Niente modelli, niente animazioni, niente audio — quelli restano dopo
+INC-8.
+
+✅ **INC-7d — curva delle ondate stimata (2026-07-28), non tarata**: il meccanismo di
+vittoria (`GameStateController.Win()` chiamato da `WaveManager`) esisteva già da INC-5, mai
+osservato scattare. Su richiesta esplicita dell'utente — sapendo che è una stima, non una
+taratura — la curva è salita da 3/+2/60s/5 ondate a **3/+1/90s/20 ondate**, per avvicinarsi
+alle 20-60 minuti di [[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]]. Il conflitto ondate-vs-fame osservato a INC-6 (~40s di carestia contro
+un'ondata a 60s) **non è stato riverificato** con l'economia di INC-7b: primo indizio da
+cercare nel collaudo. Aggiunti anche i numeri di fine partita (ondate sopravvissute,
+cadaveri macellati/rialzati/svuotati) su `GameOverIndicator`, per dare a INC-8 dei dati e
+non solo un'impressione.
+
+✅ **Audit di sola lettura (2026-07-28)**: prima del collaudo, un sub-agente ha riletto a
+freddo tutti i file toccati in questa sessione (wiring editor↔runtime, `FindProperty`,
+ordine di `TryRecruit`, call site di `CombatUnit.Initialize`) — nessun problema oltre a
+quello già trovato e corretto. → [[Reclutamento e Ruoli]]
+
+✅ **Backlog #38 chiuso nel codice (2026-07-28)**: `Worker` implementa `IMoveCommandReceiver`
+— muoversi a comando **stacca** dal `WorkSite` corrente. Worker_A/B e i rialzati sono ora
+selezionabili come i Soldati. Resta fuori solo il ri-assegnamento a un WorkSite scelto col
+mouse (oggi si libera un lavoratore, non lo si assegna direttamente).
+
+⚠️ **Primo collaudo reale (2026-07-28): un bug di compilazione, uno di layout**. L'utente ha
+aperto Unity ed è iniziato il collaudo unico di INC-7b+7d+7f:
+1. `Selectable` ambiguo fra `Bleed.Gameplay` e `UnityEngine.UI` — CS0104, Safe Mode al primo
+   avvio. Trovato in 3 file (`RecruitmentSetup`, `MortuaryPanel`, `RecruiterPanel`), corretto
+   qualificando per esteso ovunque. Non trovabile a lettura: serve il compilatore vero.
+2. **`CasermaPanel` nasceva sovrapposto al menu di costruzione** (stessa posizione, 20/20) —
+   causa quasi certa del "il reclutamento non funziona" segnalato dall'utente (i click
+   probabilmente cadevano nel posto sbagliato). Risolto con una regola generale: ogni
+   pannello edificio (Caserma, Poligono di Tiro, Mortuary) ora si mostra **solo quando quel
+   preciso edificio è selezionato** (`Selectable.Selected`/`Deselected` + `CanvasGroup`,
+   mai `SetActive`), condividendo un'unica zona lontana dal menu di costruzione.
+   → [[Selezione e Comandi]] · [[Reclutamento e Ruoli]] · [[Scelta sul Cadavere]]
+
+⚠️ **Stesso collaudo, altri tre problemi (2026-07-28)** — tutti dello stesso tipo: codice che
+presume un oggetto "appena creato" senza gestire "esiste già da una sessione precedente":
+3. Il pannello riappariva ma restava **invisibile per sempre**: esisteva già in scena creato
+   col vecchio `SetActive(false)`, e un GameObject spento non esegue mai `Awake()` in Unity —
+   non riceveva mai il nuovo `CanvasGroup`. Corretto forzando riattivazione + `CanvasGroup`
+   anche sul pannello riusato, non solo su uno creato da zero.
+4. "MAX" e "Recluta" si sovrapponevano: calcolo dello spazio verticale sbagliato. Corretto, e
+   nel farlo scoperto che `CreateLabel`/`CreateButton` non aggiornavano posizione su un
+   elemento già esistente — corretto anche quello, altrimenti la fix non si sarebbe vista.
+5. Il menu di costruzione mostrava ancora "Fucina"/"Carpentiere": è un **tool separato**
+   (`BuildMenuSetup.cs`, "Pannello di Test - Costruzione e Mura") che l'utente non aveva
+   rieseguito — e quando l'ha rieseguito, i pulsanti in eccesso da prima (6 invece di 5) non
+   si ripulivano da soli. Corretto con `RemoveOrphanButtons`.
+→ [[Reclutamento e Ruoli]] · [[Costruzione su Griglia]] · [[Selezione e Comandi]]
+
+✅ **Collaudo confermato (2026-07-29)**: dopo le cinque correzioni sopra, l'utente ha
+riprovato e confermato che il reclutamento funziona. **Non ancora mergiato su `main`** — il
+merge resta un passo deliberato separato, non automatico dopo un "funziona".
+
+**Prossimo passo:** INC-7d, il bilanciamento vero (la curva attuale è una stima, non una
+taratura, e va rigiocata per intero prima di fidarsi dei numeri), poi valutare il merge su
+`main` e l'avvio di INC-8.
+
+Non bloccante: repository GitHub del progetto Unity (il repo esiste solo in locale, `git
+remote -v` vuoto — serve conferma esplicita dell'utente prima di crearne uno); cancellare
+`...\Bleed\VideoGame` vuota.
 
 > [!danger] Budget: il target di settembre non è più garantito
 > 15-20 h/settimana × ~9 settimane = **135-180 ore**, e [[Piano Prototipo]] ×3 arrivava già a

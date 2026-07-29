@@ -1,7 +1,7 @@
 ---
 tags: [sistema, ui, ux, rischio]
 stato: progettato
-aggiornato: 2026-07-27
+aggiornato: 2026-07-28
 ---
 
 # Sistema: Scelta sul Cadavere
@@ -112,6 +112,14 @@ MortuaryPanel (Bleed.UI, MonoBehaviour in HUD)
   ("Camera Mortuaria"?), quando si passa alla rifinitura testuale.
 - Se la giacenza cresce molto (dopo molte ondate senza svuotarla), un elenco visivo dei
   singoli corpi in coda potrebbe servire oltre al numero totale — fuori scope per ora.
+
+> [!info] MortuaryPanel diventato contestuale (2026-07-28)
+> Era sempre visibile in basso a destra; da questa sessione si mostra **solo con la Fossa
+> selezionata** (via `CanvasGroup` + `Selectable.Selected`/`Deselected`), nella stessa zona
+> condivisa con i pannelli di Caserma/Poligono di Tiro — regola generale, vedi
+> [[Selezione e Comandi]]. La logica di assegnazione (Macella/Rialza/Icore) non cambia,
+> solo *quando* il pannello si vede: la verifica in Play Mode sotto resta valida per quella
+> parte, ma la nuova visibilità contestuale non è ancora stata riprovata.
 
 ## Stato
 
