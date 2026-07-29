@@ -149,17 +149,21 @@ salvare** prima che scada — con la manodopera che hai, non quella che vorresti
 ### INC-7 — La partita
 
 > [!info] Spezzato in sotto-incrementi (deciso il 2026-07-28)
-> Cresciuto troppo per un solo passo verificabile: mura su griglia, tre edifici nuovi
-> (Boscaiolo, Carpentiere, Caserma), una risorsa in più, un sistema di combattimento a
-> distanza mai scritto, e un ribilanciamento per una partita 5-15 volte più lunga del piano
-> originale. Ogni sotto-incremento ha il suo branch (`inc-7a-...`, `inc-7b-...`, ...) e la sua
-> verifica in Play Mode prima di passare al successivo — stessa disciplina di ADR-0018,
-> applicata dentro un incremento invece che fra incrementi.
+> Cresciuto troppo per un solo passo verificabile: mura su griglia, edifici nuovi, una risorsa
+> in più, un sistema di combattimento a distanza mai scritto, e un ribilanciamento per una
+> partita 5-15 volte più lunga del piano originale. Ogni sotto-incremento ha il suo branch
+> (`inc-7a-...`, `inc-7b-...`, ...) e la sua verifica in Play Mode prima di passare al
+> successivo — stessa disciplina di ADR-0018, applicata dentro un incremento invece che fra
+> incrementi.
 
-**Prodotto finale (a fine 7d):** ondate crescenti, mura su griglia, Fucina + Carpentiere +
-Boscaiolo, sudditi disoccupati reclutabili alla Caserma come Guerriero o Arciere (con
-combattimento a distanza vero), vittoria a N ondate, sconfitta per carestia o Cuore distrutto.
-Tutti i valori in ScriptableObject.
+> [!info] INC-7b e INC-7c fusi (ADR-0023, 2026-07-28)
+> Fucina e Carpentiere tagliate prima di implementarle: senza bene-arma intermedio,
+> "accumulare armi" e "reclutare" sono la stessa cosa. Un solo sotto-incremento, lettera **b**.
+
+**Prodotto finale (a fine 7f):** ondate crescenti, mura su griglia, Boscaiolo, sudditi
+disoccupati reclutabili alla Caserma come Guerriero o al Poligono di Tiro come Arciere/
+Balestriere (con combattimento a distanza vero), vittoria a N ondate, sconfitta per carestia o
+Cuore distrutto. Tutti i valori in ScriptableObject.
 
 **Uscita finale:** una partita completa **di durata stile They Are Billions (20-60+ minuti)**,
 non più i 2-5 minuti del piano originale
@@ -167,20 +171,18 @@ non più i 2-5 minuti del piano originale
 
 > [!warning] Rischio di budget accettato consapevolmente
 > Il budget di tempo del progetto (135-180 ore) non cambia. Se bilanciare una partita lunga
-> costa più delle stime, si taglia — [[Fucina]] (o l'intero [[Carpentiere]]) resta il primo
-> candidato. → [[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]] · [[ADR-0021 - Espansione della filiera produttiva - Carpentiere, Caserma, nuove risorse]]
+> costa più delle stime, si taglia. → [[ADR-0020 - Durata target della partita - stile They Are Billions, non 2-5 minuti]] · [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]
 
 **INC-7a — Costruzione su Griglia**: celle, anteprima di piazzamento, mura a trascinamento di
 linea, demolizione. Sistema: [[Costruzione su Griglia]]. *Uscita: si piazzano Mura e i 6
 edifici esistenti su griglia, invece che a mano libera fuori scena.*
 
-**INC-7b — L'economia estesa**: Boscaiolo (Legna), Carpentiere (Arco/Balestra a scelta),
-Fucina aggiornata (Spada). Sistemi: [[Fucina]] · [[Carpentiere]]. *Uscita: le 4 risorse nuove
-si producono e si accumulano nel magazzino, senza ancora un modo di spenderle.*
-
-**INC-7c — Reclutamento e combattimento a distanza**: la Caserma, le classi Guerriero/Arciere,
-il proiettile per l'Arciere. Sistema: [[Reclutamento e Ruoli]]. *Uscita: un suddito
-disoccupato diventa un difensore a scelta del giocatore, e un Arciere colpisce davvero da
+**INC-7b — Caserma, Poligono di Tiro e reclutamento**: Boscaiolo (Legna), la Caserma recluta
+il Guerriero e il Poligono di Tiro recluta Arciere/Balestriere, consumando materiali grezzi
+direttamente — niente Fucina, niente Carpentiere, niente risorse-arma intermedie
+([[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]) — più il combattimento a distanza vero (proiettile) per Arciere e Balestriere.
+Sistema: [[Reclutamento e Ruoli]]. *Uscita: un suddito disoccupato diventa un difensore a
+scelta del giocatore (mischia o distanza), e un Arciere/Balestriere colpisce davvero da
 lontano.*
 
 **INC-7e — Mura calpestabili** ✅ *fatto il 2026-07-28, ma **fuori dall'ordine del piano***:
@@ -192,10 +194,17 @@ Scala, presidia un segmento di muro e combatte da lì, fuori portata del corpo a
 Porta la lettera **e** e non **b**/**c** per non spostare la numerazione di ciò che era già
 pianificato: è stato svolto prima, non al posto di qualcos'altro.
 
-**INC-7d — Bilanciamento per una partita lunga**: curva di ondate, numeri di
-`WaveDefinition`/`CombatUnitDefinition`, condizione di vittoria a N ondate. Sistema:
-[[Stato della Partita]]. *Uscita: una partita completa stile They Are Billions, con inizio e
-fine, giocata per intero almeno una volta.*
+**INC-7d — Bilanciamento per una partita lunga**: la vittoria (N ondate) era già scritta da
+INC-5, mai osservata scattare. Curva `WaveDefinition` alzata a una **stima** (3/+1/90s/20
+ondate, 2026-07-28), non tarata su dati reali — si rivede col primo giro completo. Sistemi:
+[[Ondate]] · [[Stato della Partita]]. *Uscita: una partita intera, giocata almeno una volta.*
+
+**INC-7f — Leggibilità minima** *(non pianificato, aggiunto il 2026-07-28)*: colori
+distinti per edifici/unità/risorse, confine della mappa, marcatore delle ondate — niente
+modelli/animazioni/audio, restano fuori scope. Nato immaginando INC-8 sul prototipo
+tutto-grigio: illeggibile, un playtest così giudica la confusione, non il gioco.
+→ [[ADR-0024 - Leggibilita minima nel prototipo - colore prima dei modelli]]. *Uscita: si
+distingue a colpo d'occhio edificio, fazione e punto d'arrivo delle ondate.*
 
 ### INC-8 — Il verdetto
 **Prodotto:** nessun codice. Due persone che non sono te ci giocano, guardate senza aiutare,
@@ -240,14 +249,17 @@ peggiorasse, non sapremmo quale delle cinque è colpevole.
 | [[Posto di Lavoro e Assegnazione]] | INC-3 | ✅ scritta | ✅ verificato |
 | [[HUD Risorse]] | INC-3 | ✅ scritta | ✅ verificato |
 | [[Fame e Sussistenza]] | INC-4 | ✅ scritta | ✅ verificato |
-| [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ✅ verificato |
+| [[Stato della Partita]] | INC-4, INC-7 | ✅ scritta | ⚠️ Lose verificato, Win e numeri di fine partita mai osservati |
 | [[Ondate]] | INC-5 | ✅ scritta | ✅ verificato |
 | [[Combattimento Base]] | INC-5 | ✅ scritta | ✅ verificato |
 | [[Cuore del Regno]] | INC-5 | ✅ scritta | ⚠️ presente, non stress-testato (nessun invasore l'ha mai raggiunto) |
-| [[Cadavere e Degrado]] | INC-6 | da scrivere | — |
-| [[Scelta sul Cadavere]] | INC-6 | da scrivere | — |
-| [[Costruzione su Griglia]] | INC-7 | da scrivere | — |
-| [[Fucina]] | INC-7 | da scrivere | — |
+| [[Cadavere e Degrado]] | INC-6 | ✅ scritta | ✅ verificato |
+| [[Scelta sul Cadavere]] | INC-6 | ✅ scritta | ✅ verificato |
+| [[Costruzione su Griglia]] | INC-7a | ✅ scritta | ✅ verificato |
+| [[Mura Difensive e Combattimento in Elevazione]] | INC-7e | ✅ scritta | ✅ verificato |
+| [[Fucina]] | INC-7b *(tagliato)* | ✅ scritta, poi tagliata | — → [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]] |
+| [[Carpentiere]] | INC-7b *(tagliato)* | ✅ scritta, poi tagliata | — → [[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]] |
+| [[Reclutamento e Ruoli]] | INC-7b | ✅ scritta | ⚠️ scritto, non ancora verificato in Play Mode |
 
 **Regola:** la scheda si scrive **prima** del codice, all'inizio della sessione che
 implementa quel sistema — non tutte insieme adesso. Una scheda scritta con tre incrementi di
@@ -270,22 +282,17 @@ Assets/_Project/Scripts/
 └── Editor/     Bleed.Editor      tool dell'editor (non entra nella build)
 ```
 
-**Regola di dipendenza: si guarda verso il basso, mai verso l'alto.** `UI` conosce
-`Gameplay`; `Gameplay` **non sa** che la UI esiste — comunica verso l'alto solo con eventi.
-→ [[Architettura di Progetto]]
+**Regola di dipendenza: si guarda verso il basso, mai verso l'alto** — `UI` conosce `Gameplay`, mai il contrario: comunica verso l'alto solo con eventi. → [[Architettura di Progetto]]
 
-Gli **Assembly Definitions** ([[Assembly Definitions]]) arrivano quando la compilazione
-comincia a dare fastidio, non prima: nel prototipo sono complessità gratis.
+Gli **Assembly Definitions** ([[Assembly Definitions]]) arrivano quando la compilazione dà fastidio, non prima: nel prototipo sono complessità gratis.
 
 ---
 
 ## Registro delle stime
 
-Le stime sono in **sessioni**, non in ore, perché non sappiamo ancora quanto dura una nostra
-sessione. Si riempie la colonna "reale" ogni volta: è l'unico modo per imparare a stimare.
-
-> Regola di [[Roadmap e Milestone]]: **la stima si moltiplica per 3.** Non è pessimismo, è
-> statistica sui progetti reali. Le stime qui sotto sono già "grezze": aspettiamoci il triplo.
+Le stime sono in **sessioni**, non in ore: si riempie "reale" ogni volta, l'unico modo per
+imparare a stimare. Regola di [[Roadmap e Milestone]]: **la stima si moltiplica per 3** —
+non pessimismo, statistica sui progetti reali. Sono già "grezze": aspettiamoci il triplo.
 
 | Incremento | Stima grezza | Reale | Note |
 |---|---|---|---|

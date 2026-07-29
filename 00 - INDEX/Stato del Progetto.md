@@ -1,6 +1,6 @@
 ---
 tags: [index, stato]
-aggiornato: 2026-07-28
+aggiornato: 2026-07-29
 ---
 
 # Stato del Progetto
@@ -36,9 +36,27 @@ e spiegato, quando la cima non è raggiungibile. → [[Costruzione su Griglia]] 
 
 ✅ **Mergiato su `main`** nei due repo (2026-07-28), dopo la verifica in Play Mode.
 
-**Prossimo: INC-7b — l'economia estesa** ([[Fucina]], [[Carpentiere]], Boscaiolo). Poi INC-7c
-([[Reclutamento e Ruoli]]) e **solo allora** INC-7d, il bilanciamento: oggi si perde perché
-manca una **leva** (la Caserma), non perché un numero è tarato male.
+✅ **Economia semplificata prima del codice (2026-07-28)**: Fucina e Carpentiere, progettate
+ma mai implementate, sono state tagliate — la Caserma recluta direttamente il Guerriero e un
+nuovo edificio, il **Poligono di Tiro**, recluta Arciere e Balestriere, consumando
+Ferro/Legna/Pietra grezzi senza passaggio intermedio →
+[[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]].
+INC-7b e l'ex INC-7c si sono fusi in un solo sotto-incremento.
+
+✅ **INC-7b, INC-7d e INC-7f verificati in Play Mode dall'utente (2026-07-29)**: Caserma e
+Poligono di Tiro reclutano Guerriero/Arciere/Balestriere consumando Ferro/Legna/Pietra grezzi,
+i pannelli sono contestuali alla selezione dell'edificio (regola valida ora per tutti gli
+edifici), il combattimento a distanza usa proiettili veri
+([[Reclutamento e Ruoli]]). Leggibilità minima applicata (colore su edifici/unità, confine
+mappa, marcatore ondate) → [[ADR-0024 - Leggibilita minima nel prototipo - colore prima dei modelli]]. Curva ondate stimata (non tarata) a 3/+1/90s/20. Cinque bug trovati e corretti
+durante il collaudo (cast IRallyPointReceiver sbagliato, `Selectable` ambiguo in 3 file,
+pannelli sovrapposti al menu di costruzione, pannello riusato mai attivo perché creato
+`SetActive(false)` in una sessione precedente, pulsanti orfani di Fucina/Carpentiere nel
+pannello di debug) → dettaglio in [[2026-07-29 - Sessione 11]].
+**Non ancora mergiato su `main`** — resta un passo deliberato separato.
+
+**Prossimo: INC-7d, il bilanciamento vero** (la curva attuale è una stima, non una taratura),
+poi valutare il merge su `main` e INC-8.
 → [[Piano Prototipo]]
 
 ## Il gioco
@@ -195,6 +213,14 @@ non è installato, va creato a mano su GitHub.
 
 ## Ultima sessione
 
+- **2026-07-29 — Sessione 11**: economia semplificata ([[ADR-0023 - Caserma e Poligono di Tiro reclutano dai materiali grezzi - Fucina e Carpentiere tagliate]]), poi **INC-7b, INC-7d e
+  INC-7f scritti per intero e verificati in Play Mode dall'utente**: reclutamento diretto da
+  Caserma/Poligono di Tiro, pannelli contestuali alla selezione (nuova regola generale per
+  tutti gli edifici), combattimento a distanza con proiettili, leggibilità minima a colori
+  ([[ADR-0024 - Leggibilita minima nel prototipo - colore prima dei modelli]]), curva ondate
+  stimata. Cinque bug trovati e corretti durante il collaudo, tre riconducibili alla stessa
+  causa di fondo (codice che assume che un oggetto sia appena creato, quando esiste già da una
+  sessione precedente). **Non ancora mergiato su `main`**. → [[2026-07-29 - Sessione 11]]
 - **2026-07-28 — Sessione 10**: progettati, scritti e **verificati in Play Mode** due
   sotto-incrementi: **INC-7a** [[Costruzione su Griglia]] (griglia logica testabile + 8 test,
   fantasma di piazzamento, trascinamento mura con anteprima cella per cella, demolizione) e

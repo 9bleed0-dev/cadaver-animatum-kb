@@ -1,7 +1,7 @@
 ---
 tags: [sistema, input, ui, selezione]
 stato: progettato
-aggiornato: 2026-07-25
+aggiornato: 2026-07-28
 ---
 
 # Sistema: Selezione e Comandi
@@ -144,11 +144,38 @@ Click destro ──► SelectionInput ──► Command ──► ICommandable.T
 
 - [x] Progettato
 - [x] Prototipato (funziona coi cubi) — **non ancora verificato in Play Mode**
-- [ ] Implementato (mancano rettangolo di selezione, comandi col destro, `maxSelection`,
-      doppio click — tutti INC-2 o oltre)
+- [ ] Implementato (mancano rettangolo di selezione, `maxSelection`, doppio click)
 - [ ] Bilanciato (soglie di click e doppio click provate)
 - [ ] Rifinito (game feel)
 - [ ] Done secondo [[Definition of Done]]
+
+> [!info] Comandi col destro — scritti durante INC-7b, estesi ai lavoratori il 2026-07-28
+> `UnitCommandInput` (`Bleed.Core`) fa due cose col tasto destro: sposta la bandierina di
+> raduno di un edificio di reclutamento selezionato (`IRallyPointReceiver`), o dà un ordine
+> di movimento diretto a un'unità selezionata (`IMoveCommandReceiver`). Sia `CombatUnit`
+> (Soldati) sia `Worker` (lavoratori, rialzati compresi) lo implementano ora: per un
+> lavoratore, muoversi a comando **stacca** dal `WorkSite` corrente (la domanda "lo stacca?"
+> di Backlog #38 è stata decisa così — coerente col comportamento intuitivo, non serve un
+> lavoratore "assegnato a un posto" che cammina altrove). Resta fuori il ri-assegnamento a un
+> WorkSite scelto col mouse: oggi si libera un lavoratore, non lo si assegna direttamente a
+> un edificio. Non ancora verificato in Play Mode.
+
+> [!info] Regola generale: i pannelli degli edifici sono contestuali alla selezione (2026-07-28)
+> Trovato dall'utente al primo collaudo: il pannello della Caserma stava fisso nello stesso
+> angolo del menu di costruzione, sovrapposto — probabile causa del reclutamento che sembrava
+> "non funzionare" (i click cadevano nel posto sbagliato). Corretto con una regola valida per
+> **ogni** edificio con un pannello (Caserma, Poligono di Tiro, Mortuary): il pannello si
+> mostra SOLO quando quell'edificio è selezionato, si nasconde appena non lo è più.
+>
+> `Selectable` (`Bleed.Gameplay`) ora emette `Selected`/`Deselected`; ogni pannello ci si
+> abbona nel proprio `Bind()`/`OnEnable()` e mostra/nasconde con un `CanvasGroup`
+> (alpha/interactable/blocksRaycasts), **mai** `gameObject.SetActive()` — un pannello disattivo
+> smetterebbe di ascoltare proprio l'evento che dovrebbe farlo ricomparire. Tutti i pannelli
+> edificio condividono la stessa zona schermo (centro in basso): non sono mai visibili insieme,
+> quindi non serve un angolo a testa. Il menu di costruzione (a sinistra) resta l'unico sempre
+> visibile — è l'HUD principale, non un pannello contestuale.
+>
+> Vedi [[Reclutamento e Ruoli]] e [[Scelta sul Cadavere]] per i dettagli tecnici.
 
 ## Note di implementazione
 

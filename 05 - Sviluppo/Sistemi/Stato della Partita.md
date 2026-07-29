@@ -1,7 +1,7 @@
 ---
 tags: [sistema, core, stato]
 stato: prototipato
-aggiornato: 2026-07-26
+aggiornato: 2026-07-28
 ---
 
 # Sistema: Stato della Partita
@@ -33,10 +33,11 @@ aggiornato: 2026-07-26
 - **La sconfitta per carestia ha una soglia di tolleranza**, non è immediata: 15 secondi
   (`FoodSettings.starvationGraceSeconds`), decisi in [[Fame e Sussistenza]]. Dà una finestra
   per rimediare invece di essere un cecchino.
-- **Lo schermo di fine partita**: oggi solo un testo ("HAI PERSO" / "HAI VINTO"), zero numeri.
-  I numeri utili a INC-8 (ondate sopravvissute, cadaveri raccolti/scaduti) arrivano quando
-  esistono le ondate e i cadaveri (INC-5, INC-6) — non prima, perché oggi quei numeri
-  sarebbero sempre zero.
+- **Lo schermo di fine partita**: dal 2026-07-28 mostra anche i numeri utili a INC-8 — ondate
+  sopravvissute (`WaveManager.CurrentWaveNumber`) e cadaveri macellati/rialzati/svuotati
+  d'Icore (contatori su `Mortuary`, incrementati in `TryAssign`). Non ancora i cadaveri
+  **scaduti** senza essere raccolti: nessuna infrastruttura li conta oggi, resta un
+  affinamento futuro se servirà davvero (vedi [[Backlog]]).
 - **Il riavvio non è ancora implementato.** `Won`/`Lost` fermano il tempo e basta; ricaricare
   la scena o resettare lo stato è un passo successivo, non necessario finché non esiste un
   vero ciclo di partita da rigiocare.
@@ -48,15 +49,17 @@ aggiornato: 2026-07-26
 - `GameStateController` (MonoBehaviour) — tiene lo stato corrente, espone `Pause()` ·
   `Resume()` · `Win()` · `Lose(string reason)`, emette `GameStateChanged`.
 - `GameOverIndicator` (Bleed.UI, MonoBehaviour) — ascolta `GameStateChanged`, mostra/nasconde
-  un testo. Non decide niente, solo mostra.
+  un testo. Da 2026-07-28 legge anche `WaveManager.CurrentWaveNumber` e i tre contatori di
+  `Mortuary` per comporre una riga di numeri sotto "HAI VINTO"/"HAI PERSO" — riferimenti
+  opzionali, se assenti mostra solo il testo come prima. Non decide niente, solo mostra.
 
 **Dipendenze**
 - [[Fame e Sussistenza]] **chiama** `GameStateController.Lose(...)` direttamente (Gameplay
   dipende da Core, non il contrario — vedi la nota nella sua scheda).
 - La UI **ascolta** l'evento `GameStateChanged`: non sa perché la partita è finita, solo che
   lo è.
-- Nessuno chiama ancora `Win()`: arriva con [[Ondate]] e [[Cuore del Regno]] (INC-5), quando
-  esisterà una condizione di vittoria vera.
+- `WaveManager` **chiama** `Win()` alla `totalWaves`-esima ondata respinta — scritto durante
+  [[Ondate]] (INC-5), mai osservato in Play Mode per una partita intera.
 
 ## Diagramma
 
@@ -75,8 +78,10 @@ HungerSystem (Gameplay) ──Lose("Carestia")──►  GameStateController (Co
 ## Stato
 
 - [x] Progettato
-- [x] Prototipato — collegato a [[Fame e Sussistenza]]. **Non ancora verificato in Play Mode.**
-- [ ] Implementato (manca: `Win()` non ancora chiamato da nessuno, nessun riavvio)
+- [x] Prototipato — collegato a [[Fame e Sussistenza]] e (2026-07-28) a [[Ondate]]/
+  [[Scelta sul Cadavere]] per i numeri di fine partita. **Non ancora verificato in Play Mode.**
+- [ ] Implementato (`Win()` è scritto e chiamato, ma mai osservato scattare per intero;
+  manca ancora il riavvio)
 - [ ] Bilanciato
 - [ ] Rifinito (il testo è `Text` legacy bianco, centrato, zero game feel — va bene per ora)
 - [ ] Done secondo [[Definition of Done]]
@@ -84,7 +89,9 @@ HungerSystem (Gameplay) ──Lose("Carestia")──►  GameStateController (Co
 **File:** `Assets/_Project/Scripts/Core/GameState.cs` ·
 `Assets/_Project/Scripts/Core/GameStateController.cs` ·
 `Assets/_Project/Scripts/UI/GameOverIndicator.cs` ·
-`Assets/_Project/Scripts/Editor/HungerAndGameStateSetup.cs` (tool: crea e collega tutto)
+`Assets/_Project/Scripts/Editor/HungerAndGameStateSetup.cs` (tool: crea e collega tutto) ·
+`Assets/_Project/Scripts/Editor/CorpseSetup.cs` § `WireGameOverIndicator` (collega i numeri,
+gira dopo perché Mortuary e WaveManager nascono in incrementi successivi)
 
 ## Collegamenti
 - [[Piano Prototipo]] · [[Fame e Sussistenza]] · [[Ondate]] · [[Cuore del Regno]]
